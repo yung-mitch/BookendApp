@@ -13,11 +13,13 @@ namespace API.Controllers
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly IMapper _mapper;
+        private readonly ITokenService _tokenService;
 
-        public AccountController(UserManager<AppUser> userManager, IMapper mapper)
+        public AccountController(UserManager<AppUser> userManager, IMapper mapper, ITokenService tokenService)
         {
             _userManager = userManager;
             _mapper = mapper;
+            _tokenService = tokenService;
         }
 
         [HttpPost("register")]
@@ -44,7 +46,8 @@ namespace API.Controllers
 
             return new UserDto
             {
-                Username = user.UserName
+                Username = user.UserName,
+                Token = await _tokenService.CreateToken(user)
             };
         }
 
@@ -64,7 +67,8 @@ namespace API.Controllers
             // if all steps succeeded, return UserDto
             return new UserDto
             {
-                Username = user.UserName
+                Username = user.UserName,
+                Token = await _tokenService.CreateToken(user)
             };
         }
 

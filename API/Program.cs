@@ -1,6 +1,7 @@
 using API.Data;
 using API.Entities;
 using API.Interfaces;
+using API.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,11 +18,14 @@ builder.Services.AddDbContext<DataContext>(options =>
 builder.Services.AddCors();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddIdentityCore<AppUser>(options =>
 {
     // Password options
     options.Password.RequireNonAlphanumeric = false;
     options.Password.RequiredLength = 8;
+
+    // options.User.RequireUniqueEmail = true;
 })
     .AddRoles<AppRole>()
     .AddRoleManager<RoleManager<AppRole>>()
