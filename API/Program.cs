@@ -1,10 +1,14 @@
+using System.Text;
 using API.Data;
 using API.Entities;
 using API.Interfaces;
+using API.Middleware;
 using API.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,22 +37,35 @@ builder.Services.AddIdentityCore<AppUser>(options =>
 
 // ADD BELOW ONCE LOGIN AND REGISTER LOGIC CREATED
 
-// builder.Services.AddAuthentication();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["TokenKey"])),
+            ValidateIssuer = false,
+            ValidateAudience = false
+        };
+    });
 
-// builder.Services.AddAuthorization(options =>
-// {
-//     options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
-//     options.AddPolicy("MemberExperience", policy => policy.RequireRole("AppMember"));
-//     options.AddPolicy("PublisherExperience", policy => policy.RequireRole("Publisher"));
-//     options.AddPolicy("AdvertiserExperience", policy => policy.RequireRole("Advertiser"));
-// });
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
+    options.AddPolicy("MemberExperience", policy => policy.RequireRole("AppMember"));
+    options.AddPolicy("PublisherExperience", policy => policy.RequireRole("Publisher"));
+    options.AddPolicy("AdvertiserExperience", policy => policy.RequireRole("Advertiser"));
+});
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+app.UseMiddleware<ExceptionMiddleware>();
+
 app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200"));
 
-// app.UseAuthorization();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 

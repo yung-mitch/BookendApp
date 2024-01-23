@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
+    [Authorize]
     public class UsersController : BaseApiController
     {
         private readonly IUnitOfWork _uow;
@@ -17,7 +18,6 @@ namespace API.Controllers
             _uow = uow;
         }
 
-        [AllowAnonymous]
         [HttpGet]
         public async Task<IEnumerable<AppUser>> GetUsers()
         {
