@@ -69,4 +69,22 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+// Seed database
+using var scope = app.Services.CreateScope();
+var services = scope.ServiceProvider;
+try
+{
+    var context = services.GetRequiredService<DataContext>();
+    var userManager = services.GetRequiredService<UserManager<AppUser>>();
+    var roleManager = services.GetRequiredService<RoleManager<AppRole>>();
+    await context.Database.MigrateAsync();
+    await Seed.SeedUsers(userManager, roleManager); // only seeds data if database users table is empty
+    // await Seed.SeedBooks() // only seeds data if database books table is empty
+}
+catch (Exception ex)
+{
+    var logger = services.GetService<ILogger<Program>>();
+    logger.LogError(ex, "An error occurred during database seeding");
+}
+
 app.Run();
