@@ -10,6 +10,12 @@ import { NavComponent } from './nav/nav.component';
 import { RegisterComponent } from './register/register.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TextInputComponent } from './_forms/text-input/text-input.component';
+import { BookListComponent } from './books/book-list/book-list.component';
+import { BookCardComponent } from './books/book-card/book-card.component';
+import { BookDetailComponent } from './books/book-detail/book-detail.component';
+import { MemberCardComponent } from './members/member-card/member-card.component';
+import { MemberDetailComponent } from './members/member-detail/member-detail.component';
+import { MemberEditComponent } from './members/member-edit/member-edit.component';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
 @NgModule({
@@ -18,7 +24,13 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
     HomeComponent,
     NavComponent,
     RegisterComponent,
-    TextInputComponent
+    TextInputComponent,
+    BookListComponent,
+    BookCardComponent,
+    BookDetailComponent,
+    MemberCardComponent,
+    MemberDetailComponent,
+    MemberEditComponent
   ],
   imports: [
     BrowserModule,
