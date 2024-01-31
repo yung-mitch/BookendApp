@@ -13,6 +13,9 @@ namespace API.Data
         {
         }
 
+        public DbSet<Book> Books { get; set; }
+        public DbSet<UserBook> UserBooks { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -28,6 +31,27 @@ namespace API.Data
                 .WithOne(u => u.Role)
                 .HasForeignKey(ur => ur.RoleId)
                 .IsRequired();
+
+            builder.Entity<Book>()
+                .HasMany(bc => bc.Chapters)
+                .WithOne(b => b.Book)
+                .HasForeignKey(bc => bc.BookId)
+                .IsRequired();
+
+            builder.Entity<UserBook>()
+                .HasKey(k => new {k.UserId, k.BookId});
+
+            builder.Entity<UserBook>()
+                .HasOne(ub => ub.User)
+                .WithMany(u => u.UserLibraryBooks)
+                .HasForeignKey(ub => ub.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<UserBook>()
+                .HasOne(ub => ub.Book)
+                .WithMany(b => b.UserLibraryBooks)
+                .HasForeignKey(ub => ub.BookId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

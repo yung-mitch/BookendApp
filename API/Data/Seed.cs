@@ -64,6 +64,32 @@ namespace API.Data
             await userManager.AddToRoleAsync(publisher, "Publisher");
         }
 
-        // public static async Task seedBooks()
+        public static async Task SeedBooks(DataContext context)
+        {
+            if (await context.Books.AnyAsync()) return; // return if the database already has books
+
+            var bookData = await File.ReadAllTextAsync("Data/BookSeedData.json");
+            var chapterData = await File.ReadAllTextAsync("Data/ChapterSeedData.json");
+            
+            var options = new JsonSerializerOptions{PropertyNameCaseInsensitive = true};
+
+            var books = JsonSerializer.Deserialize<List<Book>>(bookData, options);
+            var chapters = JsonSerializer.Deserialize<List<Chapter>>(chapterData, options);
+
+            foreach (var book in books)
+            {
+                await context.Books.AddAsync(book);
+            }
+
+            foreach (var book in books)
+            {
+                for (int i=books.IndexOf(book) * books.Count; i < (books.IndexOf(book) * books.Count) + books.Count; i++)
+                {
+                    book.Chapters.Add(chapters[i]);
+                }
+            }
+
+            await context.SaveChangesAsync();
+        }
     }
 }

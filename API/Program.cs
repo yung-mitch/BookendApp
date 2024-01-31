@@ -79,7 +79,7 @@ try
     var roleManager = services.GetRequiredService<RoleManager<AppRole>>();
     await context.Database.MigrateAsync();
     await Seed.SeedUsers(userManager, roleManager); // only seeds data if database users table is empty
-    // await Seed.SeedBooks() // only seeds data if database books table is empty
+    await Seed.SeedBooks(context); // only seeds data if database books table is empty
 }
 catch (Exception ex)
 {
