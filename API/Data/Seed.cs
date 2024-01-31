@@ -11,7 +11,7 @@ namespace API.Data
         {
             if (await userManager.Users.AnyAsync()) return; // return if the database already has users
 
-            var userData = await File.ReadAllTextAsync("Data/UserSeedData.json");
+            var userData = await File.ReadAllTextAsync("Data/UsersSeedData.json");
 
             var options = new JsonSerializerOptions{PropertyNameCaseInsensitive = true};
 
