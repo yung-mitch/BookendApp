@@ -6,5 +6,6 @@ namespace API.Entities
     {
         public ICollection<AppUserRole> UserRoles { get; set; }
         public List<UserBook> UserLibraryBooks { get; set; }
+        public List<Book> PublishedBooks { get; set; }
     }
 }

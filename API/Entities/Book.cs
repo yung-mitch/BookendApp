@@ -8,5 +8,7 @@
         public List<Chapter> Chapters { get; set; } = new();
 
         public List<UserBook> UserLibraryBooks { get; set; }
+        public AppUser PublishingUser { get; set; }
+        public int PublishingUserId { get; set; }
     }
 }

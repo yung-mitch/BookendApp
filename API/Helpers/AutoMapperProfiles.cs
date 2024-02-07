@@ -1,4 +1,5 @@
-﻿using API.DTOs;
+﻿using API.Chapters;
+using API.DTOs;
 using API.Entities;
 using AutoMapper;
 
@@ -10,6 +11,11 @@ namespace API.Helpers
         {
             CreateMap<AppUser, MemberDto>();
             CreateMap<RegisterDto, AppUser>();
+            CreateMap<Book, BookDto>();
+            CreateMap<Book, BookDetailDto>();
+            CreateMap<BookDto, Book>();
+            CreateMap<BookUpdateDto, Book>();
+            CreateMap<Chapter, ChapterDto>();
         }
     }
 }

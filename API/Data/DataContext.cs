@@ -14,6 +14,7 @@ namespace API.Data
         }
 
         public DbSet<Book> Books { get; set; }
+        public DbSet<Chapter> Chapters { get; set; }
         public DbSet<UserBook> UserBooks { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -26,6 +27,12 @@ namespace API.Data
                 .HasForeignKey(ur => ur.UserId)
                 .IsRequired();
 
+            builder.Entity<AppUser>()
+                .HasMany(u => u.PublishedBooks)
+                .WithOne(b => b.PublishingUser)
+                .HasForeignKey(b => b.PublishingUserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
             builder.Entity<AppRole>()
                 .HasMany(ur => ur.UserRoles)
                 .WithOne(u => u.Role)
@@ -36,7 +43,7 @@ namespace API.Data
                 .HasMany(bc => bc.Chapters)
                 .WithOne(b => b.Book)
                 .HasForeignKey(bc => bc.BookId)
-                .IsRequired();
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<UserBook>()
                 .HasKey(k => new {k.UserId, k.BookId});

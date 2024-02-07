@@ -60,8 +60,17 @@ namespace API.Data
                 Email = "pub@pub.com"
             };
 
+            var publisher2 = new AppUser
+            {
+                UserName = "publisher2",
+                Email = "pub2@pub.com"
+            };
+
             await userManager.CreateAsync(publisher, "Pa$$w0rd");
             await userManager.AddToRoleAsync(publisher, "Publisher");
+
+            await userManager.CreateAsync(publisher2, "Pa$$w0rd");
+            await userManager.AddToRoleAsync(publisher2, "Publisher");
         }
 
         public static async Task SeedBooks(DataContext context)
@@ -78,6 +87,7 @@ namespace API.Data
 
             foreach (var book in books)
             {
+                book.PublishingUser = await context.Users.SingleOrDefaultAsync(x => x.UserName == "publisher");
                 await context.Books.AddAsync(book);
             }
 
@@ -89,7 +99,7 @@ namespace API.Data
                 }
             }
 
-            // await context.SaveChangesAsync();
+            await context.SaveChangesAsync();
         }
     }
 }
