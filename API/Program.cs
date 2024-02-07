@@ -1,6 +1,8 @@
 using System.Text;
+using System.Text.Json.Serialization;
 using API.Data;
 using API.Entities;
+using API.Extensions;
 using API.Interfaces;
 using API.Middleware;
 using API.Services;
@@ -13,12 +15,12 @@ using Microsoft.IdentityModel.Tokens;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
-builder.Services.AddControllers();
-builder.Services.AddCors();
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    });
+builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddIdentityCore<AppUser>(options =>
 {
     // Password options
@@ -55,7 +57,13 @@ builder.Services.AddAuthorization(options =>
 
 var connString = "";
 if (builder.Environment.IsDevelopment())
+{
     connString = builder.Configuration.GetConnectionString("DefaultConnection");
+    builder.Services.AddDbContext<DataContext>(opt =>
+    {
+        opt.UseSqlite(connString);
+    });
+}
 else
 {
     // Use connection string provided at runtime by FlyIO
@@ -74,11 +82,12 @@ else
     var updatedHost = pgHost.Replace("flycast", "internal");
 
     connString = $"Server={updatedHost};Port={pgPort};User Id={pgUser};Password={pgPass};Database={pgDb};";
+
+    builder.Services.AddDbContext<DataContext>(opt =>
+    {
+        opt.UseNpgsql(connString);
+    });
 }
-builder.Services.AddDbContext<DataContext>(opt =>
-{
-    opt.UseNpgsql(connString);
-});
 
 
 var app = builder.Build();
