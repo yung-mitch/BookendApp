@@ -7,6 +7,7 @@ namespace API.Interfaces
     public interface IBookRepository
     {
         Task<IEnumerable<Book>> GetBooksAsync();
+        Task<IEnumerable<BookDto>> GetBooksAsync(int userId);
         Task<Book> GetBookByIdAsync(int id);
         Task<BookDto> GetBookAsync(int id);
         Task<Book> GetFullBookAsync(int id);

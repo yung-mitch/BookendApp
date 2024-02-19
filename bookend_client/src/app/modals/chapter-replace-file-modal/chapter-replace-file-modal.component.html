@@ -1,0 +1,44 @@
+<div class="modal-header">
+    <h4 class="modal-title pull-left">Create a new book</h4>
+    <button type="button" class="btn-close close pull-right" aria-label="close"(click)="bsModalRef.hide()">
+        <span aria-hidden="true" class="visually-hidden">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+    <form #replaceChapterForm="ngForm" id="replaceChapterForm" (ngSubmit)="submit()" [hidden]="true" autocomplete="off">
+        <input type="text"
+            name="chapterId"
+            value="{{chapterId}}"
+            [(ngModel)]="chapterId">
+        <input type="text"
+            name="bookId"
+            value="{{book?.id}}"
+            [(ngModel)]="bookId">
+    </form>
+    <div class="row mt-3" *ngIf="!dropZoneDisabled">
+        <div ng2FileDrop
+            [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
+            (fileOver)="fileOverBase($event)"
+            [uploader]="uploader"
+            (onFileDrop)="toggleDropZone(); getFileType($event)"
+            class="card bg-faded p-3 text-center mb-3 my-drop-zone">
+            <i class="fa fa-upload fa-3x"></i>
+            Upload file here
+        </div>
+    </div>
+    <div class="mb-3" *ngIf="uploader && uploader.queue.length > 0">
+        <div class="row">
+            <div class="col-9">
+                <p>{{uploader.queue[0].file.name}}</p>
+            </div>
+            <div class="col-3">
+                <button class="btn btn-danger btn-xs" (click)="uploader.queue[0].remove(); toggleDropZone()">
+                    <i class="fa fa-trash"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="submit" form="replaceChapterForm" class="btn btn-primary">Submit</button>
+</div>

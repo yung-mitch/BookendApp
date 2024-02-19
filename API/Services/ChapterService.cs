@@ -41,6 +41,26 @@ namespace API.Services
             return uploadResult;
         }
 
+        public async Task<VideoUploadResult> ReplaceChapterAsync(IFormFile file, string publicId)
+        {
+            var replaceResult = new VideoUploadResult();
+
+            if (file.Length > 0)
+            {
+                using var stream = file.OpenReadStream();
+                var uploadParams = new VideoUploadParams()
+                {
+                    File = new FileDescription(file.FileName, stream),
+                    PublicId = publicId,
+                    Overwrite = true
+                };
+
+                replaceResult = await _cloudinary.UploadAsync(uploadParams);
+            }
+
+            return replaceResult;
+        }
+
         public async Task<DeletionResult> DeleteChapterAsync(string publicId)
         {
             var deleteParams = new DeletionParams(publicId);

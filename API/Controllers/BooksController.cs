@@ -6,6 +6,7 @@ using API.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace API.Controllers
 {
@@ -32,6 +33,27 @@ namespace API.Controllers
         public async Task<ActionResult<IEnumerable<BookDto>>> GetBooks()
         {
             var books = await _uow.BookRepository.GetBooksAsync();
+
+            return Ok(books);
+        }
+
+        /*
+            Get books published by requesting user
+            Parameters: None
+            Request body content: None
+            Query string variables: none
+        */
+        [Authorize (Roles = "Publisher")]
+        [HttpGet("published")]
+        public async Task<ActionResult<IEnumerable<BookDto>>> GetPublishedBooks()
+        {
+            var user = await _uow.UserRepository.GetUserByIdAsync(User.GetUserId());
+
+            if (user == null) return NotFound();
+
+            var books = await _uow.BookRepository.GetBooksAsync(user.Id);
+
+            if (books == null) return NotFound();
 
             return Ok(books);
         }
@@ -103,7 +125,7 @@ namespace API.Controllers
         public async Task<ActionResult> DeleteBook(int bookId)
         {
             // do not allow delete unless all chapters are already deleted
-            var book = await _uow.BookRepository.GetBookByIdAsync(bookId);
+            var book = await _uow.BookRepository.GetFullBookAsync(bookId);
 
             if (book == null) return NotFound();
 
@@ -149,8 +171,12 @@ namespace API.Controllers
         */
         [Authorize (Roles = "Publisher")]
         [HttpPost("add-chapter/{bookId}")]
-        public async Task<ActionResult<ChapterDto>> AddChapter(IFormFile file, int bookId, [FromQuery]string chapterTitle)
+        public async Task<ActionResult<ChapterDto>> AddChapter(IFormFile file, int bookId)
         {
+            var chapterTitle = HttpContext.Request.Form["chapterTitle"];
+
+            if (chapterTitle == "") return BadRequest("No Title input found");
+
             var book = await _uow.BookRepository.GetBookByIdAsync(bookId);
 
             if (book == null) return NotFound();
@@ -217,6 +243,44 @@ namespace API.Controllers
             if (await _uow.Complete()) return NoContent();
 
             return BadRequest("Problem updating chapter details");
+        }
+
+        /*
+            Replace an existing Chapter's file with a new file
+            Parameters: New file to store
+            Request body contents: form-data {chapterId --> id of the Chapter to be manipulated, bookId --> id of the Book the Chapter belongs to}
+        */
+        [Authorize (Roles = "Publisher")]
+        [HttpPost("replace-chapter-file")]
+        public async Task<ActionResult> ReplaceChapterFile(IFormFile file)
+        {
+            var chapterIdString = HttpContext.Request.Form["chapterId"];
+            var bookIdString = HttpContext.Request.Form["bookId"];
+
+            if (String.IsNullOrEmpty(bookIdString) || String.IsNullOrEmpty(chapterIdString)) return BadRequest("Missing info in request");
+
+            var bookId = int.Parse(bookIdString);
+            var chapterId = int.Parse(chapterIdString);
+
+            var book = await _uow.BookRepository.GetBookByIdAsync(bookId);
+
+            if (book == null) return NotFound();
+
+            var chapter = await _uow.BookRepository.GetChapterAsync(chapterId);
+
+            if (chapter == null) return NotFound();
+
+            if (chapter.BookId != book.Id) return BadRequest("Chapter does not belong to book you are attempting to access");
+
+            var currentUser = _uow.UserRepository.GetUserByUsernameAsync(User.GetUsername());
+
+            if (currentUser.Result.Id != book.PublishingUserId) return BadRequest("You cannot edit a book you did not publish");
+
+            var replaceResult = await _chapterService.ReplaceChapterAsync(file, chapter.PublicId);
+
+            if (replaceResult.Error != null) return BadRequest(replaceResult.Error.Message); // error on upload of new file, nothing changes in database
+
+            return NoContent();
         }
 
         /*

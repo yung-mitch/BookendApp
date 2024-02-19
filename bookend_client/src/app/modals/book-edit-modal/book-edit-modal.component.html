@@ -1,0 +1,23 @@
+<div class="modal-header">
+    <h4 class="modal-title pull-left">Edit details for {{title}}</h4>
+    <button type="button" class="btn-close close pull-right" aria-label="close" (click)="bsModalRef.hide()">
+        <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <form #bookEditForm="ngForm" id="bookEditForm" (ngSubmit)="submit()" autocomplete="off">
+        <label for="title">Title</label>
+        <input type="text"
+            name="title"
+            value="{{title}}"
+            [(ngModel)]="title">
+        <label for="author">Author</label>
+        <input type="text"
+            name="author"
+            value="{{author}}"
+            [(ngModel)]="author">
+    </form>
+</div>
+<div class="modal-footer">
+    <button type="submit" form="bookEditForm" class="btn btn-primary">Save</button>
+</div>

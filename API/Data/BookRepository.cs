@@ -46,6 +46,14 @@ namespace API.Data
         {
             return await _context.Books.ToListAsync();
         }
+        
+        public async Task<IEnumerable<BookDto>> GetBooksAsync(int userId)
+        {
+            return await _context.Books
+                .Where(x => x.PublishingUserId == userId)
+                .ProjectTo<BookDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+        }
 
         public async Task<Book> GetFullBookAsync(int id)
         {
