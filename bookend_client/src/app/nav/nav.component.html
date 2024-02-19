@@ -3,17 +3,18 @@
         <a routerLink="/" class="navbar-brand" routerLinkActive="active">Bookend App</a>
 
         <ul *ngIf="accountService.currentUser$ | async" class="navbar-nav me-auto mb-2 mb-md-0">
-                <li class="nav-item"><a class="nav-link" routerLinkActive="active">My Library</a></li>
-                <li class="nav-item"><a class="nav-link" routerLinkActive="active">Books</a></li>
-                <li class="nav-item"><a class="nav-link" routerLinkActive="active">Messages</a></li>
-                <li class="nav-item"><a class="nav-link" routerLinkActive="active">Bookclubs</a></li>
+                <li class="nav-item"><a class="nav-link" routerLink="/library" routerLinkActive="active">My Library</a></li>
+                <li class="nav-item"><a class="nav-link" routerLink="/books" routerLinkActive="active">Books</a></li>
+                <li class="nav-item"><a class="nav-link" routerLink="/messages" routerLinkActive="active">Messages</a></li>
+                <li class="nav-item"><a class="nav-link" routerLink="/bookclubs" routerLinkActive="active">Bookclubs</a></li>
         </ul>
 
     <div class="dropdown" *ngIf="(accountService.currentUser$ | async) as user" dropdown>
             <img src="" alt="user photo">
             <a class="dropdown-toggle text-decoration-none text-light ms-2" dropdownToggle>Welcome {{user.knownAs | titlecase}}</a>
             <div class="dropdown-menu" *dropdownMenu>
-                <a class="dropdown-item">Edit Profile</a>
+                <a class="dropdown-item" routerLink="/member/edit">Edit Profile</a>
+                <a class="dropdown-item" *appHasRole="['Admin', 'Publisher']" routerLink="books/manage">Manage Books</a>
                 <a class="dropdown-item" (click)="logout()">Logout</a>
             </div>
         </div>

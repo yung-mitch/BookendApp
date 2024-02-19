@@ -1,0 +1,15 @@
+<div class="text-center mt-3 mb-2">
+    <h2>Manage the books you have published</h2>
+</div>
+
+<div class="row mb-3">
+    <div class="col-3">
+        <button class="btn btn-success" (click)="openCreateBookModal()">Create Book</button>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-3" *ngFor="let book of books">
+        <app-book-card [book]="book" (deleteBookEvent)="deleteBook($event)"></app-book-card>
+    </div>
+</div>
