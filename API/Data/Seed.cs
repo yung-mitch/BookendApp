@@ -1,5 +1,9 @@
 ﻿using System.Text.Json;
 using API.Entities;
+using API.Helpers;
+using API.Services;
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -73,7 +77,7 @@ namespace API.Data
             await userManager.AddToRoleAsync(publisher2, "Publisher");
         }
 
-        public static async Task SeedBooks(DataContext context)
+        public static async Task SeedBooks(DataContext context, ConfigurationManager config, bool envIsDev)
         {
             if (await context.Books.AnyAsync()) return; // return if the database already has books
 
@@ -91,11 +95,37 @@ namespace API.Data
                 await context.Books.AddAsync(book);
             }
 
+            var section = config.GetSection("CloudinarySettings");
+
+            var cloudinaryAccount = new Account
+            (
+                section["CloudName"],
+                section["ApiKey"],
+                section["ApiSecret"]
+            );
+
+            var cloudinary = new Cloudinary(cloudinaryAccount);
+
+            string path = Path.Combine(Directory.GetCurrentDirectory(), "Data/SeedChapter.wav");
+            var fileStream = File.OpenRead(path);
+            var file = new FormFile(fileStream, 0, fileStream.Length, null, fileStream.Name);
+            var cloudParentDirectory = (envIsDev) ? "bookend-net7-dev" : "bookend-net7-production";
+
             foreach (var book in books)
             {
                 for (int i=books.IndexOf(book) * books.Count; i < (books.IndexOf(book) * books.Count) + books.Count; i++)
                 {
+                    using var stream = file.OpenReadStream();
+                    var uploadParams = new VideoUploadParams();
+                    uploadParams.File = new FileDescription(file.FileName, stream);
+                    uploadParams.Folder = cloudParentDirectory + "/" + (books.IndexOf(book) + 1);
+                    var result = await cloudinary.UploadAsync(uploadParams);
+                    if (result.Error != null) break;
+                    chapters[i].Url = result.SecureUrl.AbsoluteUri;
+                    chapters[i].PublicId = result.PublicId;
                     book.Chapters.Add(chapters[i]);
+
+                    uploadParams.Folder = null;
                 }
             }
 
