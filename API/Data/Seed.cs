@@ -43,7 +43,10 @@ namespace API.Data
             var adminUser = new AppUser
             {
                 UserName = "admin",
-                Email = "admin@admin.com"
+                Email = "admin@admin.com",
+                ProfilePhoto = {
+                    Url = "https://randomuser.me/api/portraits/men/55.jpg"
+                }
             };
 
             await userManager.CreateAsync(adminUser, "Pa$$w0rd");
@@ -52,7 +55,10 @@ namespace API.Data
             var advertiser = new AppUser
             {
                 UserName = "advertiser",
-                Email = "advertiser@ad.com"
+                Email = "advertiser@ad.com",
+                ProfilePhoto = {
+                    Url = "https://randomuser.me/api/portraits/men/88.jpg"
+                }
             };
 
             await userManager.CreateAsync(advertiser, "Pa$$w0rd");
@@ -61,13 +67,19 @@ namespace API.Data
             var publisher = new AppUser
             {
                 UserName = "publisher",
-                Email = "pub@pub.com"
+                Email = "pub@pub.com",
+                ProfilePhoto = {
+                    Url = "https://randomuser.me/api/portraits/men/99.jpg"
+                }
             };
 
             var publisher2 = new AppUser
             {
                 UserName = "publisher2",
-                Email = "pub2@pub.com"
+                Email = "pub2@pub.com",
+                ProfilePhoto = {
+                    Url = "https://randomuser.me/api/portraits/men/44.jpg"
+                }
             };
 
             await userManager.CreateAsync(publisher, "Pa$$w0rd");
@@ -109,7 +121,7 @@ namespace API.Data
             string path = Path.Combine(Directory.GetCurrentDirectory(), "Data/SeedChapter.wav");
             var fileStream = File.OpenRead(path);
             var file = new FormFile(fileStream, 0, fileStream.Length, null, fileStream.Name);
-            var cloudParentDirectory = (envIsDev) ? "bookend-net7-dev" : "bookend-net7-production";
+            var cloudParentDirectory = (envIsDev) ? "bookend-net7-dev/chapters" : "bookend-net7-production/chapters";
 
             foreach (var book in books)
             {

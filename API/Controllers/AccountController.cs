@@ -55,7 +55,9 @@ namespace API.Controllers
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
             // find user --> return unauthorized if user does not exist
-            var user = await _userManager.Users.SingleOrDefaultAsync(appUser => appUser.UserName == loginDto.Username);
+            var user = await _userManager.Users
+                .Include(p => p.ProfilePhoto)
+                .SingleOrDefaultAsync(appUser => appUser.UserName == loginDto.Username);
 
             if (user == null) return Unauthorized("Invalid Username or Password"); // keep ambiguous for which parameter is not correct
 
@@ -68,7 +70,8 @@ namespace API.Controllers
             return new UserDto
             {
                 Username = user.UserName,
-                Token = await _tokenService.CreateToken(user)
+                Token = await _tokenService.CreateToken(user),
+                PhotoUrl = user.ProfilePhoto.Url
             };
         }
 

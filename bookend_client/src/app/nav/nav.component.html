@@ -10,7 +10,7 @@
         </ul>
 
     <div class="dropdown" *ngIf="(accountService.currentUser$ | async) as user" dropdown>
-            <img src="" alt="user photo">
+            <img src="{{user.photoUrl}}" alt="user photo">
             <a class="dropdown-toggle text-decoration-none text-light ms-2" dropdownToggle>Welcome {{user.knownAs | titlecase}}</a>
             <div class="dropdown-menu" *dropdownMenu>
                 <a class="dropdown-item" routerLink="/member/edit">Edit Profile</a>

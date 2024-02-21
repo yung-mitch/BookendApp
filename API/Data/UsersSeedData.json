@@ -1,42 +1,82 @@
 [
     {
       "UserName": "Walls",
-      "Email": "walls@bookend.com"
+      "Email": "walls@bookend.com",
+      "ProfilePhoto":
+        {
+          "Url": "https://randomuser.me/api/portraits/men/11.jpg"
+        }
     },
     {
       "UserName": "Moreno",
-      "Email": "moreno@bookend.com"
+      "Email": "moreno@bookend.com",
+      "ProfilePhoto":
+        {
+          "Url": "https://randomuser.me/api/portraits/men/15.jpg"
+        }
     },
     {
       "UserName": "George",
-      "Email": "george@bookend.com"
+      "Email": "george@bookend.com",
+      "ProfilePhoto":
+        {
+          "Url": "https://randomuser.me/api/portraits/men/19.jpg"
+        }
     },
     {
       "UserName": "Graves",
-      "Email": "graves@bookend.com"
+      "Email": "graves@bookend.com",
+      "ProfilePhoto":
+        {
+          "Url": "https://randomuser.me/api/portraits/men/24.jpg"
+        }
     },
     {
       "UserName": "Soto",
-      "Email": "soto@bookend.com"
+      "Email": "soto@bookend.com",
+      "ProfilePhoto":
+        {
+          "Url": "https://randomuser.me/api/portraits/men/28.jpg"
+        }
     },
     {
       "UserName": "Velez",
-      "Email": "velez@bookend.com"
+      "Email": "velez@bookend.com",
+      "ProfilePhoto":
+        {
+          "Url": "https://randomuser.me/api/portraits/men/57.jpg"
+        }
     },
     {
       "UserName": "Lucas",
-      "Email": "lucas@bookend.com"
+      "Email": "lucas@bookend.com",
+      "ProfilePhoto":
+        {
+          "Url": "https://randomuser.me/api/portraits/men/49.jpg"
+        }
     },
     {
       "UserName": "Fletcher",
-      "Email": "fletcher@bookend.com"
+      "Email": "fletcher@bookend.com",
+      "ProfilePhoto":
+        {
+          "Url": "https://randomuser.me/api/portraits/men/66.jpg"
+        }
     },
     {
       "UserName": "Fleming",
-      "Email": "fleming@bookend.com"
+      "Email": "fleming@bookend.com",
+      "ProfilePhoto":
+        {
+          "Url": "https://randomuser.me/api/portraits/men/37.jpg"
+        }
     },
     {
       "UserName": "Bob",
-      "Email": "bob@bookend.com"
+      "Email": "bob@bookend.com",
+      "ProfilePhoto":
+        {
+          "Url": "https://randomuser.me/api/portraits/men/73.jpg"
+        }
     }
   ]
