@@ -11,6 +11,8 @@ primary_region = 'atl'
 
 [env]
   ASPNETCORE_URLS="http://+:8080"
+  CloudinarySettings__CloudName="dwpzemkdm"
+  CloudinarySettings__ApiKey="416519224824881"
 
 [http_service]
   internal_port = 8080
