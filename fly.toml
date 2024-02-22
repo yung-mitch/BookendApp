@@ -1,4 +1,4 @@
-# fly.toml app configuration file generated for bookendapp on 2024-01-31T12:58:25-06:00
+# fly.toml app configuration file generated for bookendapp on 2024-02-22T06:56:50-06:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
@@ -10,9 +10,9 @@ primary_region = 'atl'
   image = 'eldridgem007/bookendapp:latest'
 
 [env]
-  ASPNETCORE_URLS="http://+:8080"
-  CloudinarySettings__CloudName="dwpzemkdm"
-  CloudinarySettings__ApiKey="416519224824881"
+  ASPNETCORE_URLS = 'http://+:8080'
+  CloudinarySettings__ApiKey = '416519224824881'
+  CloudinarySettings__CloudName = 'dwpzemkdm'
 
 [http_service]
   internal_port = 8080
@@ -23,6 +23,4 @@ primary_region = 'atl'
   processes = ['app']
 
 [[vm]]
-  cpu_kind = 'shared'
-  cpus = 1
-  memory_mb = 256
+  size = 'shared-cpu-1x'
