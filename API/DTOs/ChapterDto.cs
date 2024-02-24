@@ -6,5 +6,6 @@
         public string ChapterTitle { get; set; }
         public string Url { get; set; }
         public string PublicId { get; set; }
+        public int BookId { get; set; }
     }
 }

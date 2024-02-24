@@ -9,6 +9,8 @@ import { BookClubListComponent } from './book-club-list/book-club-list.component
 import { ManagePublishedBooksComponent } from './books/manage-published-books/manage-published-books.component';
 import { BookDetailComponent } from './books/book-detail/book-detail.component';
 import { bookDetailedResolver } from './_resolvers/book-detailed.resolver';
+import { MediaPlayerComponent } from './media-player/media-player.component';
+import { chapterDetailedResolver } from './_resolvers/chapter-detailed.resolver';
 
 const routes: Routes = [
   { path: '', component: HomeComponent},
@@ -20,7 +22,8 @@ const routes: Routes = [
       {path: 'bookclubs', component: BookClubListComponent},
       {path: 'member/edit', component: MemberEditComponent},
       {path: 'books/manage', component: ManagePublishedBooksComponent},
-      {path: 'book/detail/:bookId', component: BookDetailComponent, resolve: {book: bookDetailedResolver}}
+      {path: 'book/detail/:bookId', component: BookDetailComponent, resolve: {book: bookDetailedResolver}},
+      {path: 'chapter/:chapterId', component: MediaPlayerComponent, resolve: {chapter: chapterDetailedResolver}}
     ]}
 ];
 

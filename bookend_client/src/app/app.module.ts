@@ -30,6 +30,7 @@ import { CreateBookModalComponent } from './modals/create-book-modal/create-book
 import { CreateChapterModalComponent } from './modals/create-chapter-modal/create-chapter-modal.component';
 import { ChapterEditModalComponent } from './modals/chapter-edit-modal/chapter-edit-modal.component';
 import { ChapterReplaceFileModalComponent } from './modals/chapter-replace-file-modal/chapter-replace-file-modal.component';
+import { MediaPlayerComponent } from './media-player/media-player.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,8 @@ import { ChapterReplaceFileModalComponent } from './modals/chapter-replace-file-
     CreateBookModalComponent,
     CreateChapterModalComponent,
     ChapterEditModalComponent,
-    ChapterReplaceFileModalComponent
+    ChapterReplaceFileModalComponent,
+    MediaPlayerComponent
   ],
   imports: [
     BrowserModule,

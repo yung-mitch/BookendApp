@@ -147,18 +147,12 @@ namespace API.Controllers
             Parameters: PK of Chapter the user is attempting to GET
         */
         [Authorize (Roles = "AppMember, Publisher")]
-        [HttpGet("chapter/{bookId}/{chapterId}")]
-        public async Task<ActionResult<ChapterDto>> GetChapterByIdAsync(int bookId, int chapterId)
+        [HttpGet("chapter/{chapterId}")]
+        public async Task<ActionResult<ChapterDto>> GetChapterByIdAsync(int chapterId)
         {
-            var book = await _uow.BookRepository.GetBookByIdAsync(bookId);
-
-            if (book == null) return NotFound();
-
             var chapter = await _uow.BookRepository.GetChapterAsync(chapterId);
 
             if (chapter == null) return NotFound();
-
-            if (chapter.BookId != book.Id) return BadRequest("Chapter does not belong to book you are trying to access");
 
             return await _uow.BookRepository.GetChapterDtoAsync(chapterId);
         }

@@ -74,6 +74,11 @@ export class BookService {
     return this.http.delete(this.baseUrl + 'books/delete-book/' + bookId);
   }
 
+  getChapter(chapterId: number) {
+    // opportunity to add caching here to improve performance
+    return this.http.get<Chapter>(this.baseUrl + 'books/chapter/' + chapterId);
+  }
+
   // addChapter handled by ng2-file-upload FileUploader
 
   updateChapter(chapter: any, chapterId: number) {

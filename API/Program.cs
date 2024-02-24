@@ -62,7 +62,7 @@ if (builder.Environment.IsDevelopment())
     builder.Services.AddDbContext<DataContext>(opt =>
     {
         // opt.UseSqlite(connString);
-        opt.UseNpgsql(connString); // use for builds only; comment out when in full development mode
+        opt.UseSqlite(connString); // use for builds only; comment out when in full development mode
     });
 }
 else
