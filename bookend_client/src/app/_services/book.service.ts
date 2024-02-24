@@ -28,13 +28,13 @@ export class BookService {
     })
   }
 
-  // getAllBooks(bookParams: BookParams) {
-  //   const response = this.bookCache.get(Object.values(bookParams).join('-'));
+  getBooks() {
+    // const response = this.bookCache.get(Object.values(bookParams).join('-'));
 
-  //   if (response) return of(response);
+    // if (response) return of(response);
 
-  //   let
-  // }
+    return this.http.get<Book[]>(this.baseUrl + 'books');
+  }
 
   getPublishedBooks() {
     return this.http.get<Book[]>(this.baseUrl + 'books/published');
