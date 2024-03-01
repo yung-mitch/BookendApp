@@ -55,10 +55,11 @@ namespace API.Data
                 .ToListAsync();
         }
 
-        public async Task<Book> GetFullBookAsync(int id)
+        public async Task<FullBookDto> GetFullBookAsync(int id)
         {
             return await _context.Books
                 .Include(c => c.Chapters)
+                .ProjectTo<FullBookDto>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync(x => x.Id == id);
         }
 

@@ -1,0 +1,24 @@
+.btn-circle {
+    border-radius: 50%;
+}
+
+.btn > .fa {
+    font-size: 1.3rem;
+    color: black;
+}
+
+.time-slider {
+    width: auto;
+
+    --mdc-slider-handle-color: white;
+    --mdc-slider-focus-handle-color: white;
+    --mdc-slider-hover-handle-color: white;
+    --mdc-slider-active-track-color: whitesmoke;
+    --mdc-slider-inactive-track-color: #d7d7d77f;
+    --mdc-slider-handle-height: 10px;
+    --mdc-slider-handle-width: 10px;
+
+    --mat-mdc-slider-ripple-color: white;
+    --mat-mdc-slider-hover-ripple-color: rgba(255, 255, 255, 0.171);
+    --mat-mdc-slider-focus-ripple-color: rgba(255, 255, 255, 0.504);
+}

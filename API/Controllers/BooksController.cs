@@ -64,7 +64,7 @@ namespace API.Controllers
         */
         [Authorize (Roles = "AppMember, Publisher")]
         [HttpGet("{bookId}")]
-        public async Task<ActionResult<Book>> GetBook(int bookId)
+        public async Task<ActionResult<FullBookDto>> GetBook(int bookId)
         {
             return await _uow.BookRepository.GetFullBookAsync(bookId);
         }
@@ -125,7 +125,7 @@ namespace API.Controllers
         public async Task<ActionResult> DeleteBook(int bookId)
         {
             // do not allow delete unless all chapters are already deleted
-            var book = await _uow.BookRepository.GetFullBookAsync(bookId);
+            var book = await _uow.BookRepository.GetBookByIdAsync(bookId);
 
             if (book == null) return NotFound();
 
@@ -274,7 +274,11 @@ namespace API.Controllers
 
             if (replaceResult.Error != null) return BadRequest(replaceResult.Error.Message); // error on upload of new file, nothing changes in database
 
-            return NoContent();
+            chapter.Url = replaceResult.SecureUrl.AbsoluteUri;
+
+            if (await _uow.Complete()) return NoContent();
+
+            return BadRequest("Problem replacing chapter audio file");
         }
 
         /*

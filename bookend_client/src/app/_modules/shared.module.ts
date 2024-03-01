@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { FileUploadModule } from 'ng2-file-upload';
+import { MaterialModule } from './material.module';
 
 
 
@@ -12,12 +13,14 @@ import { FileUploadModule } from 'ng2-file-upload';
     CommonModule,
     BsDropdownModule.forRoot(),
     ModalModule.forRoot(),
-    FileUploadModule
+    FileUploadModule,
+    MaterialModule
   ],
   exports: [
     BsDropdownModule,
     ModalModule,
-    FileUploadModule
+    FileUploadModule,
+    MaterialModule
   ]
 })
 export class SharedModule { }

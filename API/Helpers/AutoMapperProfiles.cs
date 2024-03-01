@@ -16,6 +16,7 @@ namespace API.Helpers
             CreateMap<BookDto, Book>();
             CreateMap<BookUpdateDto, Book>();
             CreateMap<Chapter, ChapterDto>();
+            CreateMap<Book, FullBookDto>();
         }
     }
 }
