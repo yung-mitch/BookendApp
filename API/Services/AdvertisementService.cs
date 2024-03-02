@@ -7,11 +7,12 @@ using Microsoft.Extensions.Options;
 
 namespace API.Services
 {
-    public class ChapterService : IChapterService
+    public class AdvertisementService : IAdvertisementService
     {
         private readonly Cloudinary _cloudinary;
         private readonly string _rootDir;
-        public ChapterService(IOptions<CloudinarySettings> config, IOptions<CloudStorageSettings> storageConfig)
+
+        public AdvertisementService(IOptions<CloudinarySettings> config, IOptions<CloudStorageSettings> storageConfig)
         {
             var cloudinaryAccount = new Account
             (
@@ -24,7 +25,8 @@ namespace API.Services
 
             _rootDir = storageConfig.Value.CloudinaryRootDirectory;
         }
-        public async Task<VideoUploadResult> AddChapterAsync(IFormFile file, Book book)
+
+        public async Task<VideoUploadResult> AddAdvertisementAsync(IFormFile file, AppUser advertisingUser)
         {
             var uploadResult = new VideoUploadResult();
 
@@ -34,8 +36,7 @@ namespace API.Services
                 var uploadParams = new VideoUploadParams()
                 {
                     File = new FileDescription(file.FileName, stream),
-                    // Transformation = new Transformation(),
-                    Folder = _rootDir + "chapters/" + book.Id.ToString()
+                    Folder = _rootDir + "advertisements/" + advertisingUser.Id.ToString()
                 };
 
                 uploadResult = await _cloudinary.UploadAsync(uploadParams);
@@ -44,7 +45,7 @@ namespace API.Services
             return uploadResult;
         }
 
-        public async Task<VideoUploadResult> ReplaceChapterAsync(IFormFile file, string publicId)
+        public async Task<VideoUploadResult> ReplaceAdvertisementAsync(IFormFile file, string publicId)
         {
             var replaceResult = new VideoUploadResult();
 
@@ -63,8 +64,8 @@ namespace API.Services
 
             return replaceResult;
         }
-
-        public async Task<DeletionResult> DeleteChapterAsync(string publicId)
+        
+        public async Task<DeletionResult> DeleteAdvertisementAsync(string publicId)
         {
             var deleteParams = new DeletionParams(publicId)
             {

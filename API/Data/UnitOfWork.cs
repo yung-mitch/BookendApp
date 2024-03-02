@@ -18,6 +18,8 @@ namespace API.Data
         public IUserRepository UserRepository => new UserRepository(_context, _mapper);
 
         public IBookRepository BookRepository => new BookRepository(_context, _mapper);
+        
+        public IAdvertisementRepository AdvertisementRepository => new AdvertisementRepository(_context, _mapper);
 
         public async Task<bool> Complete()
         {

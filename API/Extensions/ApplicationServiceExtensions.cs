@@ -14,6 +14,7 @@ namespace API.Extensions
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IChapterService, ChapterService>();
+            services.AddScoped<IAdvertisementService, AdvertisementService>();
             services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));
 
             return services;

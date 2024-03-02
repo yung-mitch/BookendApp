@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 using API.Data;
 using API.Entities;
 using API.Extensions;
+using API.Helpers;
 using API.Interfaces;
 using API.Middleware;
 using API.Services;
@@ -64,6 +65,8 @@ if (builder.Environment.IsDevelopment())
         // opt.UseSqlite(connString);
         opt.UseSqlite(connString); // use for builds only; comment out when in full development mode
     });
+
+    builder.Services.Configure<CloudStorageSettings>(builder.Configuration.GetSection("CloudStorageSettings"));
 }
 else
 {
@@ -88,6 +91,8 @@ else
     {
         opt.UseNpgsql(connString);
     });
+
+    builder.Services.Configure<CloudStorageSettings>(builder.Configuration.GetSection("CloudStorageSettings"));
 }
 
 
