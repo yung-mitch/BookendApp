@@ -62,8 +62,8 @@ if (builder.Environment.IsDevelopment())
     connString = builder.Configuration.GetConnectionString("DefaultConnection");
     builder.Services.AddDbContext<DataContext>(opt =>
     {
-        // opt.UseSqlite(connString);
-        opt.UseSqlite(connString); // use for builds only; comment out when in full development mode
+        opt.UseSqlite(connString);
+        // opt.UseSqlite(connString); // use for builds only; comment out when in full development mode
     });
 
     builder.Services.Configure<CloudStorageSettings>(builder.Configuration.GetSection("CloudStorageSettings"));
