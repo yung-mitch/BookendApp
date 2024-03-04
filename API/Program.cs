@@ -123,6 +123,7 @@ try
     await context.Database.MigrateAsync();
     await Seed.SeedUsers(userManager, roleManager); // only seeds data if database users table is empty
     await Seed.SeedBooks(context, builder.Configuration, builder.Environment.IsDevelopment()); // only seeds data if database books table is empty
+    await Seed.SeedAdvertisements(context, builder.Configuration, builder.Environment.IsDevelopment()); // only seeds data if database advertisements table is empty
 }
 catch (Exception ex)
 {

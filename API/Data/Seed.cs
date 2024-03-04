@@ -143,5 +143,50 @@ namespace API.Data
 
             await context.SaveChangesAsync();
         }
+        
+        public static async Task SeedAdvertisements(DataContext context, ConfigurationManager config, bool envIsDev)
+        {
+            if (await context.Advertisements.AnyAsync()) return; // return if the database already has advertisements
+
+            var adData = await File.ReadAllTextAsync("Data/AdvertisementSeedData.json");
+            
+            var ads = JsonSerializer.Deserialize<List<Advertisement>>(adData);
+
+            var advertisingUser = await context.Users.SingleOrDefaultAsync(x => x.UserName == "advertiser");
+
+            var section = config.GetSection("CloudinarySettings");
+
+            var cloudinaryAccount = new Account(
+                section["CloudName"],
+                section["ApiKey"],
+                section["ApiSecret"]
+            );
+
+            var cloudinary = new Cloudinary(cloudinaryAccount);
+
+            string path = Path.Combine(Directory.GetCurrentDirectory(), "Data/SeedAdvertisement.wav");
+            var fileStream = File.OpenRead(path);
+            var file = new FormFile(fileStream, 0, fileStream.Length, null, fileStream.Name);
+            var cloudParentDirectory = (envIsDev) ? "bookend-net7-dev/advertisements/" : "bookend-net7-production/advertisements/";
+
+            foreach (var ad in ads)
+            {
+                using var stream = file.OpenReadStream();
+                var uploadParams = new VideoUploadParams()
+                {
+                    File = new FileDescription(file.FileName, stream),
+                    Folder = cloudParentDirectory + advertisingUser.Id
+                };
+
+                var result = await cloudinary.UploadAsync(uploadParams);
+                if (result.Error != null) break;
+                ad.Url = result.SecureUrl.AbsoluteUri;
+                ad.PublicId = result.PublicId;
+                
+                advertisingUser.PublishedAds.Add(ad);
+            }
+
+            await context.SaveChangesAsync();
+        }
     }
 }
