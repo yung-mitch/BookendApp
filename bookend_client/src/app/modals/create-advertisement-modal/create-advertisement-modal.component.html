@@ -1,19 +1,15 @@
 <div class="modal-header">
-    <h4 class="modal-title pull-left">Upload a new file for this chapter</h4>
+    <h4 class="modal-title pull-left">Create a new book</h4>
     <button type="button" class="btn-close close pull-right" aria-label="close"(click)="bsModalRef.hide()">
         <span aria-hidden="true" class="visually-hidden">&times;</span>
 </button>
 </div>
 <div class="modal-body">
-    <form #replaceChapterForm="ngForm" id="replaceChapterForm" (ngSubmit)="submit()" [hidden]="true" autocomplete="off">
+    <form #bookCreateForm="ngForm" id="chapterCreateForm" (ngSubmit)="submit()" autocomplete="off">
+        <label for="title">Title</label>
         <input type="text"
-            name="chapterId"
-            value="{{chapterId}}"
-            [(ngModel)]="chapterId">
-        <input type="text"
-            name="bookId"
-            value="{{book?.id}}"
-            [(ngModel)]="bookId">
+            name="adName"
+            [(ngModel)]="adName">
     </form>
     <div class="row mt-3" *ngIf="!dropZoneDisabled">
         <div ng2FileDrop
@@ -40,5 +36,5 @@
     </div>
 </div>
 <div class="modal-footer">
-    <button type="submit" form="replaceChapterForm" class="btn btn-primary">Submit</button>
+    <button type="submit" form="chapterCreateForm" class="btn btn-primary">Submit</button>
 </div>

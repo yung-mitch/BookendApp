@@ -31,6 +31,10 @@ import { CreateChapterModalComponent } from './modals/create-chapter-modal/creat
 import { ChapterEditModalComponent } from './modals/chapter-edit-modal/chapter-edit-modal.component';
 import { ChapterReplaceFileModalComponent } from './modals/chapter-replace-file-modal/chapter-replace-file-modal.component';
 import { MediaPlayerComponent } from './media-player/media-player.component';
+import { ManageAdvertisementsComponent } from './manage-advertisements/manage-advertisements.component';
+import { CreateAdvertisementModalComponent } from './modals/create-advertisement-modal/create-advertisement-modal.component';
+import { AdvertisementEditModalComponent } from './modals/advertisement-edit-modal/advertisement-edit-modal.component';
+import { AdvertisementReplaceFileModalComponent } from './modals/advertisement-replace-file-modal/advertisement-replace-file-modal.component';
 
 @NgModule({
   declarations: [
@@ -55,7 +59,11 @@ import { MediaPlayerComponent } from './media-player/media-player.component';
     CreateChapterModalComponent,
     ChapterEditModalComponent,
     ChapterReplaceFileModalComponent,
-    MediaPlayerComponent
+    MediaPlayerComponent,
+    ManageAdvertisementsComponent,
+    CreateAdvertisementModalComponent,
+    AdvertisementEditModalComponent,
+    AdvertisementReplaceFileModalComponent
   ],
   imports: [
     BrowserModule,

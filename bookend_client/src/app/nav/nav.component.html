@@ -15,6 +15,7 @@
             <a class="dropdown-toggle text-decoration-none text-light ms-2" dropdownToggle>Welcome {{user.knownAs | titlecase}}</a>
             <div class="dropdown-menu" *dropdownMenu>
                 <a class="dropdown-item" routerLink="/member/edit">Edit Profile</a>
+                <a class="dropdown-item" *appHasRole="['Admin', 'Advertiser']" routerLink="/advertisements/manage">Manage Advertisements</a>
                 <a class="dropdown-item" *appHasRole="['Admin', 'Publisher']" routerLink="/books/manage">Manage Books</a>
                 <a class="dropdown-item" (click)="logout()">Logout</a>
             </div>

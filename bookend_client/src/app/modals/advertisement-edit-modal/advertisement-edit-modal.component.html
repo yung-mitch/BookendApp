@@ -1,0 +1,18 @@
+<div class="modal-header">
+    <h4 class="modal-title pull-left">Edit details for {{adName}}</h4>
+    <button type="button" class="btn-close close pull-right" aria-label="close" (click)="bsModalRef.hide()">
+        <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <form #adEditForm="ngForm" id="adEditForm" autocomplete="off">
+        <label for="adName">Advertisement Name</label>
+        <input type="text"
+            name="adName"
+            value="{{adName}}"
+            [(ngModel)]="adName">
+    </form>
+</div>
+<div class="modal-footer">
+    <button type="submit" form="adEditForm" (click)="bsModalRef.hide()" class="btn btn-primary">Save</button>
+</div>
