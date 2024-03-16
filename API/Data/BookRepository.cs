@@ -29,6 +29,15 @@ namespace API.Data
             _context.Books.Remove(book);
         }
 
+        public void AddBookToLibrary(int userId, int bookId)
+        {
+            _context.UserBooks.Add(new UserBook
+            {
+                UserId = userId,
+                BookId = bookId
+            });
+        }
+
         public async Task<BookDto> GetBookAsync(int id)
         {
             return await _context.Books
@@ -53,6 +62,19 @@ namespace API.Data
                 .Where(x => x.PublishingUserId == userId)
                 .ProjectTo<BookDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
+        }
+
+        public async Task<List<BookDto>> GetLibraryBooks(int userId)
+        {
+            var userLibrary = _context.UserBooks.AsQueryable();
+            var books = _context.Books.OrderBy(b => b.Title).AsQueryable();
+
+            userLibrary = userLibrary.Where(ub => ub.UserId == userId);
+            books = userLibrary.Select(libBook => libBook.Book);
+
+            var userLibBooks = await books.ProjectTo<BookDto>(_mapper.ConfigurationProvider).ToListAsync();
+
+            return userLibBooks;
         }
 
         public async Task<FullBookDto> GetFullBookAsync(int id)

@@ -8,6 +8,7 @@ namespace API.Interfaces
     {
         Task<IEnumerable<Book>> GetBooksAsync();
         Task<IEnumerable<BookDto>> GetBooksAsync(int userId);
+        Task<List<BookDto>> GetLibraryBooks(int userId);
         Task<Book> GetBookByIdAsync(int id);
         Task<BookDto> GetBookAsync(int id);
         Task<FullBookDto> GetFullBookAsync(int id);
@@ -16,5 +17,7 @@ namespace API.Interfaces
         
         void AddBook(Book book);
         void DeleteBook(Book book);
+
+        void AddBookToLibrary(int userId, int bookId);
     }
 }
