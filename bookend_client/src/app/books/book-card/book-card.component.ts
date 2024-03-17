@@ -11,17 +11,44 @@ import { BookEditModalComponent } from 'src/app/modals/book-edit-modal/book-edit
 })
 export class BookCardComponent implements OnInit {
   @Input() book: Book | undefined;
+  inUserLibrary: boolean = false;
   bsModalRef: BsModalRef<BookEditModalComponent> = new BsModalRef<BookEditModalComponent>();
   @Output() deleteBookEvent = new EventEmitter<number>();
+  @Output() removeFromLibEvent = new EventEmitter<number>();
 
-  constructor(private bookService: BookService, private modalService: BsModalService) { }
-
-  ngOnInit(): void {
+  constructor(private bookService: BookService, private modalService: BsModalService) {
+    
   }
 
-  // addToLibrary(book: Book) {
-    
-  // }
+  ngOnInit(): void {
+    if (this.book) {
+      this.bookService.foundInUserLibrary(this.book.id).subscribe({
+        next: response => {
+          if (response)
+          {
+            this.inUserLibrary = response;
+          }
+        }
+      })
+    }
+  }
+
+  addToLibrary() {
+    if (this.book) {
+      this.bookService.addToLibrary(this.book.id).subscribe({
+        next: response => {
+          if (response == this.book?.id)
+          {
+            this.inUserLibrary = !this.inUserLibrary;
+          }
+        }
+      })
+    }
+  }
+
+  removeFromLibrary(bookId: number) {
+    this.removeFromLibEvent.emit(bookId);
+  }
 
   openBookEditModal(book: Book) {
     const config = {

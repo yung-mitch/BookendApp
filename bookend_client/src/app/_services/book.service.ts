@@ -88,4 +88,20 @@ export class BookService {
   deleteChapter(bookId: number, chapterId: number) {
     return this.http.delete(this.baseUrl + 'books/delete-chapter/' + bookId + '/' + chapterId);
   }
+
+  getLibrary() {
+    return this.http.get<Book[]>(this.baseUrl + 'library');
+  }
+
+  addToLibrary(bookId: number) {
+    return this.http.post<number>(this.baseUrl + 'library/add?bookId=' + bookId, {});
+  }
+
+  removeFromLibrary(bookId: number) {
+    return this.http.delete(this.baseUrl + 'library/remove?bookId=' + bookId);
+  }
+
+  foundInUserLibrary(bookId: number) {
+    return this.http.get<boolean>(this.baseUrl + 'library/' + bookId);
+  }
 }

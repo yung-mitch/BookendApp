@@ -1,1 +1,9 @@
-<p>member-library works!</p>
+<div class="text-center mt-3 mb-2">
+    <h2>Explore your bookmarked titles</h2>
+</div>
+
+<div class="row">
+    <div class="col-3" *ngFor="let book of books">
+        <app-book-card [book]="book" (removeFromLibEvent)="removeFromLib($event)"></app-book-card>
+    </div>
+</div>

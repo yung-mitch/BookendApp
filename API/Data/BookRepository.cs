@@ -38,6 +38,16 @@ namespace API.Data
             });
         }
 
+        public void DeleteUserBook(UserBook userBook)
+        {
+            _context.UserBooks.Remove(userBook);
+        }
+
+        public async Task<UserBook> GetUserBook(int userId, int bookId)
+        {
+            return await _context.UserBooks.FindAsync(userId, bookId);
+        }
+
         public async Task<BookDto> GetBookAsync(int id)
         {
             return await _context.Books
