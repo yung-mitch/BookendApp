@@ -12,5 +12,6 @@ namespace API.Entities
         
         public int BookId { get; set; }
         public Book Book { get; set; }
+        public List<Comment> Comments { get; set; }
     }
 }

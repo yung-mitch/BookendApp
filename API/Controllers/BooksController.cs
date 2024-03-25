@@ -148,11 +148,11 @@ namespace API.Controllers
         */
         [Authorize (Roles = "AppMember, Publisher")]
         [HttpGet("chapter/{chapterId}")]
-        public async Task<ActionResult<ChapterDto>> GetChapterByIdAsync(int chapterId)
+        public async Task<ActionResult<ChapterDto>> GetChapterById(int chapterId)
         {
-            var chapter = await _uow.BookRepository.GetChapterAsync(chapterId);
+            // var chapter = await _uow.BookRepository.GetChapterAsync(chapterId);
 
-            if (chapter == null) return NotFound();
+            // if (chapter == null) return NotFound();
 
             return await _uow.BookRepository.GetChapterDtoAsync(chapterId);
         }
@@ -322,6 +322,188 @@ namespace API.Controllers
             if (await _uow.Complete()) return Ok();
 
             return BadRequest("Problem deleting chapter");
+        }
+
+        /*
+            Get reviews for the specified book
+            Parameters: Id of targeted Book
+            Request body content: None
+            Query string variables: None
+        */
+        [Authorize (Roles = "AppMember")]
+        [HttpGet("reviews/{bookId}")]
+        public async Task<ActionResult<IEnumerable<ReviewDto>>> GetBookReviews(int bookId)
+        {
+            var book = await _uow.BookRepository.GetBookByIdAsync(bookId);
+            if (book == null) return NotFound();
+
+            var reviews = await _uow.BookRepository.GetBookReviews(bookId);
+            if (reviews == null) return NotFound();
+
+            return Ok(reviews);
+        }
+
+        /*
+            Create review for the specified book
+            Parameters: Id of targeted Book
+            Request body content: ReviewDto object
+            Query string variables: None
+        */
+        [Authorize (Roles = "AppMember")]
+        [HttpPost("add-review/{bookId}")]
+        public async Task<ActionResult<ReviewDto>> CreateReview(int bookId, ReviewDto reviewDto)
+        {
+            var book = await _uow.BookRepository.GetBookByIdAsync(bookId);
+            if (book == null) return NotFound();
+
+            var review = _mapper.Map<Review>(reviewDto);
+            review.BookId = bookId;
+            review.ReviewingUserId = User.GetUserId();
+            _uow.BookRepository.AddReview(review);
+
+            if (await _uow.Complete())
+            {
+                return CreatedAtAction(nameof(GetBook), new {bookId = book.Id}, _mapper.Map<ReviewDto>(review));
+            }
+
+            return BadRequest("Problem adding review");
+        }
+
+        /*
+            Update review specified by Id
+            Parameters: Id of Review to update
+            Request body content:  Dto for updated review attributes
+            Query string variables: None
+        */
+        [Authorize (Roles = "AppMember")]
+        [HttpPut("update-review/{reviewId}")]
+        public async Task<ActionResult> UpdateReview(ReviewUpdateDto reviewUpdateDto, int reviewId)
+        {
+            var review = await _uow.BookRepository.GetReviewByIdAsync(reviewId);
+            if (review == null) return NotFound();
+
+            var currentUser = await _uow.UserRepository.GetUserByIdAsync(User.GetUserId());
+            if (currentUser.Id != review.ReviewingUserId) return BadRequest("You cannot edit a review you did not leave");
+
+            _mapper.Map(reviewUpdateDto, review);
+
+            if (await _uow.Complete()) return NoContent();
+
+            return BadRequest("Failed to update review");
+        }
+
+        /*
+            Delete Review specified by Id
+            Parameters: Id of Review to be deleted
+            Request body content: None
+            Query string variables: None
+        */
+        [Authorize (Roles = "AppMember")]
+        [HttpDelete("delete-review/{reviewId}")]
+        public async Task<ActionResult> DeleteReview(int reviewId)
+        {
+            var review = await _uow.BookRepository.GetReviewByIdAsync(reviewId);
+            if (review == null) return NotFound();
+
+            var currentUser = await _uow.UserRepository.GetUserByIdAsync(User.GetUserId());
+            if (currentUser.Id != review.ReviewingUserId) return BadRequest("You cannot edit a review you did not leave");
+
+            _uow.BookRepository.DeleteReview(review);
+
+            if (await _uow.Complete()) return Ok();
+
+            return BadRequest("Problem deleting the review");
+        }
+
+        /*
+            Get comments for the specified chapter
+            Parameters: Id of targeted Chapter
+            Request body content: None
+            Query string variables: None
+        */
+        [Authorize (Roles = "AppMember")]
+        [HttpGet("comments/{chapterId}")]
+        public async Task<ActionResult<IEnumerable<CommentDto>>> GetChapterComments(int chapterId)
+        {
+            var chapter = await _uow.BookRepository.GetChapterAsync(chapterId);
+            if (chapter == null) return NotFound();
+            
+            var comments = await _uow.BookRepository.GetChapterComments(chapterId);
+            if (comments == null) return NotFound();
+
+            return Ok(comments);
+        }
+
+        /*
+            Create comment for the specified Chapter
+            Parameters: Id of targeted Chapter
+            Request body content: CommentDto object
+            Query string variables: None
+        */
+        [Authorize (Roles = "AppMember")]
+        [HttpPost("add-comment/{chapterId}")]
+        public async Task<ActionResult<CommentDto>> CreateComment(int chapterId, CommentDto commentDto)
+        {
+            var chapter = await _uow.BookRepository.GetChapterAsync(chapterId);
+            if (chapter == null) return NotFound();
+
+            var comment = _mapper.Map<Comment>(commentDto);
+            comment.ChapterId = chapterId;
+            comment.CommentingUserId = User.GetUserId();
+            _uow.BookRepository.AddComment(comment);
+
+            if (await _uow.Complete())
+            {
+                return CreatedAtAction(nameof(GetChapterById), new {chapterId = chapter.Id}, _mapper.Map<CommentDto>(comment));
+            }
+
+            return BadRequest("Problem adding comment");
+        }
+
+        /*
+            Update Comment specified by Id
+            Parameters: Id of Comment to update
+            Request body content: Dto for updated comment attributes
+            Query string variables: None
+        */
+        [Authorize (Roles = "AppMember")]
+        [HttpPut("update-comment/{commentId}")]
+        public async Task<ActionResult> UpdateComment(CommentUpdateDto commentUpdateDto, int commentId)
+        {
+            var comment = await _uow.BookRepository.GetCommentByIdAsync(commentId);
+            if (comment == null) return NotFound();
+
+            var currentUser = await _uow.UserRepository.GetUserByIdAsync(User.GetUserId());
+            if (currentUser.Id != comment.CommentingUserId) return BadRequest("You cannot edit a comment you did not leave");
+
+            _mapper.Map(commentUpdateDto, comment);
+            
+            if (await _uow.Complete()) return NoContent();
+
+            return BadRequest("Failed to update comment");
+        }
+
+        /*
+           Delete Comment specified by Id
+            Parameters: Id of Comment to be deleted
+            Request body content: None
+            Query string variables: None
+        */
+        [Authorize (Roles = "AppMember")]
+        [HttpDelete("delete-comment/{commentId}")]
+        public async Task<ActionResult> DeleteComment(int commentId)
+        {
+            var comment = await _uow.BookRepository.GetCommentByIdAsync(commentId);
+            if (comment == null) return NotFound();
+            
+            var currentUser = await _uow.UserRepository.GetUserByIdAsync(User.GetUserId());
+            if (currentUser.Id != comment.CommentingUserId) return BadRequest("You cannot edit a comment you did not leave");
+
+            _uow.BookRepository.DeleteComment(comment);
+
+            if (await _uow.Complete()) return Ok();
+
+            return BadRequest("Problem deleting the comment");
         }
     }
 }

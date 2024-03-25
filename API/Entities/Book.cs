@@ -10,5 +10,6 @@
         public List<UserBook> UserLibraryBooks { get; set; }
         public AppUser PublishingUser { get; set; }
         public int PublishingUserId { get; set; }
+        public List<Review> Reviews { get; set; }
     }
 }

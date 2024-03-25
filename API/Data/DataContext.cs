@@ -17,6 +17,8 @@ namespace API.Data
         public DbSet<Chapter> Chapters { get; set; }
         public DbSet<UserBook> UserBooks { get; set; }
         public DbSet<Advertisement> Advertisements { get; set; }
+        public DbSet<Review> Reviews { get; set; }
+        public DbSet<Comment> Comments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -34,6 +36,18 @@ namespace API.Data
                 .HasForeignKey(b => b.PublishingUserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            builder.Entity<AppUser>()
+                .HasMany(u => u.ReviewsLeft)
+                .WithOne(r => r.ReviewingUser)
+                .HasForeignKey(r => r.ReviewingUserId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
+            builder.Entity<AppUser>()
+                .HasMany(u => u.CommentsLeft)
+                .WithOne(c => c.CommentingUser)
+                .HasForeignKey(c => c.CommentingUserId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
             builder.Entity<AppRole>()
                 .HasMany(ur => ur.UserRoles)
                 .WithOne(u => u.Role)
@@ -44,6 +58,18 @@ namespace API.Data
                 .HasMany(bc => bc.Chapters)
                 .WithOne(b => b.Book)
                 .HasForeignKey(bc => bc.BookId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Book>()
+                .HasMany(b => b.Reviews)
+                .WithOne(r => r.Book)
+                .HasForeignKey(r => r.BookId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Chapter>()
+                .HasMany(ch => ch.Comments)
+                .WithOne(c => c.Chapter)
+                .HasForeignKey(c => c.ChapterId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<UserBook>()

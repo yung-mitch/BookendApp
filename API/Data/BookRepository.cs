@@ -107,5 +107,51 @@ namespace API.Data
                 .ProjectTo<ChapterDto>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync();
         }
+
+        public async Task<IEnumerable<ReviewDto>> GetBookReviews(int bookId)
+        {
+            return await _context.Reviews
+                .Where(x => x.BookId == bookId)
+                .ProjectTo<ReviewDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+        }
+
+        public void AddReview(Review review)
+        {
+            _context.Reviews.Add(review);
+        }
+
+        public void DeleteReview(Review review)
+        {
+            _context.Reviews.Remove(review);
+        }
+
+        public async Task<IEnumerable<CommentDto>> GetChapterComments(int chapterId)
+        {
+            return await _context.Comments
+                .Where(x => x.ChapterId == chapterId)
+                .ProjectTo<CommentDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+        }
+
+        public void AddComment(Comment comment)
+        {
+            _context.Comments.Add(comment);
+        }
+
+        public void DeleteComment(Comment comment)
+        {
+            _context.Comments.Remove(comment);
+        }
+
+        public async Task<Review> GetReviewByIdAsync(int reviewId)
+        {
+            return await _context.Reviews.FindAsync(reviewId);
+        }
+
+        public async Task<Comment> GetCommentByIdAsync(int commentId)
+        {
+            return await _context.Comments.FindAsync(commentId);
+        }
     }
 }

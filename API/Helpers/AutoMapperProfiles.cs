@@ -19,6 +19,12 @@ namespace API.Helpers
             CreateMap<Book, FullBookDto>();
             CreateMap<Advertisement, AdvertisementDto>();
             CreateMap<AdvertisementUpdateDto, Advertisement>();
+            CreateMap<Review, ReviewDto>();
+            CreateMap<ReviewDto, Review>();
+            CreateMap<ReviewUpdateDto, Review>();
+            CreateMap<Comment, CommentDto>();
+            CreateMap<CommentDto, Comment>();
+            CreateMap<CommentUpdateDto, Comment>();
         }
     }
 }
