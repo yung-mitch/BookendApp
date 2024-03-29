@@ -15,9 +15,9 @@ namespace API.Interfaces
         Task<FullBookDto> GetFullBookAsync(int id);
         Task<Chapter> GetChapterAsync(int id);
         Task<ChapterDto> GetChapterDtoAsync(int id);
-        Task<IEnumerable<ReviewDto>> GetBookReviews(int bookId);
+        Task<List<ReviewDto>> GetBookReviews(int bookId);
         Task<Review> GetReviewByIdAsync(int reviewId);
-        Task<IEnumerable<CommentDto>> GetChapterComments(int chapterId);
+        Task<List<CommentDto>> GetChapterComments(int chapterId);
         Task<Comment> GetCommentByIdAsync(int commentId);
         
         void AddBook(Book book);

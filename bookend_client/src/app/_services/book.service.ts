@@ -7,6 +7,8 @@ import { map, of, take } from 'rxjs';
 import { User } from '../_models/user';
 import { BookParams } from '../_models/bookParams';
 import { Chapter } from '../_models/chapter';
+import { Review } from '../_models/review';
+import { ChapterComment } from '../_models/chapterComment';
 
 @Injectable({
   providedIn: 'root'
@@ -103,5 +105,37 @@ export class BookService {
 
   foundInUserLibrary(bookId: number) {
     return this.http.get<boolean>(this.baseUrl + 'library/' + bookId);
+  }
+
+  getBookReviews(bookId: number) {
+    return this.http.get<Review[]>(this.baseUrl + 'books/reviews/' + bookId);
+  }
+
+  createBookReview(bookId: number, reviewDto: any) {
+    return this.http.post<Review>(this.baseUrl + 'books/add-review/' + bookId, reviewDto);
+  }
+
+  updateBookReview(reviewId: number, reviewUpdateDto: any) {
+    return this.http.put(this.baseUrl + 'books/update-review/' + reviewId, reviewUpdateDto)
+  }
+
+  deleteBookReview(reviewId: number) {
+    return this.http.delete(this.baseUrl + 'books/delete-review/' + reviewId);
+  }
+
+  getChapterComments(chapterId: number) {
+    return this.http.get<ChapterComment[]>(this.baseUrl + "books/comments/" + chapterId);
+  }
+
+  createChapterComment(chapterId: number, commentDto: any) {
+    return this.http.post(this.baseUrl + 'books/add-comment/' + chapterId, commentDto);
+  }
+
+  updateChapterComment(commentId: number, commentUpdateDto: any) {
+    return this.http.put(this.baseUrl + 'books/update-comment/' + commentId, commentUpdateDto);
+  }
+
+  deleteChapterComment(commentId: number) {
+    return this.http.delete(this.baseUrl + 'books/delete-comment/' + commentId);
   }
 }

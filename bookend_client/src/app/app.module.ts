@@ -35,6 +35,10 @@ import { ManageAdvertisementsComponent } from './manage-advertisements/manage-ad
 import { CreateAdvertisementModalComponent } from './modals/create-advertisement-modal/create-advertisement-modal.component';
 import { AdvertisementEditModalComponent } from './modals/advertisement-edit-modal/advertisement-edit-modal.component';
 import { AdvertisementReplaceFileModalComponent } from './modals/advertisement-replace-file-modal/advertisement-replace-file-modal.component';
+import { ReviewsListComponent } from './books/reviews-list/reviews-list.component';
+import { ChapterCommentsListComponent } from './books/chapter-comments-list/chapter-comments-list.component';
+import { ChapterCommentComponent } from './books/chapter-comment/chapter-comment.component';
+import { ReviewComponent } from './books/review/review.component';
 
 @NgModule({
   declarations: [
@@ -63,7 +67,11 @@ import { AdvertisementReplaceFileModalComponent } from './modals/advertisement-r
     ManageAdvertisementsComponent,
     CreateAdvertisementModalComponent,
     AdvertisementEditModalComponent,
-    AdvertisementReplaceFileModalComponent
+    AdvertisementReplaceFileModalComponent,
+    ReviewsListComponent,
+    ChapterCommentsListComponent,
+    ChapterCommentComponent,
+    ReviewComponent
   ],
   imports: [
     BrowserModule,

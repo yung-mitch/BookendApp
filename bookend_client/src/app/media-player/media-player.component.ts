@@ -102,4 +102,8 @@ export class MediaPlayerComponent implements OnInit {
   stop() {
     this.audioService.stop();
   }
+
+  jumpSeek(timestamp: number) {
+    this.audioService.seekTo(timestamp);
+  }
 }

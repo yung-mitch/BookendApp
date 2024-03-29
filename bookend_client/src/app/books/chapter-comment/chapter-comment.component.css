@@ -1,0 +1,9 @@
+.comment-time {
+    color: #6E8CA0;
+    text-decoration: none;
+}
+
+.comment-time:hover {
+    color: #324755;
+    cursor: pointer;
+}

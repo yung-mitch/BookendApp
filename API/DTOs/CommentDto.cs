@@ -6,5 +6,6 @@
         public int Timestamp { get; set; }
         public string CommentText { get; set; }
         public int CommentingUserId { get; set; }
+        public string CommentingUserName { get; set; }
     }
 }

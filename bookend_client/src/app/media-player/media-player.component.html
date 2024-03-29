@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container mb-3">
     <div class="row">
         <div class="col-4">
             <div class="content pb-2" style="background-color: lightgray;">
@@ -34,12 +34,13 @@
         <div class="col-8">
             <div class="mb-2">
                 <h3>{{book?.title}}</h3>
-                <h4>{{book?.author}}</h4>
+                <h4 class="mb-3">{{book?.author}}</h4>
             </div>
             <!-- <p>{{book.description}}</p> -->
+            <p>Book Description will go here!</p>
         </div>
     </div>
 </div>
 <div class="container">
-    <!-- Add comments for this chapter here -->
+    <app-chapter-comments-list [chapter]="chapter" (jumpToCommentTimestampEvent)="jumpSeek($event)"></app-chapter-comments-list>
 </div>

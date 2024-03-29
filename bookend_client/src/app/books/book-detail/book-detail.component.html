@@ -1,4 +1,4 @@
-<div class="row mb-3">
+<div class="row mb-3" *appHasRole="['Publisher']">
   <div class="col-3">
       <button class="btn btn-success" (click)="openCreateChapterModal(book!)">&plus; New Chapter</button>
   </div>
@@ -7,34 +7,37 @@
 <div class="container d-flex mt-2 mb-3">
     <table class="table table-hover">
         <thead>
-      <tr>
-        <th scope="col">Chapter No.</th>
-        <th scope="col">Title</th>
-        <th class="text-center" scope="col">Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let chapter of chapters; index as i">
-        <th scope="row">{{i+1}}</th>
-        <td>{{chapter.chapterTitle}}</td>
-        <td>
-            <ul class="list-inline text-center">
-                <li class="list-inline-item" *appHasRole="['Publisher', 'AppMember']">
-                    <button class="btn btn-primary" routerLink="/chapter/{{chapter.id}}"><i class="fa fa-play"></i></button>
-                </li>
-                <li class="list-inline-item" *appHasRole="['Publisher', 'Admin']">
-                    <button class="btn btn-primary" (click)="openEditChapterModal(chapter)"><i class="fa fa-pencil"></i></button>
-                </li>
-                <li class="list-inline-item" *appHasRole="['Publisher', 'Admin']">
-                    <button class="btn btn-primary" (click)="openChapterReplaceFileModal(chapter)"><i class="fa fa-file"></i></button>
-                </li>
-                <li class="list-inline-item" *appHasRole="['Publisher', 'Admin']">
-                    <button class="btn btn-primary" (click)="delete(book!.id, chapter.id)"><i class="fa fa-trash"></i></button>
-                </li>
-            </ul>
-        </td>
-      </tr>
-    </tbody>
-  
+        <tr>
+          <th scope="col">Chapter No.</th>
+          <th scope="col">Title</th>
+          <th class="text-center" scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let chapter of chapters; index as i">
+          <th scope="row">{{i+1}}</th>
+          <td>{{chapter.chapterTitle}}</td>
+          <td>
+              <ul class="list-inline text-center">
+                  <li class="list-inline-item" *appHasRole="['Publisher', 'AppMember']">
+                      <button class="btn btn-primary" routerLink="/chapter/{{chapter.id}}"><i class="fa fa-play"></i></button>
+                  </li>
+                  <li class="list-inline-item" *appHasRole="['Publisher', 'Admin']">
+                      <button class="btn btn-primary" (click)="openEditChapterModal(chapter)"><i class="fa fa-pencil"></i></button>
+                  </li>
+                  <li class="list-inline-item" *appHasRole="['Publisher', 'Admin']">
+                      <button class="btn btn-primary" (click)="openChapterReplaceFileModal(chapter)"><i class="fa fa-file"></i></button>
+                  </li>
+                  <li class="list-inline-item" *appHasRole="['Publisher', 'Admin']">
+                      <button class="btn btn-primary" (click)="delete(book!.id, chapter.id)"><i class="fa fa-trash"></i></button>
+                  </li>
+              </ul>
+          </td>
+        </tr>
+      </tbody>
     </table>
+  </div>
+
+  <div class="container d-flex mt-5 mb-3">
+    <app-reviews-list [book]="book"></app-reviews-list>
   </div>

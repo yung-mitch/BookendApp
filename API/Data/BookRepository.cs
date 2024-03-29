@@ -108,12 +108,30 @@ namespace API.Data
                 .SingleOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<ReviewDto>> GetBookReviews(int bookId)
+        public async Task<List<ReviewDto>> GetBookReviews(int bookId)
         {
-            return await _context.Reviews
-                .Where(x => x.BookId == bookId)
-                .ProjectTo<ReviewDto>(_mapper.ConfigurationProvider)
-                .ToListAsync();
+            var users = _context.Users;
+            var reviews = _context.Reviews;
+
+            var query = users
+                .Join(
+                    reviews.Where(x => x.BookId == bookId),
+                    user => user.Id,
+                    review => review.ReviewingUserId,
+                    (user, review) => new ReviewDto
+                    {
+                        Id = review.Id,
+                        Rating = review.Rating,
+                        ReviewText = review.ReviewText,
+                        ReviewingUserId = review.ReviewingUserId,
+                        ReviewingUserName = user.UserName,
+                        ReviewingUserPhotoUrl = user.ProfilePhoto.Url
+                    }
+                );
+
+            var returnedReviews = await query.ToListAsync();
+
+            return returnedReviews;
         }
 
         public void AddReview(Review review)
@@ -126,12 +144,29 @@ namespace API.Data
             _context.Reviews.Remove(review);
         }
 
-        public async Task<IEnumerable<CommentDto>> GetChapterComments(int chapterId)
+        public async Task<List<CommentDto>> GetChapterComments(int chapterId)
         {
-            return await _context.Comments
-                .Where(x => x.ChapterId == chapterId)
-                .ProjectTo<CommentDto>(_mapper.ConfigurationProvider)
-                .ToListAsync();
+            var users = _context.Users;
+            var comments = _context.Comments;
+
+            var query = users
+                .Join(
+                    comments.Where(x => x.ChapterId == chapterId),
+                    user => user.Id,
+                    comment => comment.CommentingUserId,
+                    (user, comment) => new CommentDto
+                    {
+                        Id = comment.Id,
+                        Timestamp = comment.Timestamp,
+                        CommentText = comment.CommentText,
+                        CommentingUserId = comment.CommentingUserId,
+                        CommentingUserName = user.UserName
+                    }
+                );
+
+            var returnedComments = await query.ToListAsync();
+            
+            return returnedComments;
         }
 
         public void AddComment(Comment comment)

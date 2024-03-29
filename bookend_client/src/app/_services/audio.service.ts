@@ -57,7 +57,7 @@ export class AudioService {
 
   formatTime(time: number, format: string = "hh:mm:ss") {
     var dur = Duration.fromObject({ seconds: time});
-    return (dur.hours == 0) ? dur.toFormat('mm:ss') : dur.toFormat('hh:mm:ss')
+    return (dur.hours == 0) ? dur.toFormat('mm:ss') : dur.toFormat('hh:mm:ss');
   }
 
   getState(): Observable<AudioStreamState> {
