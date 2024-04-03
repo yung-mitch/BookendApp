@@ -210,7 +210,12 @@ namespace API.Controllers
             Request body content: 
             Query String variables: 
         */
-
+        [Authorize (Roles = "AppMember")]
+        [HttpGet("advertisements-to-serve")]
+        public async Task<ActionResult<List<AdvertisementDto>>> GetAdvertisementsToServe()
+        {
+            return await _uow.AdvertisementRepository.GetRandomAdvertisements(1);
+        }
 
         /*
             Action: 

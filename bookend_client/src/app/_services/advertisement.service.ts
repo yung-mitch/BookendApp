@@ -28,6 +28,10 @@ export class AdvertisementService {
 
   }
 
+  getAdvertisementsToServe() {
+    return this.http.get<Advertisement[]>(this.baseUrl + 'advertisements/advertisements-to-serve');
+  }
+
   getPublishedAdvertisements() {
     return this.http.get<Advertisement[]>(this.baseUrl + 'advertisements/published');
   }

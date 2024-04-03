@@ -10,5 +10,6 @@ namespace API.Interfaces
         Task<IEnumerable<AdvertisementDto>> GetUserAdvertisementsAsync(int userId);
         Task<Advertisement> GetAdvertisementByIdAsync(int id);
         Task<AdvertisementDto> GetAdvertisementAsync(int id);
+        Task<List<AdvertisementDto>> GetRandomAdvertisements(int numberOfAds);
     }
 }

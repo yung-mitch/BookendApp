@@ -50,5 +50,18 @@ namespace API.Data
                 .ProjectTo<AdvertisementDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }
+
+        public async Task<List<AdvertisementDto>> GetRandomAdvertisements(int numberOfAds)
+        {
+            Random rand = new Random();
+            int skipper = rand.Next(0, _context.Set<Advertisement>().Count());
+
+            return await _context.Advertisements
+                .OrderBy(x => x.Id)
+                .Skip(skipper)
+                .Take(numberOfAds)
+                .ProjectTo<AdvertisementDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+        }
     }
 }
