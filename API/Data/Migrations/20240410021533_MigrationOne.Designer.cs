@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240304223126_BackToDev")]
-    partial class BackToDev
+    [Migration("20240410021533_MigrationOne")]
+    partial class MigrationOne
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -199,6 +199,33 @@ namespace API.Data.Migrations
                     b.ToTable("Chapters");
                 });
 
+            modelBuilder.Entity("API.Entities.Comment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ChapterId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("CommentText")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("CommentingUserId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Timestamp")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChapterId");
+
+                    b.HasIndex("CommentingUserId");
+
+                    b.ToTable("Comments");
+                });
+
             modelBuilder.Entity("API.Entities.Photo", b =>
                 {
                     b.Property<int>("Id")
@@ -220,6 +247,33 @@ namespace API.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("Photos");
+                });
+
+            modelBuilder.Entity("API.Entities.Review", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("BookId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Rating")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ReviewText")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ReviewingUserId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookId");
+
+                    b.HasIndex("ReviewingUserId");
+
+                    b.ToTable("Reviews");
                 });
 
             modelBuilder.Entity("API.Entities.UserBook", b =>
@@ -373,6 +427,24 @@ namespace API.Data.Migrations
                     b.Navigation("Book");
                 });
 
+            modelBuilder.Entity("API.Entities.Comment", b =>
+                {
+                    b.HasOne("API.Entities.Chapter", "Chapter")
+                        .WithMany("Comments")
+                        .HasForeignKey("ChapterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("API.Entities.AppUser", "CommentingUser")
+                        .WithMany("CommentsLeft")
+                        .HasForeignKey("CommentingUserId")
+                        .IsRequired();
+
+                    b.Navigation("Chapter");
+
+                    b.Navigation("CommentingUser");
+                });
+
             modelBuilder.Entity("API.Entities.Photo", b =>
                 {
                     b.HasOne("API.Entities.AppUser", "AppUser")
@@ -382,6 +454,24 @@ namespace API.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("AppUser");
+                });
+
+            modelBuilder.Entity("API.Entities.Review", b =>
+                {
+                    b.HasOne("API.Entities.Book", "Book")
+                        .WithMany("Reviews")
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("API.Entities.AppUser", "ReviewingUser")
+                        .WithMany("ReviewsLeft")
+                        .HasForeignKey("ReviewingUserId")
+                        .IsRequired();
+
+                    b.Navigation("Book");
+
+                    b.Navigation("ReviewingUser");
                 });
 
             modelBuilder.Entity("API.Entities.UserBook", b =>
@@ -446,11 +536,15 @@ namespace API.Data.Migrations
 
             modelBuilder.Entity("API.Entities.AppUser", b =>
                 {
+                    b.Navigation("CommentsLeft");
+
                     b.Navigation("ProfilePhoto");
 
                     b.Navigation("PublishedAds");
 
                     b.Navigation("PublishedBooks");
+
+                    b.Navigation("ReviewsLeft");
 
                     b.Navigation("UserLibraryBooks");
 
@@ -461,7 +555,14 @@ namespace API.Data.Migrations
                 {
                     b.Navigation("Chapters");
 
+                    b.Navigation("Reviews");
+
                     b.Navigation("UserLibraryBooks");
+                });
+
+            modelBuilder.Entity("API.Entities.Chapter", b =>
+                {
+                    b.Navigation("Comments");
                 });
 #pragma warning restore 612, 618
         }

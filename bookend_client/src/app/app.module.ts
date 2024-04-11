@@ -39,6 +39,7 @@ import { ReviewsListComponent } from './books/reviews-list/reviews-list.componen
 import { ChapterCommentsListComponent } from './books/chapter-comments-list/chapter-comments-list.component';
 import { ChapterCommentComponent } from './books/chapter-comment/chapter-comment.component';
 import { ReviewComponent } from './books/review/review.component';
+import { PhotoEditorModalComponent } from './members/photo-editor-modal/photo-editor-modal.component';
 
 @NgModule({
   declarations: [
@@ -71,7 +72,8 @@ import { ReviewComponent } from './books/review/review.component';
     ReviewsListComponent,
     ChapterCommentsListComponent,
     ChapterCommentComponent,
-    ReviewComponent
+    ReviewComponent,
+    PhotoEditorModalComponent
   ],
   imports: [
     BrowserModule,

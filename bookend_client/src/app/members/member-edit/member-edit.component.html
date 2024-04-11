@@ -1,1 +1,6 @@
-<p>member-edit works!</p>
+<div class="row">
+    <div class="col-4">
+        <img src="{{user?.photoUrl}}" alt="photo of user" class="mb-1">
+        <button class="btn btn-primary" *ngIf="user" (click)="openPhotoEditorModal(user)">Change Profile Photo</button>
+    </div>
+</div>

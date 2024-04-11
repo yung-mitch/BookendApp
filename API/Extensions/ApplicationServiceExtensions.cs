@@ -15,6 +15,7 @@ namespace API.Extensions
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IChapterService, ChapterService>();
             services.AddScoped<IAdvertisementService, AdvertisementService>();
+            services.AddScoped<IPhotoService, PhotoService>();
             services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));
 
             return services;
