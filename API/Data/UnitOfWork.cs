@@ -21,6 +21,8 @@ namespace API.Data
         
         public IAdvertisementRepository AdvertisementRepository => new AdvertisementRepository(_context, _mapper);
 
+        public IClubRepository ClubRepository => new ClubRepository(_context, _mapper);
+
         public async Task<bool> Complete()
         {
             return await _context.SaveChangesAsync() > 0;

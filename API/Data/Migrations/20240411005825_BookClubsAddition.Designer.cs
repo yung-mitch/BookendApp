@@ -3,6 +3,7 @@ using System;
 using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240411005825_BookClubsAddition")]
+    partial class BookClubsAddition
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.15");
@@ -188,21 +191,6 @@ namespace API.Data.Migrations
                     b.HasIndex("OwningUserId");
 
                     b.ToTable("BookClubs");
-                });
-
-            modelBuilder.Entity("API.Entities.BookClubBook", b =>
-                {
-                    b.Property<int>("ClubId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("BookId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("ClubId", "BookId");
-
-                    b.HasIndex("BookId");
-
-                    b.ToTable("BookClubBooks");
                 });
 
             modelBuilder.Entity("API.Entities.Chapter", b =>
@@ -471,25 +459,6 @@ namespace API.Data.Migrations
                     b.Navigation("OwningUser");
                 });
 
-            modelBuilder.Entity("API.Entities.BookClubBook", b =>
-                {
-                    b.HasOne("API.Entities.Book", "Book")
-                        .WithMany("ClubCheckouts")
-                        .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("API.Entities.BookClub", "Club")
-                        .WithMany("ClubBooks")
-                        .HasForeignKey("ClubId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Book");
-
-                    b.Navigation("Club");
-                });
-
             modelBuilder.Entity("API.Entities.Chapter", b =>
                 {
                     b.HasOne("API.Entities.Book", "Book")
@@ -652,8 +621,6 @@ namespace API.Data.Migrations
                 {
                     b.Navigation("Chapters");
 
-                    b.Navigation("ClubCheckouts");
-
                     b.Navigation("Reviews");
 
                     b.Navigation("UserLibraryBooks");
@@ -661,8 +628,6 @@ namespace API.Data.Migrations
 
             modelBuilder.Entity("API.Entities.BookClub", b =>
                 {
-                    b.Navigation("ClubBooks");
-
                     b.Navigation("ClubMembers");
                 });
 

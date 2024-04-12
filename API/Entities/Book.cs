@@ -11,5 +11,6 @@
         public AppUser PublishingUser { get; set; }
         public int PublishingUserId { get; set; }
         public List<Review> Reviews { get; set; }
+        public List<BookClubBook> ClubCheckouts { get; set; }
     }
 }

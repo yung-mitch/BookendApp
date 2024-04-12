@@ -25,6 +25,9 @@ namespace API.Helpers
             CreateMap<Comment, CommentDto>();
             CreateMap<CommentDto, Comment>();
             CreateMap<CommentUpdateDto, Comment>();
+            CreateMap<BookClub, ClubDto>();
+            CreateMap<ClubDto, BookClub>();
+            CreateMap<ClubUpdateDto, BookClub>();
         }
     }
 }

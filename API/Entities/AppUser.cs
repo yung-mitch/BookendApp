@@ -11,5 +11,7 @@ namespace API.Entities
         public Photo ProfilePhoto { get; set; } = new();
         public List<Review> ReviewsLeft { get; set; }
         public List<Comment> CommentsLeft { get; set; }
+        public List<UserClub> MemberClubs { get; set; }
+        public List<BookClub> OwnedClubs { get; set; }
     }
 }

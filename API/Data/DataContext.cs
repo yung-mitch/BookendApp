@@ -19,6 +19,9 @@ namespace API.Data
         public DbSet<Advertisement> Advertisements { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Comment> Comments { get; set; }
+        public DbSet<BookClub> BookClubs { get; set;}
+        public DbSet<UserClub> UserClubs { get; set; }
+        public DbSet<BookClubBook> BookClubBooks { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -85,6 +88,42 @@ namespace API.Data
                 .HasOne(ub => ub.Book)
                 .WithMany(b => b.UserLibraryBooks)
                 .HasForeignKey(ub => ub.BookId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<UserClub>()
+                .HasKey(k => new {k.BookClubId, k.UserId});
+
+            builder.Entity<UserClub>()
+                .HasOne(uc => uc.User)
+                .WithMany(u => u.MemberClubs)
+                .HasForeignKey(ub => ub.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<UserClub>()
+                .HasOne(uc => uc.Club)
+                .WithMany(bc => bc.ClubMembers)
+                .HasForeignKey(uc => uc.BookClubId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<BookClub>()
+                .HasOne(bc => bc.OwningUser)
+                .WithMany(u => u.OwnedClubs)
+                .HasForeignKey(bc => bc.OwningUserId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
+            builder.Entity<BookClubBook>()
+                .HasKey(k => new {k.ClubId, k.BookId});
+
+            builder.Entity<BookClubBook>()
+                .HasOne(bcb => bcb.Book)
+                .WithMany(b => b.ClubCheckouts)
+                .HasForeignKey(bcb => bcb.BookId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<BookClubBook>()
+                .HasOne(bcb => bcb.Club)
+                .WithMany(bc => bc.ClubBooks)
+                .HasForeignKey(bcb => bcb.ClubId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }
