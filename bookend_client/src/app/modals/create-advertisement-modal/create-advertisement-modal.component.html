@@ -18,7 +18,7 @@
             [uploader]="uploader"
             (onFileDrop)="toggleDropZone(); getFileType($event)"
             class="card bg-faded p-3 text-center mb-3 my-drop-zone">
-            <i class="fa fa-upload fa-3x"></i>
+            <i class="fa-solid fa-upload fa-3x"></i>
             Upload file here
         </div>
     </div>
@@ -29,7 +29,7 @@
             </div>
             <div class="col-3">
                 <button class="btn btn-danger btn-xs" (click)="uploader.queue[0].remove(); toggleDropZone()">
-                    <i class="fa fa-trash"></i>
+                    <i class="fa-solid fa-trash"></i>
                 </button>
             </div>
         </div>

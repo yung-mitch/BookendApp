@@ -1,6 +1,6 @@
 <h6><img src="{{review?.reviewingUserPhotoUrl}}" alt="user photo"> {{review?.reviewingUserName}}</h6>
-<div class="ps-3" style="display: inline;" *ngIf="review?.reviewingUserName == user?.username">
-    <button class="btn" (click)="toggleEditReviewForm()"><i class="fa fa-pencil"></i></button> <button class="btn" (click)="deleteReview()"><i class="fa fa-trash"></i></button>
+<div class="ps-3" style="display: inline;" *ngIf="review?.reviewingUserName == user?.userName">
+    <button class="btn" (click)="toggleEditReviewForm()"><i class="fa-solid fa-pencil"></i></button> <button class="btn" (click)="deleteReview()"><i class="fa-solid fa-trash"></i></button>
 </div>
 
 <div *ngIf="!editReviewForm">

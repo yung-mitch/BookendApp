@@ -4,8 +4,8 @@
             <div class="content pb-2" style="background-color: lightgray;">
                 <div class="logo text-center pt-5 pb-5">
                     <span style="font-size: 48px;">
-                        <i class="fa fa-headphones fa-2x" *ngIf="adsPlayedBack"></i>
-                        <i class="fa fa-bullhorn fa-2x" *ngIf="!adsPlayedBack"></i>
+                        <i class="fa-solid fa-headphones fa-2x" *ngIf="adsPlayedBack"></i>
+                        <i class="fa-solid fa-bullhorn fa-2x" *ngIf="!adsPlayedBack"></i>
                     </span>
                 </div>
                 <h5 class="text-center" *ngIf="adsPlayedBack">
@@ -26,16 +26,16 @@
                 </div>
                 <div class="d-flex justify-content-around align-items-center">
                     <button class="btn btn-secondary btn-circle" [disabled]="chapterIndex == 0" (click)="previous()">
-                        <i class="fa fa-step-backward"></i>
+                        <i class="fa-solid fa-step-backward"></i>
                     </button>
                     <button class="btn btn-secondary btn-circle" *ngIf="state?.playable && !state?.playing" (click)="play()">
-                        <i class="fa fa-play"></i>
+                        <i class="fa-solid fa-play"></i>
                     </button>
                     <button class="btn btn-secondary btn-circle" *ngIf="state?.playing && state?.playable" (click)="pause()">
-                        <i class="fa fa-pause"></i>
+                        <i class="fa-solid fa-pause"></i>
                     </button>
                     <button class="btn btn-secondary btn-circle" [disabled]="chapterIndex == (book?.chapters!.length - 1)" (click)="next()">
-                        <i class="fa fa-step-forward"></i>
+                        <i class="fa-solid fa-step-forward"></i>
                     </button>
                 </div>
             </div>
