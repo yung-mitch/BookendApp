@@ -54,7 +54,7 @@ export class ReviewsListComponent implements OnInit {
             var review = JSON.parse(JSON.stringify(response)) as Review;
             if (this.user)
             {
-              review.reviewingUserName = this.user.username;
+              review.reviewingUserName = this.user.userName;
               review.reviewingUserPhotoUrl = this.user.photoUrl;
             }
             this.reviews.push(review);

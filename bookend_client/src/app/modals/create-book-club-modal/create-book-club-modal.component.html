@@ -1,0 +1,17 @@
+<div class="modal-header">
+    <h4 class="modal-title pull-left">Start a Book Club!</h4>
+    <button type="button" class="btn-close close pull-right" aria-label="close" (click)="bsModalRef.hide()">
+        <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <form #bookClubCreateForm="ngForm" id="bookClubCreateForm" autocomplete="off">
+        <label for="clubName">Book Club Name</label>
+        <input type="text"
+            name="clubName"
+            [(ngModel)]="clubName">
+    </form>
+</div>
+<div class="modal-footer">
+    <button type="submit" form="bookClubCreateForm" class="btn btn-primary" (click)="bsModalRef.hide()">Create</button>
+</div>

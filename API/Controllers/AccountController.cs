@@ -46,7 +46,7 @@ namespace API.Controllers
 
             return new UserDto
             {
-                Username = user.UserName,
+                UserName = user.UserName,
                 Token = await _tokenService.CreateToken(user)
             };
         }
@@ -69,7 +69,7 @@ namespace API.Controllers
             // if all steps succeeded, return UserDto
             return new UserDto
             {
-                Username = user.UserName,
+                UserName = user.UserName,
                 Token = await _tokenService.CreateToken(user),
                 PhotoUrl = user.ProfilePhoto.Url
             };

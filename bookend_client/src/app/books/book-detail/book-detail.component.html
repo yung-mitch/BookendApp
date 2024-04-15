@@ -20,16 +20,16 @@
           <td>
               <ul class="list-inline text-center">
                   <li class="list-inline-item" *appHasRole="['Publisher', 'AppMember']">
-                      <button class="btn btn-primary" routerLink="/chapter/{{chapter.id}}"><i class="fa fa-play"></i></button>
+                      <button class="btn btn-primary" routerLink="/chapter/{{chapter.id}}"><i class="fa-solid fa-play"></i></button>
                   </li>
                   <li class="list-inline-item" *appHasRole="['Publisher', 'Admin']">
-                      <button class="btn btn-primary" (click)="openEditChapterModal(chapter)"><i class="fa fa-pencil"></i></button>
+                      <button class="btn btn-primary" (click)="openEditChapterModal(chapter)"><i class="fa-solid fa-pencil"></i></button>
                   </li>
                   <li class="list-inline-item" *appHasRole="['Publisher', 'Admin']">
-                      <button class="btn btn-primary" (click)="openChapterReplaceFileModal(chapter)"><i class="fa fa-file"></i></button>
+                      <button class="btn btn-primary" (click)="openChapterReplaceFileModal(chapter)"><i class="fa-solid fa-file"></i></button>
                   </li>
                   <li class="list-inline-item" *appHasRole="['Publisher', 'Admin']">
-                      <button class="btn btn-primary" (click)="delete(book!.id, chapter.id)"><i class="fa fa-trash"></i></button>
+                      <button class="btn btn-primary" (click)="delete(book!.id, chapter.id)"><i class="fa-solid fa-trash"></i></button>
                   </li>
               </ul>
           </td>

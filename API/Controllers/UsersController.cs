@@ -27,10 +27,10 @@ namespace API.Controllers
             return await _uow.UserRepository.GetUsersAsync();
         }
 
-        [HttpGet("{username}")]
-        public async Task<ActionResult<MemberDto>> GetUserByUsername(string username)
+        [HttpGet("{userName}")]
+        public async Task<ActionResult<MemberDto>> GetUserByUsername(string userName)
         {
-            return await _uow.UserRepository.GetMemberAsync(username);
+            return await _uow.UserRepository.GetMemberAsync(userName);
         }
 
         [HttpPost("replace-photo")]

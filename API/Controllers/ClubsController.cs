@@ -93,7 +93,7 @@ namespace API.Controllers
         */
         [Authorize(Roles = "AppMember")]
         [HttpPut("update-club/{clubId}")]
-        public async Task<ActionResult<ClubDto>> UpdateBookClub(int clubId, ClubUpdateDto clubUpdateDto)
+        public async Task<ActionResult<ClubDto>> UpdateBookClub(ClubUpdateDto clubUpdateDto, int clubId)
         {
             var club = await _uow.ClubRepository.GetBookClub(clubId);
             if (club == null) return NotFound();

@@ -1,0 +1,20 @@
+<div class="row mb-3">
+    <div class="col-3">
+        <button class="btn btn-success" (click)="openCreateBookClubModal()">Start a New Book Club</button>
+    </div>
+</div>
+<div class="container d-flex mt-2 mb-3">
+    <table class="table table-hover" *ngIf="clubs.length > 0">
+        <thead>
+            <tr>
+                <th scope="col">Book Club Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let club of clubs" routerLink="/bookclubs/{{club.id}}">
+                <td>{{club.clubName}} <i class="fa-solid fa-key" *ngIf="club.owningUserId === member?.id"></i></td>
+            </tr>
+        </tbody>
+    </table>
+    <p *ngIf="clubs.length === 0">It looks like you aren't a part of any Book Clubs yet. Start one of your own by clicking the button at the top of the page!</p>
+</div>

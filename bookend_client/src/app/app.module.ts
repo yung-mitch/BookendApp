@@ -18,7 +18,7 @@ import { MemberDetailComponent } from './members/member-detail/member-detail.com
 import { MemberEditComponent } from './members/member-edit/member-edit.component';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { MemberLibraryComponent } from './members/member-library/member-library.component';
-import { BookClubListComponent } from './book-club-list/book-club-list.component';
+import { BookClubListComponent } from './book-clubs/book-club-list/book-club-list.component';
 import { MessagesComponent } from './messages/messages.component';
 import { ManagePublishedBooksComponent } from './books/manage-published-books/manage-published-books.component';
 import { HasRoleDirective } from './_directives/has-role.directive';
@@ -40,6 +40,12 @@ import { ChapterCommentsListComponent } from './books/chapter-comments-list/chap
 import { ChapterCommentComponent } from './books/chapter-comment/chapter-comment.component';
 import { ReviewComponent } from './books/review/review.component';
 import { PhotoEditorModalComponent } from './members/photo-editor-modal/photo-editor-modal.component';
+import { CreateBookClubModalComponent } from './modals/create-book-club-modal/create-book-club-modal.component';
+import { BookClubDetailComponent } from './book-clubs/book-club-detail/book-club-detail.component';
+import { AddBookClubMemberModalComponent } from './book-clubs/add-book-club-member-modal/add-book-club-member-modal.component';
+import { EditBookClubModalComponent } from './book-clubs/edit-book-club-modal/edit-book-club-modal.component';
+import { AddBookClubBookModalComponent } from './book-clubs/add-book-club-book-modal/add-book-club-book-modal.component';
+import { BookClubBookCardComponent } from './books/book-club-book-card/book-club-book-card.component';
 
 @NgModule({
   declarations: [
@@ -73,7 +79,13 @@ import { PhotoEditorModalComponent } from './members/photo-editor-modal/photo-ed
     ChapterCommentsListComponent,
     ChapterCommentComponent,
     ReviewComponent,
-    PhotoEditorModalComponent
+    PhotoEditorModalComponent,
+    CreateBookClubModalComponent,
+    BookClubDetailComponent,
+    AddBookClubMemberModalComponent,
+    EditBookClubModalComponent,
+    AddBookClubBookModalComponent,
+    BookClubBookCardComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,53 @@
+<div class="text-center mt-3 mb-2">
+    <h2>{{club?.clubName}}</h2>
+</div>
+<div *ngIf="club?.owningUserId == member?.id">
+    <button class="btn btn-secondary" (click)="openEditBookClubModal()">Edit Book Club Details</button>
+</div>
+<div>
+    <h4 class="mt-2">Current Club Material</h4>
+</div>
+<div class="row mb-2" *ngIf="books.length > 0">
+    <div class="col-3" *ngFor="let book of books">
+        <app-book-club-book-card [book]="book" [club]="club" [member]="member" (removeFromClubEvent)="removeBookClubBook($event)"></app-book-club-book-card>
+    </div>
+</div>
+<div class="row mb-5 text-center" *ngIf="books.length == 0">
+    <h6 class="text-info">It looks like there this Book Club doesn't have any listening material yet. Check back later for the the Audiobook(s) to engage with and discuss.</h6>
+</div>
+<div class="row">
+    <button class="btn btn-secondary" style="width: 20%;" (click)="openAddBookClubBookModal()" *ngIf="club?.owningUserId == member?.id">&plus; Audiobook</button>
+</div>
+
+<hr class="solid" style="border-top: 3px solid #6e8ca0">
+
+<div class="row">
+    <button class="btn btn-secondary" (click)="openAddBookClubMemberModal()" *ngIf="club?.owningUserId == member?.id">&plus; New Member</button>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Member Name</th>
+                <th style="text-align: center;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let clubMember of clubMembers">
+                <td>{{clubMember.userName}} <i class="fa-solid fa-key" *ngIf="club?.owningUserId == member?.id && member?.id == clubMember.id"></i></td>
+                <td>
+                    <ul class="list-inline text-center">
+                        <li class="list-inline-item">
+                            <button class="btn btn-primary"><i class="fa-solid fa-circle-user"></i></button>
+                        </li>
+                        <li class="list-inline-item" *ngIf="club?.owningUserId == member?.id && member?.id != clubMember.id">
+                            <button class="btn btn-primary" (click)="removeBookClubMember(clubMember.id)"><i class="fa-solid fa-user-slash"></i></button>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div *ngIf="club?.owningUserId == member?.id">
+    <button class="btn btn-danger" (click)="deleteBookClub()">Delete Book Club</button>
+</div>

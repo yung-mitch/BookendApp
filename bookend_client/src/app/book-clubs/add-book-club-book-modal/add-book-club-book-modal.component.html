@@ -1,0 +1,21 @@
+<div class="modal-header">
+    <h4 class="modal-title pull-left">Add a Book to the Book Club</h4>
+    <button type="button" class="btn-close close pull-right" aria-label="close" (click)="bsModalRef.hide()">
+        <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <form #addBookClubMemberForm="ngForm" id="addBookClubMemberForm" (ngSubmit)="addNewBook()" autocomplete="off">
+        <table>
+            <tbody>
+                <tr *ngFor="let book of otherBooks">
+                    <td>
+                        <input type="radio" id="{{book.id}}" name="newMember" value="{{book.id}}" [(ngModel)]="newBookId">
+                        <label for="{{book.id}}">{{book.title}}</label>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <button class="btn btn-success" type="submit">Add Member</button>
+    </form>
+</div>

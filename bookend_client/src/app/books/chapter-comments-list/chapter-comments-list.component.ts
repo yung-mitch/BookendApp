@@ -95,7 +95,7 @@ export class ChapterCommentsListComponent implements OnInit{
             var chapterComment = JSON.parse(JSON.stringify(response)) as ChapterComment;
             if (this.user)
             {
-              chapterComment.commentingUserName = this.user.username;
+              chapterComment.commentingUserName = this.user.userName;
               chapterComment.readableTimestamp = this.formatTimestamp(chapterComment.timestamp);
             }
             this.chapterComments.push(chapterComment);
