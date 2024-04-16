@@ -7,6 +7,7 @@ import { BsModalRef } from 'ngx-bootstrap/modal';
   styleUrls: ['./advertisement-edit-modal.component.css']
 })
 export class AdvertisementEditModalComponent implements OnInit{
+  model: any = {};
   adName: string = '';
 
   constructor(public bsModalRef: BsModalRef) { }

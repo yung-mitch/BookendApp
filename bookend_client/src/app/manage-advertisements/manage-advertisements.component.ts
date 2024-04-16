@@ -80,12 +80,12 @@ export class ManageAdvertisementsComponent implements OnInit{
     this.bsModalRefAdEdit.onHide?.subscribe({
       next: () => {
         const adUpdate = {
-          adName: this.bsModalRefAdEdit.content?.adName
+          adName: this.bsModalRefAdEdit.content?.model.adName
         }
         if (adUpdate.adName != "") {
           this.advertisementService.updateAdvertisement(adUpdate, ad.id).subscribe({
             next: () => {
-
+              this.advertisements[this.advertisements.indexOf(ad)].adName = adUpdate.adName;
             }
           })
         }

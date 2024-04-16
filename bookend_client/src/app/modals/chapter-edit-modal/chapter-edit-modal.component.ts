@@ -10,6 +10,7 @@ import { environment } from 'src/environments/environment';
 })
 export class ChapterEditModalComponent implements OnInit {
   @Input() book: Book | undefined;
+  model: any = {};
   title: string = '';
   chapterId: number | undefined;
   baseUrl = environment.apiUrl;

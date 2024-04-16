@@ -61,8 +61,8 @@ export class BookCardComponent implements OnInit {
     this.bsModalRef = this.modalService.show(BookEditModalComponent, config);
     this.bsModalRef.onHide?.subscribe({
       next: () => {
-        const title = this.bsModalRef.content?.title;
-        const author = this.bsModalRef.content?.author;
+        const title = this.bsModalRef.content?.model.title;
+        const author = this.bsModalRef.content?.model.author;
         if (title != book.title || author != book.author) {
           const bookUpdate = {
             title: title,
@@ -71,7 +71,10 @@ export class BookCardComponent implements OnInit {
           this.bookService.updateBook(bookUpdate, book.id).subscribe({
             next: () => {
               // this.toastr.success('Book updated successfully');
-              // update the component to new values without refresh
+              if (this.book && bookUpdate.title && bookUpdate.author) {
+                this.book.title = bookUpdate.title;
+                this.book.author = bookUpdate.author;
+              }
             }
           });
         }

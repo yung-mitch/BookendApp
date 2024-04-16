@@ -87,13 +87,13 @@ export class BookDetailComponent implements OnInit {
     this.bsModalRefChapterEdit.onHide?.subscribe({
       next: () => {
         const chapterUpdate = {
-          chapterTitle: this.bsModalRefChapterEdit.content?.title,
+          chapterTitle: this.bsModalRefChapterEdit.content?.model.title,
           bookId: this.book?.id
         }
         if (chapterUpdate.chapterTitle != this.book?.title && chapterUpdate.bookId == this.book?.id) {
           this.bookService.updateChapter(chapterUpdate, chapter.id).subscribe({
             next: () => {
-              // call loadChapters() to refresh the list; requires logic in loadChapters to handle one chapter's update
+              this.chapters[this.chapters.findIndex(x => x.id == chapter.id)].chapterTitle = chapterUpdate.chapterTitle;
             }
           })
         }
