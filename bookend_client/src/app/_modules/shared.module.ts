@@ -4,6 +4,7 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { FileUploadModule } from 'ng2-file-upload';
 import { MaterialModule } from './material.module';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 
 
@@ -14,13 +15,15 @@ import { MaterialModule } from './material.module';
     BsDropdownModule.forRoot(),
     ModalModule.forRoot(),
     FileUploadModule,
-    MaterialModule
+    MaterialModule,
+    NgxSpinnerModule.forRoot({ type: 'line-scale-pulse-out' })
   ],
   exports: [
     BsDropdownModule,
     ModalModule,
     FileUploadModule,
-    MaterialModule
+    MaterialModule,
+    NgxSpinnerModule
   ]
 })
 export class SharedModule { }

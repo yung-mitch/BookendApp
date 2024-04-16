@@ -30,6 +30,7 @@
               "node_modules/ngx-bootstrap/datepicker/bs-datepicker.css",
               "src/styles/bootstrap.min.css",
               "src/styles/bootstrap.css",
+              "node_modules/ngx-spinner/animations/line-scale-pulse-out.css",
               "src/styles.css"
             ],
             "scripts": []

@@ -46,6 +46,7 @@ import { AddBookClubMemberModalComponent } from './book-clubs/add-book-club-memb
 import { EditBookClubModalComponent } from './book-clubs/edit-book-club-modal/edit-book-club-modal.component';
 import { AddBookClubBookModalComponent } from './book-clubs/add-book-club-book-modal/add-book-club-book-modal.component';
 import { BookClubBookCardComponent } from './books/book-club-book-card/book-club-book-card.component';
+import { LoadingInterceptor } from './_interceptors/loading.interceptor';
 
 @NgModule({
   declarations: [
@@ -97,7 +98,8 @@ import { BookClubBookCardComponent } from './books/book-club-book-card/book-club
     SharedModule
   ],
   providers: [
-    {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true}
+    {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},
+    {provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true}
   ],
   bootstrap: [AppComponent]
 })
