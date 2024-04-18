@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { AccountService } from '../_services/account.service';
 import { Router } from '@angular/router';
 
+declare function toggleHamburger(): any;
+declare function removeHamburger(): any;
 @Component({
   selector: 'app-nav',
   templateUrl: './nav.component.html',
@@ -9,6 +11,9 @@ import { Router } from '@angular/router';
 })
 export class NavComponent implements OnInit {
   model: any = {};
+  // bookendScript: any;
+  @Output() mobileMenuToggleEvent = new EventEmitter<number>();
+  @Output() mobileMenuCloseEvent = new EventEmitter<number>();
   
   constructor(public accountService: AccountService, private router: Router) { }
 
@@ -22,6 +27,9 @@ export class NavComponent implements OnInit {
         console.log(response)
         this.router.navigateByUrl('/library');
         this.model = {};
+      },
+      complete: () => {
+        this.removeMobileMenu();
       }
     })
   }
@@ -31,4 +39,21 @@ export class NavComponent implements OnInit {
     this.router.navigateByUrl('/');
   }
 
+  // loadScripts() {
+  //   let node = document.createElement('script');
+  //   node.src = '../../assets/bookend-script.js';
+  //   node.type = 'text/javascript';
+  //   node.async = true;
+  //   document.getElementsByTagName('body')[0].appendChild(node);
+  // }
+
+  toggleMobileMenu() {
+    toggleHamburger();
+    this.mobileMenuToggleEvent.emit(1);
+  }
+
+  removeMobileMenu() {
+    removeHamburger();
+    this.mobileMenuCloseEvent.emit(1);
+  }
 }

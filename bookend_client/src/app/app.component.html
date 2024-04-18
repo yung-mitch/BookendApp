@@ -2,8 +2,8 @@
   Loading...
 </ngx-spinner>
 
-<app-nav></app-nav>
+<app-nav (mobileMenuToggleEvent)="toggleMobileMenu($event)" (mobileMenuCloseEvent)="collapseMobileMenu($event)"></app-nav>
 
-<div class="container" style="margin-top: 100px;">
+<div class="container" style="margin-top: 100px; padding-top: 60px;" [hidden]="mobileMenuOpen">
   <router-outlet></router-outlet>  
 </div>
