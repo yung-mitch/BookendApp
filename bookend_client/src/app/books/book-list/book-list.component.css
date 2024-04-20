@@ -1,0 +1,16 @@
+.book-list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.book-item {
+    justify-self: stretch;
+    align-self: center;
+    margin: 10px;
+}
+
+@media screen and (max-width: 800px) {
+    .book-list {
+        grid-template-columns: 1fr;
+    }
+}

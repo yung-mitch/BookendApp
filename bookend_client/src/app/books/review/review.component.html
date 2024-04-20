@@ -1,26 +1,31 @@
-<h6><img src="{{review?.reviewingUserPhotoUrl}}" alt="user photo"> {{review?.reviewingUserName}}</h6>
-<div class="ps-3" style="display: inline;" *ngIf="review?.reviewingUserName == user?.userName">
-    <button class="btn" (click)="toggleEditReviewForm()"><i class="fa-solid fa-pencil"></i></button> <button class="btn" (click)="deleteReview()"><i class="fa-solid fa-trash"></i></button>
-</div>
-
-<div *ngIf="!editReviewForm">
-    <p class="mb-0">{{review?.rating}} STARS</p>
-    <p class="mt-0">{{review?.reviewText}}</p>
-</div>
-<div *ngIf="editReviewForm">
-    <form style="display: table; min-width: 400px;" #editReviewForm (ngSubmit)="updateReview()" autocomplete="off">
-        <div class="mb-2">
-            <label for="rating">Rating: </label>
-            <input class="rating-radio" type="radio" id="rating" name="rating" value="1" [(ngModel)]="model.rating">
-            <input class="rating-radio" type="radio" id="rating" name="rating" value="2" [(ngModel)]="model.rating">
-            <input class="rating-radio" type="radio" id="rating" name="rating" value="3" [(ngModel)]="model.rating">
-            <input class="rating-radio" type="radio" id="rating" name="rating" value="4" [(ngModel)]="model.rating">
-            <input class="rating-radio" type="radio" id="rating" name="rating" value="5" [(ngModel)]="model.rating">
+<div class="review-container">
+    <div class="review-header">
+        <h6><img src="{{review?.reviewingUserPhotoUrl}}" alt="user photo"> {{review?.reviewingUserName}}</h6>
+        <div *ngIf="review?.reviewingUserName == user?.userName">
+            <button class="btn" (click)="toggleEditReviewForm()"><i class="fa-solid fa-pencil"></i></button>
+            <button class="btn" (click)="deleteReview()"><i class="fa-solid fa-trash"></i></button>
         </div>
-        <div class="mb-2">
-            <textarea style="display: block; width: 100%; min-height: 100px;" name="reviewText" [(ngModel)]="model.reviewText" type="text"></textarea>
-        </div>
-        <button class="btn btn-success" type="submit">Update</button>
-        <button class="btn btn-secondary ms-2" (click)="toggleEditReviewForm()">Cancel</button>
-    </form>
+    </div>
+    
+    <div class="review-body" *ngIf="!editReviewForm">
+        <p>{{review?.rating}} STARS</p>
+        <p>{{review?.reviewText}}</p>
+    </div>
+    <div *ngIf="editReviewForm" style="align-self: stretch;">
+        <form class="review-form" #editReviewForm (ngSubmit)="updateReview()" autocomplete="off">
+            <div class="mb-2">
+                <label for="rating">Rating: </label>
+                <input class="rating-radio" type="radio" id="rating" name="rating" value="1" [(ngModel)]="model.rating">
+                <input class="rating-radio" type="radio" id="rating" name="rating" value="2" [(ngModel)]="model.rating">
+                <input class="rating-radio" type="radio" id="rating" name="rating" value="3" [(ngModel)]="model.rating">
+                <input class="rating-radio" type="radio" id="rating" name="rating" value="4" [(ngModel)]="model.rating">
+                <input class="rating-radio" type="radio" id="rating" name="rating" value="5" [(ngModel)]="model.rating">
+            </div>
+            <div class="mb-2">
+                <textarea style="display: block; width: 100%; min-height: 100px;" name="reviewText" [(ngModel)]="model.reviewText" type="text"></textarea>
+            </div>
+            <button class="btn btn-success" type="submit">Update</button>
+            <button class="btn btn-secondary ms-2" (click)="toggleEditReviewForm()">Cancel</button>
+        </form>
+    </div>
 </div>

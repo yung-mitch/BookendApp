@@ -1,3 +1,8 @@
+.navbar-brand {
+    color: #f0f3f4;
+    font-size: 1.5em;
+}
+
 .dropdown-toggle, .dropdown-item {
     cursor: pointer;
 }
@@ -33,7 +38,7 @@
 
 img {
     max-height: 50px;
-    border: 2px solid white;
+    border: 2px solid #f0f3f4;
     display: inline;
 }
 
@@ -70,7 +75,7 @@ a {
 }
 
 .logo {
-    color: #fff;
+    color: #f0f3f4;
     font-size: 23px;
     font-weight: 500;
 }
@@ -89,14 +94,14 @@ a {
 }
 
 .nav-link {
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(240, 243, 244, 0.8);
     font-size: 15px;
     transition: all 0.4s;
 }
 
 .nav-link:hover,
 .nav-link:focus {
-    color: rgba(255, 255, 255, 1);
+    color: rgba(240, 243, 244, 1);
 }
 
 .hamburger {
@@ -107,7 +112,7 @@ a {
 .bar {
     height: 2px;
     width: 27px;
-    background: #fff;
+    background: #f0f3f4;
     margin: 5px 0;
     opacity: 0.8;
     transition: all 0.3s ease-in-out;

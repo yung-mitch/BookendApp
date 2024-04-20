@@ -1,5 +1,51 @@
+.review-container {
+    display: flex;
+    flex-direction: column;
+    column-gap: 5px;
+    justify-content: space-around;
+    align-items: start;
+    padding: 5px;
+    margin-bottom: 10px;
+    background-color: #c8d1d3;
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    align-content: center;
+}
+
+.review-header h6 {
+    margin: 0 0;
+}
+
+.review-body {
+    display: flex;
+    flex-direction: column;
+    column-gap: 5px;
+    justify-content: space-between;
+    align-items: start;
+}
+
+.review-body > * {
+    margin: 0 0;
+}
+
+.review-form {
+    display: table;
+    min-width: 400px
+}
+
 img {
     max-height: 30px;
     border: 2px solid white;
     display: inline;
+}
+
+@media screen and (max-width: 800px) {
+    .review-form {
+        min-width: 100px;
+        width: 90%;
+    }
 }

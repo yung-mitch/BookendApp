@@ -1,0 +1,18 @@
+.comments-container {
+    display: flex;
+    flex-direction: column;
+    column-gap: 5px;
+}
+
+.comment-form {
+    display: table;
+    min-width: 400px;
+    margin-bottom: 10px;
+}
+
+@media screen and (max-width: 800px) {
+    .comment-form {
+        min-width: 100px;
+        width: 90%;
+    }
+}

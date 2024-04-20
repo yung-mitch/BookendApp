@@ -1,3 +1,42 @@
+.comment-container {
+    display: flex;
+    flex-direction: column;
+    column-gap: 5px;
+    justify-content: space-around;
+    align-items: start;
+    padding: 5px;
+    margin-bottom: 10px;
+    background-color: #c8d1d3;
+}
+
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.comment-header h6 {
+    margin: 0 0;
+}
+
+.comment-body {
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    column-gap: 5px;
+    justify-content: space-between;
+    align-items: start;
+}
+
+.comment-body > * {
+    margin: 0 0;
+}
+
+.comment-form {
+    display: table;
+    min-width: 400px;
+}
+
 .comment-time {
     color: #6E8CA0;
     text-decoration: none;
@@ -6,4 +45,11 @@
 .comment-time:hover {
     color: #324755;
     cursor: pointer;
+}
+
+@media screen and (max-width: 800px) {
+    .comment-form {
+        min-width: 100px;
+        width: 90%;
+    }
 }

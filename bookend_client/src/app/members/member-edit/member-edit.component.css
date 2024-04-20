@@ -1,0 +1,20 @@
+.edit-profile-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    justify-content: stretch;
+    align-items: center;
+}
+
+.edit-profile-item {
+
+}
+
+.profile-photo {
+    max-width: 100%;
+}
+
+@media screen and (max-width: 800px) {
+    .edit-profile-container {
+        grid-template-columns: 1fr;
+    }
+}

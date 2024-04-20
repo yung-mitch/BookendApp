@@ -1,38 +1,28 @@
-<div class="row mb-3">
-    <div class="col-3">
-        <button class="btn btn-success" (click)="openCreateAdvertisementModal()">&plus; New Advertisement</button>
-    </div>
-  </div>
+<div class="text-center mt-3 mb-3">
+  <h2>Manage your advertisements</h2>
+</div>
+
+<div class="advertiser-options">
+  <button class="btn btn-success create-ad-btn" (click)="openCreateAdvertisementModal()">&plus; New Advertisement</button>
+</div>
   
-  <div class="container d-flex mt-2 mb-3">
-      <table class="table table-hover">
-          <thead>
-        <tr>
-          <th scope="col">Advertisement Name</th>
-          <th class="text-center" scope="col">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let ad of advertisements; index as i">
-          <td>{{ad.adName}}</td>
-          <td>
-              <ul class="list-inline text-center">
-                  <!-- <li class="list-inline-item" *appHasRole="['Advertiser']">
-                      <button class="btn btn-primary" routerLink="/chapter/{{chapter.id}}"><i class="fa-solid fa-play"></i></button>
-                  </li> -->
-                  <li class="list-inline-item" *appHasRole="['Advertiser', 'Admin']">
-                      <button class="btn btn-primary" (click)="openAdvertisementEditModal(ad)"><i class="fa-solid fa-pencil"></i></button>
-                  </li>
-                  <li class="list-inline-item" *appHasRole="['Advertiser', 'Admin']">
-                      <button class="btn btn-primary" (click)="openAdvertisementReplaceFileModal(ad)"><i class="fa-solid fa-file"></i></button>
-                  </li>
-                  <li class="list-inline-item" *appHasRole="['Advertiser', 'Admin']">
-                      <button class="btn btn-primary" (click)="delete(ad.id)"><i class="fa-solid fa-trash"></i></button>
-                  </li>
-              </ul>
-          </td>
-        </tr>
-      </tbody>
+<table class="table ad-table">
+  <thead>
+    <tr>
+      <th class="name-col">Advertisement Name</th>
+      <th class="actions-col">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let ad of advertisements; index as i">
+      <td class="name-col">{{ad.adName}}</td>
+      <td class="actions-col">
+        <!-- <button class="btn btn-primary" *appHasRole="['Advertiser']" routerLink="/chapter/{{chapter.id}}"><i class="fa-solid fa-play"></i></button> -->
+        <button class="btn btn-primary" *appHasRole="['Advertiser', 'Admin']" (click)="openAdvertisementEditModal(ad)"><i class="fa-solid fa-pencil"></i></button>
+        <button class="btn btn-primary" *appHasRole="['Advertiser', 'Admin']" (click)="openAdvertisementReplaceFileModal(ad)"><i class="fa-solid fa-file"></i></button>
+        <button class="btn btn-primary" *appHasRole="['Advertiser', 'Admin']" (click)="delete(ad.id)"><i class="fa-solid fa-trash"></i></button>
+      </td>
+    </tr>
+  </tbody>
     
-      </table>
-    </div>
+</table>

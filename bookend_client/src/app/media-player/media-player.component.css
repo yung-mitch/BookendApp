@@ -1,3 +1,16 @@
+.media-player-container {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    column-gap: 10px;
+    justify-content: stretch;
+    align-items: start;
+    margin-bottom: 10px;
+}
+
+.media-player {
+    grid-column: 1 / 3;
+}
+
 .btn-circle {
     border-radius: 50%;
 }
@@ -21,4 +34,12 @@
     --mat-mdc-slider-ripple-color: white;
     --mat-mdc-slider-hover-ripple-color: rgba(255, 255, 255, 0.171);
     --mat-mdc-slider-focus-ripple-color: rgba(255, 255, 255, 0.504);
+}
+
+@media screen and (max-width: 800px) {
+    .media-player-container {
+        grid-template-columns: 1fr;
+        row-gap: 10px;
+        margin: 5%;
+    }
 }

@@ -1,7 +1,7 @@
-<div class="row mb-3">
-    <div class="col-3">
-        <button class="btn btn-success" (click)="openCreateBookClubModal()">Start a New Book Club</button>
-    </div>
+<h2>Engage with other users on the literature you love</h2>
+
+<div class="bookclub-options">
+    <button class="btn btn-success create-club-btn" (click)="openCreateBookClubModal()">Start a New Book Club</button>
 </div>
 <div class="container d-flex mt-2 mb-3">
     <table class="table table-hover" *ngIf="clubs.length > 0">

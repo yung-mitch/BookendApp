@@ -1,0 +1,29 @@
+.card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+}
+
+.card-item {
+    margin: 3px 0;
+}
+
+@media screen and (max-width: 800px) {
+    .card {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        justify-content: space-between;
+    }
+
+    .list-inline {
+        grid-row: 1 / 3;
+        justify-self: end;
+    }
+
+    .author {
+        grid-column: 1 / 2;
+        grid-row: 2 / 3;
+    }
+}

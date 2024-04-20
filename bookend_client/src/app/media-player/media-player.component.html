@@ -1,53 +1,51 @@
-<div class="container mb-3">
-    <div class="row">
-        <div class="col-4">
-            <div class="content pb-2" style="background-color: lightgray;">
-                <div class="logo text-center pt-5 pb-5">
-                    <span style="font-size: 48px;">
-                        <i class="fa-solid fa-headphones fa-2x" *ngIf="adsPlayedBack"></i>
-                        <i class="fa-solid fa-bullhorn fa-2x" *ngIf="!adsPlayedBack"></i>
-                    </span>
-                </div>
-                <h5 class="text-center" *ngIf="adsPlayedBack">
-                    Chapter {{chapterIndex! + 1}}: {{chapter?.chapterTitle}}
-                </h5>
-                <h5 class="text-center" *ngIf="!adsPlayedBack && ads.length > 0">
-                    {{ads[adIndex].adName}}
-                </h5>
+<div class="media-player-container">
+    <div class="media-player">
+        <div class="content pb-2" style="background-color: lightgray;">
+            <div class="logo text-center pt-5 pb-5">
+                <span style="font-size: 48px;">
+                    <i class="fa-solid fa-headphones fa-2x" *ngIf="adsPlayedBack"></i>
+                    <i class="fa-solid fa-bullhorn fa-2x" *ngIf="!adsPlayedBack"></i>
+                </span>
             </div>
-            <div class="media-action-palette bg-primary p-3">
-                <div class="row d-flex justify-content-center align-items-center" style="margin-left: 5px; margin-right: 5px;">
-                    {{state?.readableCurrentTime}}
-                    <mat-slider class="time-slider" style="min-width: 50%;" min="0" [max]="(state?.totalDuration) | number: '1.0-0'" step="1" [disabled]="state?.error || chapterIndex === undefined || !adsPlayedBack">
-                        <input matSliderThumb class="time-slider-thumb" [value]="state?.currentTime" (valueChange)="onSliderChangeLift($event)">
-                        <!-- <input matSliderThumb class="time-slider-thumb" *ngIf="!adsPlayedBack" [value]="state?.currentTime" (ended)="filePlaybackEnded(true)"> -->
-                    </mat-slider>
-                    {{state?.readableTotalDuration}}
-                </div>
-                <div class="d-flex justify-content-around align-items-center">
-                    <button class="btn btn-secondary btn-circle" [disabled]="chapterIndex == 0" (click)="previous()">
-                        <i class="fa-solid fa-step-backward"></i>
-                    </button>
-                    <button class="btn btn-secondary btn-circle" *ngIf="state?.playable && !state?.playing" (click)="play()">
-                        <i class="fa-solid fa-play"></i>
-                    </button>
-                    <button class="btn btn-secondary btn-circle" *ngIf="state?.playing && state?.playable" (click)="pause()">
-                        <i class="fa-solid fa-pause"></i>
-                    </button>
-                    <button class="btn btn-secondary btn-circle" [disabled]="chapterIndex == (book?.chapters!.length - 1)" (click)="next()">
-                        <i class="fa-solid fa-step-forward"></i>
-                    </button>
-                </div>
+            <h5 class="text-center" *ngIf="adsPlayedBack">
+                Chapter {{chapterIndex! + 1}}: {{chapter?.chapterTitle}}
+            </h5>
+            <h5 class="text-center" *ngIf="!adsPlayedBack && ads.length > 0">
+                {{ads[adIndex].adName}}
+            </h5>
+        </div>
+        <div class="media-action-palette bg-primary p-3">
+            <div class="row d-flex justify-content-center align-items-center" style="margin-left: 5px; margin-right: 5px;">
+                {{state?.readableCurrentTime}}
+                <mat-slider class="time-slider" style="min-width: 50%;" min="0" [max]="(state?.totalDuration) | number: '1.0-0'" step="1" [disabled]="state?.error || chapterIndex === undefined || !adsPlayedBack">
+                    <input matSliderThumb class="time-slider-thumb" [value]="state?.currentTime" (valueChange)="onSliderChangeLift($event)">
+                    <!-- <input matSliderThumb class="time-slider-thumb" *ngIf="!adsPlayedBack" [value]="state?.currentTime" (ended)="filePlaybackEnded(true)"> -->
+                </mat-slider>
+                {{state?.readableTotalDuration}}
+            </div>
+            <div class="d-flex justify-content-around align-items-center">
+                <button class="btn btn-secondary btn-circle" [disabled]="chapterIndex == 0" (click)="previous()">
+                    <i class="fa-solid fa-step-backward"></i>
+                </button>
+                <button class="btn btn-secondary btn-circle" *ngIf="state?.playable && !state?.playing" (click)="play()">
+                    <i class="fa-solid fa-play"></i>
+                </button>
+                <button class="btn btn-secondary btn-circle" *ngIf="state?.playing && state?.playable" (click)="pause()">
+                    <i class="fa-solid fa-pause"></i>
+                </button>
+                <button class="btn btn-secondary btn-circle" [disabled]="chapterIndex == (book?.chapters!.length - 1)" (click)="next()">
+                    <i class="fa-solid fa-step-forward"></i>
+                </button>
             </div>
         </div>
-        <div class="col-8">
-            <div class="mb-2">
-                <h3>{{book?.title}}</h3>
-                <h4 class="mb-3">{{book?.author}}</h4>
-            </div>
-            <!-- <p>{{book.description}}</p> -->
-            <p>Book Description will go here!</p>
+    </div>
+    <div>
+        <div class="mb-2">
+            <h3>{{book?.title}}</h3>
+            <h4 class="mb-3">{{book?.author}}</h4>
         </div>
+        <!-- <p>{{book.description}}</p> -->
+        <p>Book Description will go here!</p>
     </div>
 </div>
 <div class="container">

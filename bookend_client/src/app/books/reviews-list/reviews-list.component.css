@@ -1,3 +1,22 @@
+.reviews-container {
+    display: flex;
+    flex-direction: column;
+    column-gap: 5px;
+}
+
 .rating-radio {
     display: inline;
+}
+
+.review-form {
+    display: table;
+    min-width: 400px;
+    margin-bottom: 10px;
+}
+
+@media screen and (max-width: 800px) {
+    .review-form {
+        min-width: 100px;
+        width: 90%;
+    }
 }

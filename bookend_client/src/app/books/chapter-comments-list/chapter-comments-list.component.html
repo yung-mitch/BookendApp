@@ -1,18 +1,20 @@
-<div class="mb-2">
-    <button class="btn btn-primary" (click)="addCommentTrigger()" *ngIf="!addCommentMode">&plus; New Comment</button>
-    <button class="btn btn-secondary" (click)="toggleAddCommentForm()" *ngIf="addCommentMode">Cancel</button>
-</div>
-<div *ngIf="addCommentMode" class="container mb-3" style="padding: 0 0;">
-    <form class="mb-2" style="display: table; min-width: 400px;" #addCommentForm="ngForm" (ngSubmit)="createComment()" autocomplete="off">
-        <div class="mb-2">
-            <label for="timestamp">Comment Time {{formatTimestamp(commentTriggerTimestamp)}}</label>
-            <input id="timestamp" name="timestamp" [(ngModel)]="model.timestamp" type="text" [hidden]="true" value="{{commentTriggerTimestamp}}">
-        </div>
-        <div class="mb-2">
-            <textarea style="display: block; width: 100%; min-height: 100px;" name="commentText" [(ngModel)]="model.commentText" type="text" placeholder="Add comment here"></textarea>
-        </div>
-        <button class="btn btn-success" type="submit">Done</button>
-    </form>
+<div class="comments-container">
+    <div>
+        <button class="btn btn-primary" (click)="addCommentTrigger()" *ngIf="!addCommentMode">&plus; New Comment</button>
+        <button class="btn btn-secondary" (click)="toggleAddCommentForm()" *ngIf="addCommentMode">Cancel</button>
+    </div>
+    <div *ngIf="addCommentMode">
+        <form class="comment-form" #addCommentForm="ngForm" (ngSubmit)="createComment()" autocomplete="off">
+            <div class="mb-2">
+                <label for="timestamp">Comment Time {{formatTimestamp(commentTriggerTimestamp)}}</label>
+                <input id="timestamp" name="timestamp" [(ngModel)]="model.timestamp" type="text" [hidden]="true" value="{{commentTriggerTimestamp}}">
+            </div>
+            <div class="mb-2">
+                <textarea style="display: block; width: 100%; min-height: 100px;" name="commentText" [(ngModel)]="model.commentText" type="text" placeholder="Add comment here"></textarea>
+            </div>
+            <button class="btn btn-success" type="submit">Done</button>
+        </form>
+    </div>
 </div>
 
 <h4 class="mb-3">Listener Comments</h4>

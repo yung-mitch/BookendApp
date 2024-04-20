@@ -1,0 +1,28 @@
+.publisher-options {
+    display: flex;
+    column-gap: 20px;
+    justify-content: space-around;
+    align-content: center;
+    padding: 0 5% 10px;
+}
+
+.create-book-btn {
+    width: 100%;
+}
+
+.book-list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.book-item {
+    justify-self: stretch;
+    align-self: center;
+    margin: 10px;
+}
+
+@media screen and (max-width: 800px) {
+    .book-list {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,20 +1,26 @@
-<h6 style="display: inline;">
-    {{chapterComment?.commentingUserName}} 
-</h6>
-<div class="ps-3" style="display: inline;" *ngIf="chapterComment?.commentingUserName == user?.userName">
-    <button class="btn" (click)="toggleEditCommentForm()"><i class="fa-solid fa-pencil"></i></button> <button class="btn" (click)="deleteComment()"><i class="fa-solid fa-trash"></i></button>
-</div>
-<p *ngIf="!editCommentForm"><a class="comment-time" (click)="jumpSeek(chapterComment!.timestamp)">{{chapterComment?.readableTimestamp}}</a> &dash; {{chapterComment?.commentText}}</p>
-<div *ngIf="editCommentForm">
-    <form style="display: table; min-width: 400px;" #editCommentForm="ngForm" (ngSubmit)="updateComment()" autocomplete="off">
-        <div class="mb-2">
-            <label for="timestamp">{{chapterComment?.readableTimestamp}}</label>
-            <input id="timestamp" name="timestamp" [(ngModel)]="model.timestamp" type="text" [hidden]="true" value="{{chapterComment?.timestamp}}">
+<div class="comment-container">
+    <div class="comment-header">
+        <h6>
+            {{chapterComment?.commentingUserName}} 
+        </h6>
+        <div *ngIf="chapterComment?.commentingUserName == user?.userName">
+            <button class="btn" (click)="toggleEditCommentForm()"><i class="fa-solid fa-pencil"></i></button> <button class="btn" (click)="deleteComment()"><i class="fa-solid fa-trash"></i></button>
         </div>
-        <div class="mb-2">
-            <textarea style="display: block; width: 100%; min-height: 100px;" name="commentText" [(ngModel)]="model.commentText" type="text" value="{{chapterComment?.commentText}}"></textarea>
+    </div>
+    <div class="comment-body">
+        <p *ngIf="!editCommentForm"><a class="comment-time" (click)="jumpSeek(chapterComment!.timestamp)">{{chapterComment?.readableTimestamp}}</a> &dash; {{chapterComment?.commentText}}</p>
+        <div *ngIf="editCommentForm" style="align-self: stretch;">
+            <form class="comment-form" #editCommentForm="ngForm" (ngSubmit)="updateComment()" autocomplete="off">
+                <div class="mb-2">
+                    <label for="timestamp">{{chapterComment?.readableTimestamp}}</label>
+                    <input id="timestamp" name="timestamp" [(ngModel)]="model.timestamp" type="text" [hidden]="true" value="{{chapterComment?.timestamp}}">
+                </div>
+                <div class="mb-2">
+                    <textarea style="display: block; width: 100%; min-height: 100px;" name="commentText" [(ngModel)]="model.commentText" type="text" value="{{chapterComment?.commentText}}"></textarea>
+                </div>
+                <button class="btn btn-success" type="submit">Update</button>
+                <button class="btn btn-secondary ms-2" (click)="toggleEditCommentForm()">Cancel</button>
+            </form>
         </div>
-        <button class="btn btn-success" type="submit">Update</button>
-        <button class="btn btn-secondary ms-2" (click)="toggleEditCommentForm()">Cancel</button>
-    </form>
+    </div>
 </div>

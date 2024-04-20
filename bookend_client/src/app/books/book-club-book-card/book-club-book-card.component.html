@@ -1,7 +1,7 @@
-<div class="card mb-4" *ngIf="book">
-    <h5 class="text-center">{{book.title}} {{book.id}}</h5>
-    <h6 class="text-center">{{book.author}}</h6>
-    <ul class="list-inline text-center mt-3">
+<div class="card" *ngIf="book">
+    <h5 class="card-item">{{book.title}} {{book.id}}</h5>
+    <h6 class="card-item author">{{book.author}}</h6>
+    <ul class="list-inline card-item">
         <li class="list-inline-item">
             <button class="btn btn-primary" routerLink="/book/detail/{{book.id}}"><i class="fa-solid fa-book"></i></button>
         </li>

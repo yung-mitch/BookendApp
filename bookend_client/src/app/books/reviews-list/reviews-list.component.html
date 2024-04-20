@@ -1,26 +1,28 @@
-<div class="mb-2">
-    <button class="btn btn-primary" (click)="toggleAddReviewForm()" *ngIf="!addReviewMode">&plus; New Review</button>
-    <button class="btn btn-secondary" (click)="toggleAddReviewForm()" *ngIf="addReviewMode">Cancel</button>
-</div>
-<div *ngIf="addReviewMode" class="container mb-3" style="padding: 0 0;">
-<form class="mb-2" style="display: table; min-width: 400px;" #addReviewForm="ngForm" (ngSubmit)="createReview()" autocomplete="off">
-    <div class="mb-2">
-        <label for="rating">Rating: </label>
-        <input class="rating-radio" type="radio" id="rating" name="rating" value="1" [(ngModel)]="model.rating">
-        <input class="rating-radio" type="radio" id="rating" name="rating" value="2" [(ngModel)]="model.rating">
-        <input class="rating-radio" type="radio" id="rating" name="rating" value="3" [(ngModel)]="model.rating">
-        <input class="rating-radio" type="radio" id="rating" name="rating" value="4" [(ngModel)]="model.rating">
-        <input class="rating-radio" type="radio" id="rating" name="rating" value="5" [(ngModel)]="model.rating">
+<div class="reviews-container">
+    <div>
+        <button class="btn btn-primary" (click)="toggleAddReviewForm()" *ngIf="!addReviewMode">&plus; New Review</button>
+        <button class="btn btn-secondary" (click)="toggleAddReviewForm()" *ngIf="addReviewMode">Cancel</button>
     </div>
-    <div class="mb-2">
-        <textarea style="display: block; width: 100%; min-height: 100px;" name="reviewText" [(ngModel)]="model.reviewText" type="text" placeholder="Add your review here"></textarea>
+    <div *ngIf="addReviewMode">
+        <form class="review-form" #addReviewForm="ngForm" (ngSubmit)="createReview()" autocomplete="off">
+            <div class="mb-2">
+                <label for="rating">Rating: </label>
+                <input class="rating-radio" type="radio" id="rating" name="rating" value="1" [(ngModel)]="model.rating">
+                <input class="rating-radio" type="radio" id="rating" name="rating" value="2" [(ngModel)]="model.rating">
+                <input class="rating-radio" type="radio" id="rating" name="rating" value="3" [(ngModel)]="model.rating">
+                <input class="rating-radio" type="radio" id="rating" name="rating" value="4" [(ngModel)]="model.rating">
+                <input class="rating-radio" type="radio" id="rating" name="rating" value="5" [(ngModel)]="model.rating">
+            </div>
+            <div class="mb-2">
+                <textarea style="display: block; width: 100%; min-height: 100px;" name="reviewText" [(ngModel)]="model.reviewText" type="text" placeholder="Add your review here"></textarea>
+            </div>
+            <button class="btn btn-success" type="submit">Submit</button>
+        </form>
     </div>
-    <button class="btn btn-success" type="submit">Submit</button>
-</form>
 </div>
 
 <h4 class="mb-3">Listener Reviews</h4>
-<div class="mt-2">
+<div>
     <div *ngFor="let review of reviews" class="mb-3">
         <app-review [review]="review" (reviewDeletedEvent)="updateReviewList($event)"></app-review>
     </div>
