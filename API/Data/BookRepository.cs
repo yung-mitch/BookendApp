@@ -63,13 +63,14 @@ namespace API.Data
 
         public async Task<IEnumerable<Book>> GetBooksAsync()
         {
-            return await _context.Books.ToListAsync();
+            return await _context.Books.OrderByDescending(x => x.Id).ToListAsync();
         }
         
         public async Task<IEnumerable<BookDto>> GetBooksAsync(int userId)
         {
             return await _context.Books
                 .Where(x => x.PublishingUserId == userId)
+                .OrderByDescending(x => x.Id)
                 .ProjectTo<BookDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }
