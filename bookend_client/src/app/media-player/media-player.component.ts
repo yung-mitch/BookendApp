@@ -161,7 +161,11 @@ export class MediaPlayerComponent implements OnInit {
   }
 
   jumpSeek(timestamp: number) {
-    this.audioService.seekTo(timestamp);
+    if (this.adsPlayedBack) {
+      this.audioService.seekTo(timestamp);
+    } else {
+      // this.toastr.error("Finish the ad to jump to this comment's location");
+    }
   }
 
   private populateAdsList() {

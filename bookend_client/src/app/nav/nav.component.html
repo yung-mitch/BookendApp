@@ -18,14 +18,14 @@
                 <li class="nav-item" (click)="removeMobileMenu()">
                     <a class="nav-link" routerLink="/bookclubs" routerLinkActive="active">Bookclubs</a>
                 </li>
-                <li class="nav-item dropdown" dropdown>
-                    <a class="dropdown-toggle text-decoration-none text-light inline" dropdownToggle>Manage Account</a>
-                    <div class="dropdown-menu" *dropdownMenu>
-                        <a class="dropdown-item nav-link" routerLink="/member/edit" (click)="removeMobileMenu()">Edit Profile</a>
-                        <a class="dropdown-item nav-link" *appHasRole="['Admin', 'Advertiser']" routerLink="/advertisements/manage" (click)="removeMobileMenu()">Manage Advertisements</a>
-                        <a class="dropdown-item nav-link" *appHasRole="['Admin', 'Publisher']" routerLink="/books/manage" (click)="removeMobileMenu()">Manage Books</a>
-                        <a class="dropdown-item nav-link" (click)="logout(); removeMobileMenu();">Logout</a>
-                    </div>
+                <li class="nav-item dropdown">
+                    <a class="text-decoration-none dropdown-toggle" style="color: #f0f3f4;" type="button" data-bs-toggle="dropdown" aria-expanded="false">Manage Account</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item nav-link" routerLink="/member/edit" (click)="removeMobileMenu()">Edit Profile</a></li>
+                        <li><a class="dropdown-item nav-link" *appHasRole="['Admin', 'Advertiser']" routerLink="/advertisements/manage" (click)="removeMobileMenu()">Manage Advertisements</a></li>
+                        <li><a class="dropdown-item nav-link" *appHasRole="['Admin', 'Publisher']" routerLink="/books/manage" (click)="removeMobileMenu()">Manage Books</a></li>
+                        <li><a class="dropdown-item nav-link" (click)="logout(); removeMobileMenu();">Logout</a></li>
+                    </ul>
                 </li>
             </ul>
         </nav>

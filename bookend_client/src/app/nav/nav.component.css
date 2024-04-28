@@ -7,16 +7,6 @@
     cursor: pointer;
 }
 
-.dropdown-menu {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    left: 0;
-    
-}
-
 .dropdown-item {
     display: flex;
     align-items: center;
@@ -87,10 +77,11 @@ a {
 .nav-list {
     display: flex;
     column-gap: 40px;
+    align-items: center;
 }
 
 .nav-item {
-
+    
 }
 
 .nav-link {
