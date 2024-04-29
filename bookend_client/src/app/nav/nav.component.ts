@@ -1,6 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { AccountService } from '../_services/account.service';
 import { Router } from '@angular/router';
+import { take } from 'rxjs';
 
 declare function toggleHamburger(): any;
 declare function removeHamburger(): any;
@@ -25,7 +26,19 @@ export class NavComponent implements OnInit {
     this.accountService.login(this.model).subscribe({
       next: response => {
         console.log(response)
-        this.router.navigateByUrl('/library');
+        this.accountService.currentUser$.pipe(take(1)).subscribe({
+          next: user => {
+            if (user?.roles.includes("AppMember")) {
+              this.router.navigateByUrl('/library');
+            } else if (user?.roles.includes("Publisher")){
+              this.router.navigateByUrl('/books/manage');
+            } else if (user?.roles.includes("Advertiser")) {
+              this.router.navigateByUrl('/advertisements/manage');
+            } else {
+              this.router.navigateByUrl('/');
+            }
+          }
+        })
         this.model = {};
       },
       complete: () => {

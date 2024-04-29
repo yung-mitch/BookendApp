@@ -1,6 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { take } from 'rxjs';
 import { Book } from 'src/app/_models/book';
+import { User } from 'src/app/_models/user';
+import { AccountService } from 'src/app/_services/account.service';
 import { BookService } from 'src/app/_services/book.service';
 import { BookEditModalComponent } from 'src/app/modals/book-edit-modal/book-edit-modal.component';
 
@@ -11,25 +14,30 @@ import { BookEditModalComponent } from 'src/app/modals/book-edit-modal/book-edit
 })
 export class BookCardComponent implements OnInit {
   @Input() book: Book | undefined;
+  user: User | null = null;
   inUserLibrary: boolean = false;
   bsModalRef: BsModalRef<BookEditModalComponent> = new BsModalRef<BookEditModalComponent>();
   @Output() deleteBookEvent = new EventEmitter<number>();
   @Output() removeFromLibEvent = new EventEmitter<number>();
 
-  constructor(private bookService: BookService, private modalService: BsModalService) {
-    
+  constructor(private accountService: AccountService, private bookService: BookService, private modalService: BsModalService) {
+    this.accountService.currentUser$.pipe(take(1)).subscribe({
+      next: user => this.user = user
+    })
   }
 
   ngOnInit(): void {
-    if (this.book) {
-      this.bookService.foundInUserLibrary(this.book.id).subscribe({
-        next: response => {
-          if (response)
-          {
-            this.inUserLibrary = response;
+    if (this.user?.roles.includes("AppMember")) {
+      if (this.book) {
+        this.bookService.foundInUserLibrary(this.book.id).subscribe({
+          next: response => {
+            if (response)
+            {
+              this.inUserLibrary = response;
+            }
           }
-        }
-      })
+        })
+      }
     }
   }
 

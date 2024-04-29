@@ -80,7 +80,7 @@ export class ChapterCommentsListComponent implements OnInit{
     this.toggleAddCommentForm();
     if (this.state?.currentTime)
     {
-      this.commentTriggerTimestamp = (this.state.currentTime);
+      this.commentTriggerTimestamp = (Math.floor(this.state.currentTime));
     }
   }
 

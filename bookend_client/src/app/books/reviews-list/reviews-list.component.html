@@ -1,5 +1,5 @@
 <div class="reviews-container">
-    <div>
+    <div *appHasRole="['AppMember']">
         <button class="btn btn-primary" (click)="toggleAddReviewForm()" *ngIf="!addReviewMode">&plus; New Review</button>
         <button class="btn btn-secondary" (click)="toggleAddReviewForm()" *ngIf="addReviewMode">Cancel</button>
     </div>

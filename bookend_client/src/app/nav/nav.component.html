@@ -3,7 +3,7 @@
         <a routerLink="/" class="navbar-brand" routerLinkActive="active">Bookend App</a>
         <nav class="nav" *ngIf="(accountService.currentUser$ | async) as user">
             <ul class="nav-list">
-                <li class="nav-item" (click)="removeMobileMenu()">
+                <li class="nav-item" *appHasRole="['AppMember']" (click)="removeMobileMenu()">
                     <a class="nav-link" routerLink="/library" routerLinkActive="active">My Library</a>
                 </li>
                 <li class="nav-item" *appHasRole="['Publisher']" (click)="removeMobileMenu()">
@@ -12,11 +12,11 @@
                 <li class="nav-item" *appHasRole="['AppMember']" (click)="removeMobileMenu()">
                     <a class="nav-link" routerLink="/books" routerLinkActive="active">Books</a>
                 </li>
-                <li class="nav-item" (click)="removeMobileMenu()">
-                    <a class="nav-link" routerLink="/messages" routerLinkActive="active">Messages</a>
+                <li class="nav-item" *appHasRole="['AppMember']" (click)="removeMobileMenu()">
+                    <a class="nav-link" routerLink="/bookclubs" routerLinkActive="active">Bookclubs</a>
                 </li>
                 <li class="nav-item" (click)="removeMobileMenu()">
-                    <a class="nav-link" routerLink="/bookclubs" routerLinkActive="active">Bookclubs</a>
+                    <a class="nav-link" routerLink="/messages" routerLinkActive="active">Messages</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="text-decoration-none dropdown-toggle" style="color: #f0f3f4;" type="button" data-bs-toggle="dropdown" aria-expanded="false">Manage Account</a>
