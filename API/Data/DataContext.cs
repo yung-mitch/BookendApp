@@ -75,6 +75,10 @@ namespace API.Data
                 .HasForeignKey(c => c.ChapterId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            builder.Entity<Chapter>()
+                .Property(c => c.ChapterNumber)
+                .HasDefaultValue(500);
+
             builder.Entity<UserBook>()
                 .HasKey(k => new {k.UserId, k.BookId});
 

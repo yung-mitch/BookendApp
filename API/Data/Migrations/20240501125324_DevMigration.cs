@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace API.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class MigrationOne : Migration
+    public partial class DevMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -181,6 +181,25 @@ namespace API.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "BookClubs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    ClubName = table.Column<string>(type: "TEXT", nullable: true),
+                    OwningUserId = table.Column<int>(type: "INTEGER", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BookClubs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BookClubs_AspNetUsers_OwningUserId",
+                        column: x => x.OwningUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Books",
                 columns: table => new
                 {
@@ -218,6 +237,54 @@ namespace API.Data.Migrations
                         name: "FK_Photos_AspNetUsers_AppUserId",
                         column: x => x.AppUserId,
                         principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserClubs",
+                columns: table => new
+                {
+                    UserId = table.Column<int>(type: "INTEGER", nullable: false),
+                    BookClubId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserClubs", x => new { x.BookClubId, x.UserId });
+                    table.ForeignKey(
+                        name: "FK_UserClubs_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserClubs_BookClubs_BookClubId",
+                        column: x => x.BookClubId,
+                        principalTable: "BookClubs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BookClubBooks",
+                columns: table => new
+                {
+                    BookId = table.Column<int>(type: "INTEGER", nullable: false),
+                    ClubId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BookClubBooks", x => new { x.ClubId, x.BookId });
+                    table.ForeignKey(
+                        name: "FK_BookClubBooks_BookClubs_ClubId",
+                        column: x => x.ClubId,
+                        principalTable: "BookClubs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BookClubBooks_Books_BookId",
+                        column: x => x.BookId,
+                        principalTable: "Books",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -365,6 +432,16 @@ namespace API.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_BookClubBooks_BookId",
+                table: "BookClubBooks",
+                column: "BookId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BookClubs_OwningUserId",
+                table: "BookClubs",
+                column: "OwningUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Books_PublishingUserId",
                 table: "Books",
                 column: "PublishingUserId");
@@ -404,6 +481,11 @@ namespace API.Data.Migrations
                 name: "IX_UserBooks_BookId",
                 table: "UserBooks",
                 column: "BookId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserClubs_UserId",
+                table: "UserClubs",
+                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -428,6 +510,9 @@ namespace API.Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "BookClubBooks");
+
+            migrationBuilder.DropTable(
                 name: "Comments");
 
             migrationBuilder.DropTable(
@@ -440,10 +525,16 @@ namespace API.Data.Migrations
                 name: "UserBooks");
 
             migrationBuilder.DropTable(
+                name: "UserClubs");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "Chapters");
+
+            migrationBuilder.DropTable(
+                name: "BookClubs");
 
             migrationBuilder.DropTable(
                 name: "Books");

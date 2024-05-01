@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240411011005_BookClubBooksAddition")]
-    partial class BookClubBooksAddition
+    [Migration("20240501170250_ChapterOrder")]
+    partial class ChapterOrder
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -216,6 +216,11 @@ namespace API.Data.Migrations
 
                     b.Property<int>("BookId")
                         .HasColumnType("INTEGER");
+
+                    b.Property<int>("ChapterNumber")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValue(500);
 
                     b.Property<string>("ChapterTitle")
                         .HasColumnType("TEXT");

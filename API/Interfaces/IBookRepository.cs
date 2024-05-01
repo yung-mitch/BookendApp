@@ -11,6 +11,7 @@ namespace API.Interfaces
         Task<List<BookDto>> GetLibraryBooks(int userId);
         Task<UserBook> GetUserBook(int userId, int bookId);
         Task<Book> GetBookByIdAsync(int id);
+        Task<Book> GetBookWithChaptersAsync(int id);
         Task<BookDto> GetBookAsync(int id);
         Task<FullBookDto> GetFullBookAsync(int id);
         Task<Chapter> GetChapterAsync(int id);

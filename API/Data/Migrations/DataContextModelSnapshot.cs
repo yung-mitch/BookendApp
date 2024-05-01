@@ -214,6 +214,11 @@ namespace API.Data.Migrations
                     b.Property<int>("BookId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("ChapterNumber")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValue(500);
+
                     b.Property<string>("ChapterTitle")
                         .HasColumnType("TEXT");
 

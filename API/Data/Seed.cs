@@ -125,6 +125,7 @@ namespace API.Data
 
             foreach (var book in books)
             {
+                var chapterNumber = 1;
                 for (int i=books.IndexOf(book) * books.Count; i < (books.IndexOf(book) * books.Count) + books.Count; i++)
                 {
                     using var stream = file.OpenReadStream();
@@ -133,10 +134,12 @@ namespace API.Data
                     uploadParams.Folder = cloudParentDirectory + "/" + (books.IndexOf(book) + 1);
                     var result = await cloudinary.UploadAsync(uploadParams);
                     if (result.Error != null) break;
+                    chapters[i].ChapterNumber = chapterNumber;
                     chapters[i].Url = result.SecureUrl.AbsoluteUri;
                     chapters[i].PublicId = result.PublicId;
                     book.Chapters.Add(chapters[i]);
 
+                    chapterNumber++;
                     uploadParams.Folder = null;
                 }
             }

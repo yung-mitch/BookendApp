@@ -171,7 +171,7 @@ namespace API.Controllers
 
             if (chapterTitle == "") return BadRequest("No Title input found");
 
-            var book = await _uow.BookRepository.GetBookByIdAsync(bookId);
+            var book = await _uow.BookRepository.GetBookWithChaptersAsync(bookId);
 
             if (book == null) return NotFound();
 
@@ -185,6 +185,7 @@ namespace API.Controllers
 
             var chapter = new Chapter
             {
+                ChapterNumber = book.Chapters.Count + 1,
                 ChapterTitle = chapterTitle,
                 Url = result.SecureUrl.AbsoluteUri,
                 PublicId = result.PublicId
@@ -297,7 +298,7 @@ namespace API.Controllers
                 // 2. verify book publisher == current userId from claims
                 // 3. delete chapter
 
-            var book = await _uow.BookRepository.GetBookByIdAsync(bookId);
+            var book = await _uow.BookRepository.GetBookWithChaptersAsync(bookId);
 
             if (book == null) return NotFound();
 
@@ -317,7 +318,15 @@ namespace API.Controllers
                 if (result.Error != null) return BadRequest(result.Error.Message);
             }
 
+            var chapterNum = chapter.ChapterNumber;
+            var chapterCount = book.Chapters.Count;
+            var bookChapters = book.Chapters.OrderBy(c => c.ChapterNumber).ToList();
+
             book.Chapters.Remove(chapter);
+
+            for (int i = chapterNum; i < chapterCount; i++) {
+                bookChapters[i].ChapterNumber = i;
+            }
 
             if (await _uow.Complete()) return Ok();
 

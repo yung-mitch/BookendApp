@@ -61,6 +61,11 @@ namespace API.Data
             return await _context.Books.FindAsync(id);
         }
 
+        public async Task<Book> GetBookWithChaptersAsync(int id)
+        {
+            return await _context.Books.Include(b => b.Chapters).SingleOrDefaultAsync(b => b.Id == id);
+        }
+
         public async Task<IEnumerable<Book>> GetBooksAsync()
         {
             return await _context.Books.OrderByDescending(x => x.Id).ToListAsync();
@@ -91,7 +96,7 @@ namespace API.Data
         public async Task<FullBookDto> GetFullBookAsync(int id)
         {
             return await _context.Books
-                .Include(c => c.Chapters)
+                .Include(b => b.Chapters.OrderBy(c => c.ChapterNumber))
                 .ProjectTo<FullBookDto>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync(x => x.Id == id);
         }
@@ -189,5 +194,6 @@ namespace API.Data
         {
             return await _context.Comments.FindAsync(commentId);
         }
+
     }
 }

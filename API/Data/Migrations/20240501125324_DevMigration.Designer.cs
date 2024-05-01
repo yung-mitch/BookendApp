@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240410021533_MigrationOne")]
-    partial class MigrationOne
+    [Migration("20240501125324_DevMigration")]
+    partial class DevMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -174,6 +174,40 @@ namespace API.Data.Migrations
                     b.ToTable("Books");
                 });
 
+            modelBuilder.Entity("API.Entities.BookClub", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ClubName")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("OwningUserId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OwningUserId");
+
+                    b.ToTable("BookClubs");
+                });
+
+            modelBuilder.Entity("API.Entities.BookClubBook", b =>
+                {
+                    b.Property<int>("ClubId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("BookId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("ClubId", "BookId");
+
+                    b.HasIndex("BookId");
+
+                    b.ToTable("BookClubBooks");
+                });
+
             modelBuilder.Entity("API.Entities.Chapter", b =>
                 {
                     b.Property<int>("Id")
@@ -289,6 +323,21 @@ namespace API.Data.Migrations
                     b.HasIndex("BookId");
 
                     b.ToTable("UserBooks");
+                });
+
+            modelBuilder.Entity("API.Entities.UserClub", b =>
+                {
+                    b.Property<int>("BookClubId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("BookClubId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserClubs");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -416,6 +465,34 @@ namespace API.Data.Migrations
                     b.Navigation("PublishingUser");
                 });
 
+            modelBuilder.Entity("API.Entities.BookClub", b =>
+                {
+                    b.HasOne("API.Entities.AppUser", "OwningUser")
+                        .WithMany("OwnedClubs")
+                        .HasForeignKey("OwningUserId");
+
+                    b.Navigation("OwningUser");
+                });
+
+            modelBuilder.Entity("API.Entities.BookClubBook", b =>
+                {
+                    b.HasOne("API.Entities.Book", "Book")
+                        .WithMany("ClubCheckouts")
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("API.Entities.BookClub", "Club")
+                        .WithMany("ClubBooks")
+                        .HasForeignKey("ClubId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Book");
+
+                    b.Navigation("Club");
+                });
+
             modelBuilder.Entity("API.Entities.Chapter", b =>
                 {
                     b.HasOne("API.Entities.Book", "Book")
@@ -493,6 +570,25 @@ namespace API.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("API.Entities.UserClub", b =>
+                {
+                    b.HasOne("API.Entities.BookClub", "Club")
+                        .WithMany("ClubMembers")
+                        .HasForeignKey("BookClubId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("API.Entities.AppUser", "User")
+                        .WithMany("MemberClubs")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Club");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
                     b.HasOne("API.Entities.AppRole", null)
@@ -538,6 +634,10 @@ namespace API.Data.Migrations
                 {
                     b.Navigation("CommentsLeft");
 
+                    b.Navigation("MemberClubs");
+
+                    b.Navigation("OwnedClubs");
+
                     b.Navigation("ProfilePhoto");
 
                     b.Navigation("PublishedAds");
@@ -555,9 +655,18 @@ namespace API.Data.Migrations
                 {
                     b.Navigation("Chapters");
 
+                    b.Navigation("ClubCheckouts");
+
                     b.Navigation("Reviews");
 
                     b.Navigation("UserLibraryBooks");
+                });
+
+            modelBuilder.Entity("API.Entities.BookClub", b =>
+                {
+                    b.Navigation("ClubBooks");
+
+                    b.Navigation("ClubMembers");
                 });
 
             modelBuilder.Entity("API.Entities.Chapter", b =>
