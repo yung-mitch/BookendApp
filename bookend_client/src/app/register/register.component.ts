@@ -2,6 +2,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { AccountService } from '../_services/account.service';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-register',
@@ -13,7 +14,8 @@ export class RegisterComponent implements OnInit{
   registerForm: FormGroup = new FormGroup({});
   validationErrors: string[] | undefined;
 
-  constructor(private accountService: AccountService, private fb: FormBuilder, private router: Router ) { }
+  constructor(private accountService: AccountService, private fb: FormBuilder,
+    private router: Router, private toastr: ToastrService) { }
 
   ngOnInit(): void {
     this.initializeForm();
@@ -45,6 +47,7 @@ export class RegisterComponent implements OnInit{
         console.log(response);
         this.router.navigateByUrl('/books');
         this.registerForm.reset();
+        this.toastr.success('Welcome to Bookend! Explore our titles and start listening');
       },
       error: error => {
         this.validationErrors = error

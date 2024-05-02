@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Duration } from 'luxon';
+import { ToastrService } from 'ngx-toastr';
 import { take } from 'rxjs';
 import { ChapterComment } from 'src/app/_models/chapterComment';
 import { User } from 'src/app/_models/user';
@@ -19,7 +20,7 @@ export class ChapterCommentComponent implements OnInit {
   @Output() emitTimestampEvent = new EventEmitter<number>();
   @Output() chapterCommentDeleted = new EventEmitter<number>();
 
-  constructor(private accountService: AccountService, private bookService: BookService) {
+  constructor(private accountService: AccountService, private bookService: BookService, private toastr: ToastrService) {
     this.accountService.currentUser$.pipe(take(1)).subscribe({
       next: user => this.user = user
     })
@@ -46,9 +47,10 @@ export class ChapterCommentComponent implements OnInit {
           this.chapterComment!.timestamp = this.model.timestamp;
           this.chapterComment!.readableTimestamp = this.formatTimestamp(this.chapterComment!.timestamp);
           this.chapterComment!.commentText = this.model.commentText;
-          this.model = {};
 
+          this.model = {};
           this.toggleEditCommentForm();
+          this.toastr.success('Success! Changes saved to your Comment');
         }
       })
     }
@@ -60,6 +62,7 @@ export class ChapterCommentComponent implements OnInit {
       this.bookService.deleteChapterComment(this.chapterComment.id).subscribe({
         next: () => {
           this.chapterCommentDeleted.emit(this.chapterComment?.id);
+          this.toastr.success('Success! Comment deleted');
         }
       })
     }

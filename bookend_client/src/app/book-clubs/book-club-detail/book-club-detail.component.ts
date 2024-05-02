@@ -13,6 +13,7 @@ import { MemberService } from 'src/app/_services/member.service';
 import { EditBookClubModalComponent } from '../edit-book-club-modal/edit-book-club-modal.component';
 import { AddBookClubMemberModalComponent } from '../add-book-club-member-modal/add-book-club-member-modal.component';
 import { AddBookClubBookModalComponent } from '../add-book-club-book-modal/add-book-club-book-modal.component';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-book-club-detail',
@@ -31,7 +32,7 @@ export class BookClubDetailComponent implements OnInit {
   
   constructor(private route: ActivatedRoute, private clubService: ClubService, private bookService: BookService,
     private accountService: AccountService, private modalService: BsModalService, public memberService: MemberService,
-    private router: Router) {
+    private router: Router, private toastr: ToastrService) {
     this.accountService.currentUser$.pipe(take(1)).subscribe({
       next: user => this.user = user
     })
@@ -96,7 +97,7 @@ export class BookClubDetailComponent implements OnInit {
           console.log(clubUpdate);
           this.clubService.updateBookClub(clubUpdate, this.club?.id).subscribe({
             next: () => {
-              
+              this.toastr.success('Changes saved to ' + this.club?.clubName);
             }
           })
         
@@ -125,6 +126,7 @@ export class BookClubDetailComponent implements OnInit {
           this.clubService.addBookClubMember(this.club.id, newMember.newMemberId).subscribe({
             next: () => {
               this.ngOnInit();
+              this.toastr.success('Success! User added to Book Club');
             }
           })
         }
@@ -149,6 +151,7 @@ export class BookClubDetailComponent implements OnInit {
           this.clubService.addBookClubBook(this.club.id, newBook.newBookId).subscribe({
             next: () => {
               this.ngOnInit();
+              this.toastr.success('Success! Book added to Book Club');
             }
           })
         }
@@ -161,9 +164,11 @@ export class BookClubDetailComponent implements OnInit {
       this.clubService.removeBookClubMember(this.club.id, userId).subscribe({
         next: () => {
           this.clubMembers = this.clubMembers.filter(x => x.id != userId);
+          this.toastr.success('Success! User removed from Book Club');
         },
         error: error => {
           console.log(error);
+          this.toastr.error('Something went wrong when attempting to remove user from Book Club');
         }
       })
     }
@@ -174,9 +179,11 @@ export class BookClubDetailComponent implements OnInit {
       this.clubService.removeBookClubBook(this.club.id, bookId).subscribe({
         next: () => {
           this.books = this.books.filter(x => x.id != bookId);
+          this.toastr.success('Success! Book removed from Book Club');
         },
         error: error => {
           console.log(error);
+          this.toastr.error('Something went wrong when attempting to remove Book from Book Club');
         }
       })
     }
@@ -186,8 +193,8 @@ export class BookClubDetailComponent implements OnInit {
     if (this.club && this.member?.id == this.club.owningUserId) {
       this.clubService.deleteBookClub(this.club.id).subscribe({
         next: response => {
-          console.log("Book Club Deleted");
           this.router.navigateByUrl('/bookclubs');
+          this.toastr.success("Success! Book Club deleted");
         }
       })
     }

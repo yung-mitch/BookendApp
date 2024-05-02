@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Duration } from 'luxon';
+import { ToastrService } from 'ngx-toastr';
 import { take } from 'rxjs';
 import { AudioStreamState } from 'src/app/_models/audioStreamState';
 import { Chapter } from 'src/app/_models/chapter';
@@ -25,7 +26,7 @@ export class ChapterCommentsListComponent implements OnInit{
   editCommentForm = false;
   @Output() jumpToCommentTimestampEvent = new EventEmitter<number>();
 
-  constructor(private bookService: BookService, private accountService: AccountService, private audioService: AudioService) {
+  constructor(private bookService: BookService, private accountService: AccountService, private audioService: AudioService, private toastr: ToastrService) {
     this.accountService.currentUser$.pipe(take(1)).subscribe({
       next: user => this.user = user
     })
@@ -102,6 +103,7 @@ export class ChapterCommentsListComponent implements OnInit{
             console.log(this.chapterComments);
 
             this.toggleAddCommentForm();
+            this.toastr.success('Success! Comment added');
           }
         }
       })

@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FileItem, FileUploader } from 'ng2-file-upload';
 import { BsModalRef } from 'ngx-bootstrap/modal';
+import { ToastrService } from 'ngx-toastr';
 import { take } from 'rxjs';
 import { Book } from 'src/app/_models/book';
 import { Chapter } from 'src/app/_models/chapter';
@@ -23,7 +24,7 @@ export class CreateChapterModalComponent implements OnInit {
   user: User | undefined;
   chapter: Chapter | undefined;
 
-  constructor(public bsModalRef: BsModalRef, private accountService: AccountService) {
+  constructor(public bsModalRef: BsModalRef, private accountService: AccountService, private toastr: ToastrService) {
     this.accountService.currentUser$.pipe(take(1)).subscribe({
       next: user => {
         if (user) this.user = user
@@ -48,6 +49,7 @@ export class CreateChapterModalComponent implements OnInit {
         this.uploader?.cancelAll;
         this.toggleDropZone();
         console.log('Invalid filetype'); // will replace this with toast message
+        this.toastr.error('Invalid filetype. Please use .wav or .mp3');
       }
     }
   }
@@ -83,12 +85,14 @@ export class CreateChapterModalComponent implements OnInit {
           if (response) {
             this.chapter = JSON.parse(response);
             console.log(this.chapter);
+            this.toastr.success('Success! New Chapter created for Book');
           }
         }
         this.bsModalRef.hide();
       }
     } catch (error) {
       console.log(error);
+      this.toastr.error('Something went wrong when attempting to create the new Chapter\n\n' + error);
     }
   }
 }

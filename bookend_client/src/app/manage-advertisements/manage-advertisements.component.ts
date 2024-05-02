@@ -11,6 +11,7 @@ import { MemberService } from '../_services/member.service';
 import { AccountService } from '../_services/account.service';
 import { take } from 'rxjs';
 import { ChapterEditModalComponent } from '../modals/chapter-edit-modal/chapter-edit-modal.component';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-manage-advertisements',
@@ -25,7 +26,9 @@ export class ManageAdvertisementsComponent implements OnInit{
   bsModalRefAdEdit: BsModalRef<AdvertisementEditModalComponent> = new BsModalRef<AdvertisementEditModalComponent>();
   bsModalRefAdFileReplace: BsModalRef<AdvertisementReplaceFileModalComponent> = new BsModalRef<AdvertisementReplaceFileModalComponent>();
 
-  constructor(private accountService: AccountService, private memberService: MemberService, private advertisementService: AdvertisementService, private modalService: BsModalService) {
+  constructor(private accountService: AccountService, private memberService: MemberService,
+    private advertisementService: AdvertisementService, private modalService: BsModalService,
+    private toastr: ToastrService) {
     this.accountService.currentUser$.pipe(take(1)).subscribe({
       next: user => this.user = user
     })
@@ -63,8 +66,12 @@ export class ManageAdvertisementsComponent implements OnInit{
     this.bsModalRefCreateAd.onHide?.subscribe({
       next: () => {
         const newAdvertisement = this.bsModalRefCreateAd.content?.advertisement;
-        if (newAdvertisement) this.advertisements.push(newAdvertisement);
+        if (newAdvertisement) {
+          this.advertisements.push(newAdvertisement);
+          this.toastr.success('Success! New Advertisement created');
+        }
         console.log(newAdvertisement);
+
       }
     })
   }
@@ -86,6 +93,7 @@ export class ManageAdvertisementsComponent implements OnInit{
           this.advertisementService.updateAdvertisement(adUpdate, ad.id).subscribe({
             next: () => {
               this.advertisements[this.advertisements.indexOf(ad)].adName = adUpdate.adName;
+              this.toastr.success('Success! Changes saved to your Advertisement');
             }
           })
         }
@@ -103,7 +111,7 @@ export class ManageAdvertisementsComponent implements OnInit{
     this.bsModalRefAdFileReplace = this.modalService.show(AdvertisementReplaceFileModalComponent, config);
     this.bsModalRefAdFileReplace.onHide?.subscribe({
       next: () => {
-        
+        this.toastr.success('Success! You replaced the Advertisement audio file.');
       }
     })
   }
@@ -112,9 +120,11 @@ export class ManageAdvertisementsComponent implements OnInit{
     this.advertisementService.deleteAdvertisement(advertisementId).subscribe({
       next: () => {
         this.advertisements = this.advertisements.filter(x => x.id != advertisementId);
+        this.toastr.success('Success! Advertisement has been deleted');
       },
       error: error => {
         console.log(error);
+        this.toastr.error('Something went wrong when attempting to delete the Advertisement\n\n' + error);
       }
     })
   }

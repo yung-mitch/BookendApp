@@ -8,6 +8,7 @@ import { User } from 'src/app/_models/user';
 import { AccountService } from 'src/app/_services/account.service';
 import { BookService } from 'src/app/_services/book.service';
 import { MemberService } from 'src/app/_services/member.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-manage-published-books',
@@ -20,7 +21,9 @@ export class ManagePublishedBooksComponent implements OnInit {
   books: Book[] = [];
   bsModalRef: BsModalRef<CreateBookModalComponent> = new BsModalRef<CreateBookModalComponent>();
 
-  constructor(private accountService: AccountService, private memberService: MemberService, private bookService: BookService, private modalService: BsModalService) {
+  constructor(private accountService: AccountService, private memberService: MemberService,
+    private bookService: BookService, private modalService: BsModalService,
+    private toastr: ToastrService) {
     this.accountService.currentUser$.pipe(take(1)).subscribe({
       next: user => this.user = user
     })
@@ -68,6 +71,7 @@ export class ManagePublishedBooksComponent implements OnInit {
                 var book = JSON.parse(JSON.stringify(response)) as Book
                 this.books.push(book);
                 console.log(this.books);
+                this.toastr.success('Success! New Book created');
               }
             }
           })
@@ -80,9 +84,11 @@ export class ManagePublishedBooksComponent implements OnInit {
     this.bookService.deleteBook(bookId).subscribe({
       next: () => {
         this.books = this.books.filter(x => x.id != bookId);
+        this.toastr.success('Success! Book deleted');
       },
       error: error => {
         console.log(error);
+        this.toastr.error('Something went wrong when attempting to delete the Book\n\n' + error);
       }
     })
   }

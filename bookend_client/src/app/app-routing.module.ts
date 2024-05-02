@@ -14,10 +14,12 @@ import { chapterDetailedResolver } from './_resolvers/chapter-detailed.resolver'
 import { ManageAdvertisementsComponent } from './manage-advertisements/manage-advertisements.component';
 import { BookClubDetailComponent } from './book-clubs/book-club-detail/book-club-detail.component';
 import { clubDetailedResolver } from './_resolvers/club-detailed.resolver';
+import { NotFoundComponent } from './errors/not-found/not-found.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent},
   { path: '',
+    runGuardsAndResolvers: 'always',
     children: [
       {path: 'library', component: MemberLibraryComponent},
       {path: 'books', component: BookListComponent},
@@ -29,7 +31,9 @@ const routes: Routes = [
       {path: 'book/detail/:bookId', component: BookDetailComponent, resolve: {book: bookDetailedResolver}},
       {path: 'chapter/:chapterId', component: MediaPlayerComponent, resolve: {chapter: chapterDetailedResolver}},
       {path: 'advertisements/manage', component: ManageAdvertisementsComponent}
-    ]}
+    ]},
+  { path: 'not-found', component: NotFoundComponent },
+  { path: '**', component: NotFoundComponent, pathMatch: 'full' }
 ];
 
 @NgModule({

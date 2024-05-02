@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 import { take } from 'rxjs';
 import { Book } from 'src/app/_models/book';
 import { Review } from 'src/app/_models/review';
@@ -18,7 +19,7 @@ export class ReviewsListComponent implements OnInit {
   addReviewMode = false;
   model: any = {};
 
-  constructor(private bookService: BookService, private accountService: AccountService) {
+  constructor(private bookService: BookService, private accountService: AccountService, private toastr: ToastrService) {
     this.accountService.currentUser$.pipe(take(1)).subscribe({
       next: user => this.user = user
     })
@@ -59,6 +60,7 @@ export class ReviewsListComponent implements OnInit {
             }
             this.reviews.push(review);
             console.log(this.reviews);
+            this.toastr.success('Success! New Review created');
           }
         }
       })

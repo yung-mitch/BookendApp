@@ -2,6 +2,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { AccountService } from '../_services/account.service';
 import { Router } from '@angular/router';
 import { take } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 declare function toggleHamburger(): any;
 declare function removeHamburger(): any;
@@ -16,7 +17,7 @@ export class NavComponent implements OnInit {
   @Output() mobileMenuToggleEvent = new EventEmitter<number>();
   @Output() mobileMenuCloseEvent = new EventEmitter<number>();
   
-  constructor(public accountService: AccountService, private router: Router) { }
+  constructor(public accountService: AccountService, private router: Router, private toastr: ToastrService) { }
 
   ngOnInit(): void {
     
@@ -37,6 +38,8 @@ export class NavComponent implements OnInit {
             } else {
               this.router.navigateByUrl('/');
             }
+            
+            this.toastr.success('Welcome back, ' + user?.userName)
           }
         })
         this.model = {};

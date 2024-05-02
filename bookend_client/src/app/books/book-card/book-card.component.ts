@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { ToastrService } from 'ngx-toastr';
 import { take } from 'rxjs';
 import { Book } from 'src/app/_models/book';
 import { User } from 'src/app/_models/user';
@@ -20,7 +21,7 @@ export class BookCardComponent implements OnInit {
   @Output() deleteBookEvent = new EventEmitter<number>();
   @Output() removeFromLibEvent = new EventEmitter<number>();
 
-  constructor(private accountService: AccountService, private bookService: BookService, private modalService: BsModalService) {
+  constructor(private accountService: AccountService, private bookService: BookService, private modalService: BsModalService, private toastr: ToastrService) {
     this.accountService.currentUser$.pipe(take(1)).subscribe({
       next: user => this.user = user
     })
@@ -49,6 +50,7 @@ export class BookCardComponent implements OnInit {
           {
             this.inUserLibrary = !this.inUserLibrary;
           }
+          this.toastr.success('Success! Book added to your library.');
         }
       })
     }
@@ -83,6 +85,7 @@ export class BookCardComponent implements OnInit {
                 this.book.title = bookUpdate.title;
                 this.book.author = bookUpdate.author;
               }
+              this.toastr.success('Success! Changes saved to Book.')
             }
           });
         }

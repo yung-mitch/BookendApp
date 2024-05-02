@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FileItem, FileUploader } from 'ng2-file-upload';
 import { BsModalRef } from 'ngx-bootstrap/modal';
+import { ToastrService } from 'ngx-toastr';
 import { take } from 'rxjs';
 import { User } from 'src/app/_models/user';
 import { AccountService } from 'src/app/_services/account.service';
@@ -19,7 +20,7 @@ export class AdvertisementReplaceFileModalComponent implements OnInit {
   baseUrl = environment.apiUrl;
   user: User | undefined;
 
-  constructor(public bsModalRef: BsModalRef, private accountService: AccountService) {
+  constructor(public bsModalRef: BsModalRef, private accountService: AccountService, private toastr: ToastrService) {
     this.accountService.currentUser$.pipe(take(1)).subscribe({
       next: user => {
         if (user) this.user = user
@@ -44,6 +45,7 @@ export class AdvertisementReplaceFileModalComponent implements OnInit {
         this.uploader?.cancelAll;
         this.toggleDropZone();
         console.log('Invalid filetype'); // will replace this with toast message
+        this.toastr.error('Invalid filetype. Please use .wav or .mp3');
       }
     }
   }
@@ -78,12 +80,14 @@ export class AdvertisementReplaceFileModalComponent implements OnInit {
         this.uploader.onSuccessItem = (item, response, status, header) => {
           if (response) {
             console.log(response);
+            this.toastr.success('Success! File change saved for Advertisement');
           }
         }
         this.bsModalRef.hide();
       }
     } catch (error) {
       console.log(error);
+      this.toastr.error('Something went wrong when attempting to replace the audio file\n\n' + error);
     }
   }
 }

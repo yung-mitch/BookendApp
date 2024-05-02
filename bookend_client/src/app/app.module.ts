@@ -47,6 +47,8 @@ import { EditBookClubModalComponent } from './book-clubs/edit-book-club-modal/ed
 import { AddBookClubBookModalComponent } from './book-clubs/add-book-club-book-modal/add-book-club-book-modal.component';
 import { BookClubBookCardComponent } from './books/book-club-book-card/book-club-book-card.component';
 import { LoadingInterceptor } from './_interceptors/loading.interceptor';
+import { ErrorInterceptor } from './_interceptors/error.interceptor';
+import { NotFoundComponent } from './errors/not-found/not-found.component';
 
 @NgModule({
   declarations: [
@@ -86,7 +88,8 @@ import { LoadingInterceptor } from './_interceptors/loading.interceptor';
     AddBookClubMemberModalComponent,
     EditBookClubModalComponent,
     AddBookClubBookModalComponent,
-    BookClubBookCardComponent
+    BookClubBookCardComponent,
+    NotFoundComponent
   ],
   imports: [
     BrowserModule,
@@ -99,7 +102,8 @@ import { LoadingInterceptor } from './_interceptors/loading.interceptor';
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},
-    {provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true}
+    {provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true},
+    {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true}
   ],
   bootstrap: [AppComponent]
 })

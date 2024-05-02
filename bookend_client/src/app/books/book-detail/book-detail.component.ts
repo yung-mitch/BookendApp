@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { ToastrService } from 'ngx-toastr';
 import { Book } from 'src/app/_models/book';
 import { Chapter } from 'src/app/_models/chapter';
 import { BookService } from 'src/app/_services/book.service';
@@ -20,7 +21,7 @@ export class BookDetailComponent implements OnInit {
   bsModalRefChapterEdit: BsModalRef<ChapterEditModalComponent> = new BsModalRef<ChapterEditModalComponent>();
   bsModalRefReplaceChapter: BsModalRef<ChapterReplaceFileModalComponent> = new BsModalRef<ChapterReplaceFileModalComponent>();
 
-  constructor(private bookService: BookService, private modalService: BsModalService, private route: ActivatedRoute) { }
+  constructor(private bookService: BookService, private modalService: BsModalService, private route: ActivatedRoute, private toastr: ToastrService) { }
 
   ngOnInit(): void {
     this.route.data.subscribe({
@@ -52,6 +53,7 @@ export class BookDetailComponent implements OnInit {
         if (newChapter) this.chapters.push(newChapter);
         // update chapters list --> will require changing loadChapters() method to make sure the addition is respecting the existing list and not adding existing chapters a second time
         console.log(newChapter);
+        this.toastr.success('Success! Chapter added to Book');
         // const title = this.bsModalRefCreateChapter.content?.title;
         // const newChapter = this.bsModalRefCreateChapter.content?.chapter;
 
@@ -94,6 +96,7 @@ export class BookDetailComponent implements OnInit {
           this.bookService.updateChapter(chapterUpdate, chapter.id).subscribe({
             next: () => {
               this.chapters[this.chapters.findIndex(x => x.id == chapter.id)].chapterTitle = chapterUpdate.chapterTitle;
+              this.toastr.success('Success! Changes saved to Chapter.')
             }
           })
         }
@@ -113,6 +116,7 @@ export class BookDetailComponent implements OnInit {
     this.bsModalRefReplaceChapter.onHide?.subscribe({
       next: () => {
         // May need to call loadChapters() to refresh the list; requires logic in loadChapters to handle one chapter's update
+        this.toastr.success('Success! You replaced audio file for the Chapter.');
       }
     })
   }
@@ -121,9 +125,11 @@ export class BookDetailComponent implements OnInit {
     this.bookService.deleteChapter(bookId, chapterId).subscribe({
       next: () => {
         this.chapters = this.chapters.filter(x => x.id != chapterId);
+        this.toastr.success('Success! The Book has been deleted');
       },
       error: error => {
         console.log(error);
+        this.toastr.error('Something went wrong when attempting to delete the Book\n\n' + error);
       }
     })
   }

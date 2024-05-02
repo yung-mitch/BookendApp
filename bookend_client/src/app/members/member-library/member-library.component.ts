@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 import { take } from 'rxjs';
 import { Book } from 'src/app/_models/book';
 import { Member } from 'src/app/_models/member';
@@ -17,7 +18,8 @@ export class MemberLibraryComponent implements OnInit{
   user: User | null = null;
   books: Book[] = [];
 
-  constructor(private accountService: AccountService, private memberService: MemberService, private bookService: BookService) {
+  constructor(private accountService: AccountService, private memberService: MemberService,
+    private bookService: BookService, private toastr: ToastrService) {
     this.accountService.currentUser$.pipe(take(1)).subscribe({
       next: user => this.user = user
     })
@@ -51,9 +53,11 @@ export class MemberLibraryComponent implements OnInit{
     this.bookService.removeFromLibrary(bookId).subscribe({
       next: () => {
         this.books = this.books.filter(x => x.id != bookId);
+        this.toastr.success('Success! The Book has been removed from your library');
       },
       error: error => {
         console.log(error);
+        this.toastr.error('Something went wrong when attempting to remove the Book from your library\n\n' + error);
       }
     })
   }

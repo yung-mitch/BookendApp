@@ -4,6 +4,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { User } from 'src/app/_models/user';
 import { AccountService } from 'src/app/_services/account.service';
 import { take } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-member-edit',
@@ -14,7 +15,7 @@ export class MemberEditComponent implements OnInit {
   user: User | undefined
   bsModalRefReplacePhoto: BsModalRef<PhotoEditorModalComponent> = new BsModalRef<PhotoEditorModalComponent>();
 
-  constructor(private accountService: AccountService, private modalService: BsModalService) {
+  constructor(private accountService: AccountService, private modalService: BsModalService, private toastr: ToastrService) {
     this.accountService.currentUser$.pipe(take(1)).subscribe({
       next: user => {
         if (user) this.user = user
@@ -41,6 +42,7 @@ export class MemberEditComponent implements OnInit {
         if (photoUrl && this.user) {
           this.user.photoUrl = photoUrl;
           this.accountService.setCurrentUser(this.user);
+          this.toastr.success('Success! You new profile photo has been saved');
         }
       }
     })

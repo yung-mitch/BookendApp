@@ -8,6 +8,7 @@ import { AccountService } from '../../_services/account.service';
 import { take } from 'rxjs';
 import { MemberService } from '../../_services/member.service';
 import { ClubService } from '../../_services/club.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-book-club-list',
@@ -20,7 +21,9 @@ export class BookClubListComponent implements OnInit {
   clubs: BookClub[] = [];
   bsModalRefCreateBookClub: BsModalRef<CreateBookClubModalComponent> = new BsModalRef<CreateBookClubModalComponent>();
 
-  constructor(private modalService: BsModalService, private memberService: MemberService, public accountService: AccountService, public clubService: ClubService) {
+  constructor(private modalService: BsModalService, private memberService: MemberService,
+    public accountService: AccountService, public clubService: ClubService,
+    private toastr: ToastrService) {
     this.accountService.currentUser$.pipe(take(1)).subscribe({
       next: user => this.user = user
     })
@@ -66,6 +69,7 @@ export class BookClubListComponent implements OnInit {
               if (response) {
                 var club = JSON.parse(JSON.stringify(response)) as BookClub;
                 this.clubs.push(club);
+                this.toastr.success('Success! New Book Club created.');
               }
             }
           })
