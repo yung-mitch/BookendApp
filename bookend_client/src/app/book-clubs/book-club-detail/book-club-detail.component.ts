@@ -14,6 +14,9 @@ import { EditBookClubModalComponent } from '../edit-book-club-modal/edit-book-cl
 import { AddBookClubMemberModalComponent } from '../add-book-club-member-modal/add-book-club-member-modal.component';
 import { AddBookClubBookModalComponent } from '../add-book-club-book-modal/add-book-club-book-modal.component';
 import { ToastrService } from 'ngx-toastr';
+import { Pagination } from 'src/app/_models/pagination';
+import { BookParams } from 'src/app/_models/bookParams';
+import { UserParams } from 'src/app/_models/userParams';
 
 @Component({
   selector: 'app-book-club-detail',
@@ -26,6 +29,10 @@ export class BookClubDetailComponent implements OnInit {
   club: BookClub | undefined;
   clubMembers: Member[] = [];
   books: Book[] = [];
+  bookPagination: Pagination | undefined;
+  userPagination: Pagination | undefined;
+  bookParams: BookParams | undefined;
+  userParams: UserParams | undefined;
   bsModalRefEditBookClub: BsModalRef<EditBookClubModalComponent> = new BsModalRef<EditBookClubModalComponent>();
   bsModalRefAddBookClubMember: BsModalRef<AddBookClubMemberModalComponent> = new BsModalRef<AddBookClubMemberModalComponent>();
   bsModalRefAddBookClubBook: BsModalRef<AddBookClubBookModalComponent> = new BsModalRef<AddBookClubBookModalComponent>();
@@ -34,7 +41,11 @@ export class BookClubDetailComponent implements OnInit {
     private accountService: AccountService, private modalService: BsModalService, public memberService: MemberService,
     private router: Router, private toastr: ToastrService) {
     this.accountService.currentUser$.pipe(take(1)).subscribe({
-      next: user => this.user = user
+      next: user => {
+        this.user = user;
+        this.bookParams = new BookParams();
+        this.userParams = new UserParams();
+      }
     })
   }
 
@@ -57,24 +68,26 @@ export class BookClubDetailComponent implements OnInit {
   }
 
   loadBooks() {
-    if (!this.user || !this.club) return;
-    this.clubService.getBookClubBooks(this.club.id).subscribe({
+    if (!this.user || !this.club || !this.bookParams) return;
+    this.clubService.getBookClubBooks(this.bookParams, this.club.id).subscribe({
       next: response => {
-        if (response)
+        if (response.result && response.pagination)
         {
-          this.books = response;
+          this.books = response.result;
+          this.bookPagination = response.pagination;
         }
       }
     })
   }
 
   loadClubMembers() {
-    if (!this.user || !this.club) return;
-    this.clubService.getBookClubMembers(this.club.id).subscribe({
+    if (!this.user || !this.club || !this.userParams) return;
+    this.clubService.getBookClubMembers(this.userParams, this.club.id).subscribe({
       next: response => {
-        if (response)
+        if (response.result && response.pagination)
           {
-            this.clubMembers = response;
+            this.clubMembers = response.result;
+            this.userPagination = response.pagination;
           }
       }
     })
@@ -197,6 +210,20 @@ export class BookClubDetailComponent implements OnInit {
           this.toastr.success("Success! Book Club deleted");
         }
       })
+    }
+  }
+
+  pageChangedBooks(event: any) {
+    if (this.bookParams && this.bookParams?.pageNumber !== event.page) {
+      this.bookParams.pageNumber = event.page;
+      this.loadBooks();
+    }
+  }
+
+  pageChangedMembers(event: any) {
+    if (this.userParams && this.userParams?.pageNumber !== event.page) {
+      this.userParams.pageNumber = event.page;
+      this.loadClubMembers();
     }
   }
 }

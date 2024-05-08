@@ -5,17 +5,43 @@
     </button>
 </div>
 <div class="modal-body">
-    <form #addBookClubMemberForm="ngForm" id="addBookClubMemberForm" (ngSubmit)="addNewBook()" autocomplete="off">
+    <div class="title-search">
+        <form #searchBooksForm="ngForm" id="searchBooksForm" (ngSubmit)="searchBooks()" style="width: 75%;" autocomplete="off">
+            <input type="text"
+                name="searchString"
+                [(ngModel)]="searchString"
+                placeholder="Search Titles..."
+                style="width: 100%;">
+            </form>
+            <button type="submit" form="searchBooksForm" class="btn btn-primary" style="width: 20%;">Search</button>
+    </div>
+    <form *ngIf="searched" #addBookClubBookForm="ngForm" id="addBookClubBookForm" (ngSubmit)="addNewBook()" autocomplete="off">
         <table>
             <tbody>
                 <tr *ngFor="let book of otherBooks">
                     <td>
-                        <input type="radio" id="{{book.id}}" name="newMember" value="{{book.id}}" [(ngModel)]="newBookId">
+                        <input type="radio" id="{{book.id}}" name="newBook" value="{{book.id}}" [(ngModel)]="newBookId">
                         <label for="{{book.id}}">{{book.title}}</label>
                     </td>
                 </tr>
             </tbody>
         </table>
-        <button class="btn btn-success" type="submit">Add Member</button>
     </form>
+    <div class="pagination-control" *ngIf="pagination">
+        <pagination
+        [boundaryLinks]="true"
+        [totalItems]="pagination.totalItems"
+        [itemsPerPage]="pagination.itemsPerPage"
+        [maxSize]="10"
+        [(ngModel)]="pagination.currentPage"
+        (pageChanged)="pageChanged($event)"
+        previousText="&lsaquo;"
+        nextText="&rsaquo;"
+        firstText="&laquo;"
+        lastText="&raquo;">
+        </pagination>
+    </div>
+</div>
+<div class="modal-footer" style="justify-content: start;">
+    <button class="btn btn-success pull-left" type="submit" form="addBookClubBookForm" [disabled]="!searched || otherBooks.length == 0">Add Book</button>
 </div>

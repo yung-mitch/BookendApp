@@ -1,6 +1,7 @@
 ﻿using API.Chapters;
 using API.DTOs;
 using API.Entities;
+using API.Helpers;
 using API.Interfaces;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
@@ -66,31 +67,48 @@ namespace API.Data
             return await _context.Books.Include(b => b.Chapters).SingleOrDefaultAsync(b => b.Id == id);
         }
 
-        public async Task<IEnumerable<Book>> GetBooksAsync()
+        public async Task<PagedList<BookDto>> GetBooksAsync(BookParams bookParams)
         {
-            return await _context.Books.OrderByDescending(x => x.Id).ToListAsync();
+            var query = _context.Books
+                .ProjectTo<BookDto>(_mapper.ConfigurationProvider)
+                .OrderByDescending(x => x.Id)
+                .AsNoTracking();
+
+            return await PagedList<BookDto>.CreateAsync(query, bookParams.PageNumber, bookParams.PageSize);
+        }
+
+        public async Task<PagedList<BookDto>> GetBooksSearchAsync(BookParams bookParams)
+        {
+            var query = _context.Books.AsQueryable();
+
+            query = query.Where(b => b.Title.Contains(bookParams.SearchString) || b.Author.Contains(bookParams.SearchString));
+
+            return await PagedList<BookDto>.CreateAsync(
+                query.AsNoTracking().ProjectTo<BookDto>(_mapper.ConfigurationProvider).OrderByDescending(x => x.Id),
+                bookParams.PageNumber,
+                bookParams.PageSize);
         }
         
-        public async Task<IEnumerable<BookDto>> GetBooksAsync(int userId)
+        public async Task<PagedList<BookDto>> GetBooksAsync(int userId, BookParams bookParams)
         {
-            return await _context.Books
+             var query = _context.Books
                 .Where(x => x.PublishingUserId == userId)
-                .OrderByDescending(x => x.Id)
                 .ProjectTo<BookDto>(_mapper.ConfigurationProvider)
-                .ToListAsync();
+                .OrderByDescending(x => x.Id)
+                .AsNoTracking();
+
+            return await PagedList<BookDto>.CreateAsync(query, bookParams.PageNumber, bookParams.PageSize);
         }
 
-        public async Task<List<BookDto>> GetLibraryBooks(int userId)
+        public async Task<PagedList<BookDto>> GetLibraryBooks(int userId, BookParams bookParams)
         {
-            var userLibrary = _context.UserBooks.AsQueryable();
-            var books = _context.Books.OrderBy(b => b.Title).AsQueryable();
-
-            userLibrary = userLibrary.Where(ub => ub.UserId == userId);
-            books = userLibrary.Select(libBook => libBook.Book);
-
-            var userLibBooks = await books.ProjectTo<BookDto>(_mapper.ConfigurationProvider).ToListAsync();
-
-            return userLibBooks;
+            var query = _context.UserBooks
+                .Where(ub => ub.UserId == userId)
+                .Select(libBook => libBook.Book)
+                .ProjectTo<BookDto>(_mapper.ConfigurationProvider)
+                .AsNoTracking();
+            
+            return await PagedList<BookDto>.CreateAsync(query, bookParams.PageNumber, bookParams.PageSize);
         }
 
         public async Task<FullBookDto> GetFullBookAsync(int id)

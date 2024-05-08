@@ -2,6 +2,7 @@
 using API.DTOs;
 using API.Entities;
 using API.Extensions;
+using API.Helpers;
 using API.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -30,11 +31,35 @@ namespace API.Controllers
         */
         [Authorize(Roles = "AppMember")]
         [HttpGet] // /api/books
-        public async Task<ActionResult<IEnumerable<BookDto>>> GetBooks()
+        public async Task<ActionResult<PagedList<BookDto>>> GetBooks([FromQuery]BookParams bookParams)
         {
-            var books = await _uow.BookRepository.GetBooksAsync();
+            if (string.IsNullOrEmpty(bookParams.SearchString))
+            {
+                // Get ALL Books and return
+                var books = await _uow.BookRepository.GetBooksAsync(bookParams);
 
-            return Ok(books);
+                Response.AddPaginationHeader(new PaginationHeader(
+                books.CurrentPage,
+                books.PageSize,
+                books.TotalCount,
+                books.TotalPages));
+
+                return Ok(books);
+
+            } else {
+                // Get only Books that satisfy bookParams.SearchString
+                var books = await _uow.BookRepository.GetBooksSearchAsync(bookParams);
+
+                Response.AddPaginationHeader(new PaginationHeader(
+                books.CurrentPage,
+                books.PageSize,
+                books.TotalCount,
+                books.TotalPages));
+
+                return Ok(books);
+            }
+
+            
         }
 
         /*
@@ -45,15 +70,20 @@ namespace API.Controllers
         */
         [Authorize (Roles = "Publisher")]
         [HttpGet("published")]
-        public async Task<ActionResult<IEnumerable<BookDto>>> GetPublishedBooks()
+        public async Task<ActionResult<PagedList<BookDto>>> GetPublishedBooks([FromQuery]BookParams bookParams)
         {
             var user = await _uow.UserRepository.GetUserByIdAsync(User.GetUserId());
-
             if (user == null) return NotFound();
 
-            var books = await _uow.BookRepository.GetBooksAsync(user.Id);
-
+            var books = await _uow.BookRepository.GetBooksAsync(user.Id, bookParams);
             if (books == null) return NotFound();
+
+            Response.AddPaginationHeader(new PaginationHeader(
+                books.CurrentPage,
+                books.PageSize,
+                books.TotalCount,
+                books.TotalPages
+            ));
 
             return Ok(books);
         }

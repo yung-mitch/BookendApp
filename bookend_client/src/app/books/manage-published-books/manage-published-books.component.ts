@@ -9,6 +9,8 @@ import { AccountService } from 'src/app/_services/account.service';
 import { BookService } from 'src/app/_services/book.service';
 import { MemberService } from 'src/app/_services/member.service';
 import { ToastrService } from 'ngx-toastr';
+import { Pagination } from 'src/app/_models/pagination';
+import { BookParams } from 'src/app/_models/bookParams';
 
 @Component({
   selector: 'app-manage-published-books',
@@ -19,13 +21,18 @@ export class ManagePublishedBooksComponent implements OnInit {
   member: Member | undefined;
   user: User | null = null;
   books: Book[] = [];
+  pagination: Pagination | undefined;
+  bookParams: BookParams | undefined;
   bsModalRef: BsModalRef<CreateBookModalComponent> = new BsModalRef<CreateBookModalComponent>();
 
   constructor(private accountService: AccountService, private memberService: MemberService,
     private bookService: BookService, private modalService: BsModalService,
     private toastr: ToastrService) {
     this.accountService.currentUser$.pipe(take(1)).subscribe({
-      next: user => this.user = user
+      next: user => {
+        this.user = user;
+        this.bookParams = new BookParams();
+      }
     })
   }
 
@@ -42,12 +49,13 @@ export class ManagePublishedBooksComponent implements OnInit {
   }
 
   loadBooks() {
-    if (!this.user) return;
-    this.bookService.getPublishedBooks().subscribe({
+    if (!this.user || !this.bookParams) return;
+    this.bookService.getPublishedBooks(this.bookParams).subscribe({
       next: response => {
-        if (response)
+        if (response.result && response.pagination)
         {
-          this.books = response;
+          this.books = response.result;
+          this.pagination = response.pagination;
         }
       }
     })
@@ -91,5 +99,12 @@ export class ManagePublishedBooksComponent implements OnInit {
         this.toastr.error('Something went wrong when attempting to delete the Book\n\n' + error);
       }
     })
+  }
+
+  pageChanged(event: any) {
+    if (this.bookParams && this.bookParams?.pageNumber !== event.page) {
+      this.bookParams.pageNumber = event.page;
+      this.loadBooks();
+    }
   }
 }

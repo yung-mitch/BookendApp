@@ -1,5 +1,6 @@
 ﻿using API.DTOs;
 using API.Entities;
+using API.Helpers;
 
 namespace API.Interfaces
 {
@@ -7,8 +8,8 @@ namespace API.Interfaces
     {
         Task<IEnumerable<BookClub>> GetBookClubsAsync();
         Task<List<ClubDto>> GetUserBookClubsAsync(int userId);
-        Task<List<BookDto>> GetBookClubBooksAsync(int clubId);
-        Task<List<MemberDto>> GetBookClubMembersAsync(int clubId);
+        Task<PagedList<BookDto>> GetBookClubBooksAsync(int clubId, BookParams bookParams);
+        Task<PagedList<MemberDto>> GetBookClubMembersAsync(int clubId, UserParams userParams);
         Task<ClubDto> GetBookClubByIdAsync(int clubId);
         Task<BookClub> GetBookClub(int clubId);
         Task<UserClub> GetUserClub(int userId, int clubId);

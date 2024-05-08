@@ -27,3 +27,9 @@
     column-gap: 5px;
     justify-content: center;
 }
+
+.pagination-control {
+    display: flex;
+    align-items: stretch;
+    justify-content: space-around;
+}

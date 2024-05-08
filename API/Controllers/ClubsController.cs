@@ -1,6 +1,7 @@
 ﻿using API.DTOs;
 using API.Entities;
 using API.Extensions;
+using API.Helpers;
 using API.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -137,12 +138,19 @@ namespace API.Controllers
         */
         [Authorize(Roles = "AppMember")]
         [HttpGet("members/{clubId}")]
-        public async Task<ActionResult<IEnumerable<MemberDto>>> GetClubMembers(int clubId)
+        public async Task<ActionResult<PagedList<MemberDto>>> GetClubMembers(int clubId, [FromQuery]UserParams userParams)
         {
             var club = await _uow.ClubRepository.GetBookClub(clubId);
             if (club == null) return NotFound();
 
-            var members = await _uow.ClubRepository.GetBookClubMembersAsync(clubId);
+            var members = await _uow.ClubRepository.GetBookClubMembersAsync(clubId, userParams);
+
+            Response.AddPaginationHeader(new PaginationHeader(
+                members.CurrentPage,
+                members.PageSize,
+                members.TotalCount,
+                members.TotalPages
+            ));
 
             return Ok(members);
         }
@@ -223,12 +231,19 @@ namespace API.Controllers
         */
         [Authorize(Roles = "AppMember")]
         [HttpGet("books/{clubId}")]
-        public async Task<ActionResult<IEnumerable<BookDto>>> GetClubBooks(int clubId)
+        public async Task<ActionResult<PagedList<BookDto>>> GetClubBooks(int clubId, [FromQuery]BookParams bookParams)
         {
             var club = await _uow.ClubRepository.GetBookClub(clubId);
             if (club == null) return NotFound();
 
-            var books = await _uow.ClubRepository.GetBookClubBooksAsync(clubId);
+            var books = await _uow.ClubRepository.GetBookClubBooksAsync(clubId, bookParams);
+
+            Response.AddPaginationHeader(new PaginationHeader(
+                books.CurrentPage,
+                books.PageSize,
+                books.TotalCount,
+                books.TotalPages
+            ));
 
             return Ok(books);
         }

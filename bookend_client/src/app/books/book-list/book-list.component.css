@@ -1,6 +1,6 @@
 .book-list {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
 }
 
 .book-item {
@@ -9,8 +9,44 @@
     margin: 10px;
 }
 
+.pagination-control {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.title-search {
+    display: flex;
+    flex-direction: column;
+    row-gap: 5px;
+    width: 100%;
+}
+
+.search-buttons {
+    display: flex;
+    flex-direction: row;
+    column-gap: 5px;
+    align-items: center;
+}
+
+.btn-search {
+    min-width: 100px;
+}
+
 @media screen and (max-width: 800px) {
     .book-list {
         grid-template-columns: 1fr;
+    }
+
+    .search-buttons {
+        flex-direction: column;
+        row-gap: 5px;
+        align-items: center;
+        justify-content: space-around;
+        width: 100%;
+    }
+
+    .btn-search {
+        width: 100%
     }
 }

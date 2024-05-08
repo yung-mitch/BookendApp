@@ -2,8 +2,40 @@
     <h2>Browse Audiobooks</h2>
 </div>
 
-<div class="book-list">
+<div class="title-search">
+    <form #searchBooksForm="ngForm" id="searchBooksForm" (ngSubmit)="searchBooks()" autocomplete="off" style="align-self: center; width: 100%;">
+        <input type="text"
+            name="searchString"
+            [(ngModel)]="searchString"
+            placeholder="Search Titles..."
+            style="width: 100%;">
+    </form>
+
+    <div class="search-buttons">
+        <button type="submit" form="searchBooksForm" class="btn btn-primary btn-search">Search</button>
+        <button class="btn btn-info btn-search" (click)="browseAllBooks();">Browse All</button>
+    </div>
+</div>
+
+<div class="text-center" *ngIf="!searched">Nothing here yet. Perform a search to see available titles.</div>
+
+<div class="book-list" *ngIf="searched">
     <div class="book-item" *ngFor="let book of books">
         <app-book-card [book]="book"></app-book-card>
     </div>
+</div>
+
+<div class="pagination-control" *ngIf="pagination">
+    <pagination
+        [boundaryLinks]="true"
+        [totalItems]="pagination.totalItems"
+        [itemsPerPage]="pagination.itemsPerPage"
+        [maxSize]="10"
+        [(ngModel)]="pagination.currentPage"
+        (pageChanged)="pageChanged($event)"
+        previousText="&lsaquo;"
+        nextText="&rsaquo;"
+        firstText="&laquo;"
+        lastText="&raquo;">
+    </pagination>
 </div>

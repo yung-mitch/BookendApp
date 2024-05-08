@@ -10,8 +10,9 @@ import { AdvertisementService } from '../_services/advertisement.service';
 import { MemberService } from '../_services/member.service';
 import { AccountService } from '../_services/account.service';
 import { take } from 'rxjs';
-import { ChapterEditModalComponent } from '../modals/chapter-edit-modal/chapter-edit-modal.component';
 import { ToastrService } from 'ngx-toastr';
+import { AdvertisementParams } from '../_models/advertisementParams';
+import { Pagination } from '../_models/pagination';
 
 @Component({
   selector: 'app-manage-advertisements',
@@ -22,6 +23,8 @@ export class ManageAdvertisementsComponent implements OnInit{
   member: Member | undefined;
   user: User | null = null;
   advertisements: Advertisement[] = [];
+  pagination: Pagination | undefined;
+  adParams: AdvertisementParams | undefined;
   bsModalRefCreateAd: BsModalRef<CreateAdvertisementModalComponent> = new BsModalRef<CreateAdvertisementModalComponent>();
   bsModalRefAdEdit: BsModalRef<AdvertisementEditModalComponent> = new BsModalRef<AdvertisementEditModalComponent>();
   bsModalRefAdFileReplace: BsModalRef<AdvertisementReplaceFileModalComponent> = new BsModalRef<AdvertisementReplaceFileModalComponent>();
@@ -30,7 +33,10 @@ export class ManageAdvertisementsComponent implements OnInit{
     private advertisementService: AdvertisementService, private modalService: BsModalService,
     private toastr: ToastrService) {
     this.accountService.currentUser$.pipe(take(1)).subscribe({
-      next: user => this.user = user
+      next: user => {
+        this.user = user;
+        this.adParams = new AdvertisementParams();
+      }
     })
   }
 
@@ -47,12 +53,13 @@ export class ManageAdvertisementsComponent implements OnInit{
   }
 
   loadAds() {
-    if (!this.user) return;
-    this.advertisementService.getPublishedAdvertisements().subscribe({
+    if (!this.user || !this.adParams) return;
+    this.advertisementService.getPublishedAdvertisements(this.adParams).subscribe({
       next: response => {
-        if (response)
+        if (response.result && response.pagination)
         {
-          this.advertisements = response;
+          this.advertisements = response.result;
+          this.pagination = response.pagination;
         }
       }
     })
@@ -127,5 +134,12 @@ export class ManageAdvertisementsComponent implements OnInit{
         this.toastr.error('Something went wrong when attempting to delete the Advertisement\n\n' + error);
       }
     })
+  }
+
+  pageChanged(event: any) {
+    if (this.adParams && this.adParams?.pageNumber !== event.page) {
+      this.adParams.pageNumber = event.page;
+      this.loadAds();
+    }
   }
 }

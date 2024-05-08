@@ -1,5 +1,6 @@
 ﻿using API.DTOs;
 using API.Entities;
+using API.Helpers;
 
 namespace API.Interfaces
 {
@@ -7,7 +8,7 @@ namespace API.Interfaces
     {
         Task<IEnumerable<Advertisement>> GetAdvertisementsAsync();
         Task<IEnumerable<AdvertisementDto>> GetAdvertisementDtosAsync();
-        Task<IEnumerable<AdvertisementDto>> GetUserAdvertisementsAsync(int userId);
+        Task<PagedList<AdvertisementDto>> GetUserAdvertisementsAsync(int userId, AdvertisementParams adParams);
         Task<Advertisement> GetAdvertisementByIdAsync(int id);
         Task<AdvertisementDto> GetAdvertisementAsync(int id);
         Task<List<AdvertisementDto>> GetRandomAdvertisements(int numberOfAds);

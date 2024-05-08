@@ -5,6 +5,8 @@ import { User } from '../_models/user';
 import { HttpClient } from '@angular/common/http';
 import { AccountService } from './account.service';
 import { take } from 'rxjs';
+import { getPaginatedResult, getPaginationHeaders } from './paginationHelper';
+import { AdvertisementParams } from '../_models/advertisementParams';
 
 @Injectable({
   providedIn: 'root'
@@ -32,8 +34,11 @@ export class AdvertisementService {
     return this.http.get<Advertisement[]>(this.baseUrl + 'advertisements/advertisements-to-serve');
   }
 
-  getPublishedAdvertisements() {
-    return this.http.get<Advertisement[]>(this.baseUrl + 'advertisements/published');
+  getPublishedAdvertisements(adParams: AdvertisementParams) {
+    let params = getPaginationHeaders(adParams.pageNumber, adParams.pageSize);
+    params = params.append('searchString', adParams.searchString);
+
+    return getPaginatedResult<Advertisement[]>(this.baseUrl + 'advertisements/published', params, this.http);
   }
   
   updateAdvertisement(advertisement: any, advertisementId: number) {

@@ -1,5 +1,6 @@
 ﻿using API.DTOs;
 using API.Extensions;
+using API.Helpers;
 using API.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -24,13 +25,20 @@ namespace API.Controllers
         */
         [Authorize(Roles = "AppMember")]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<BookDto>>> GetUserLibrary()
+        public async Task<ActionResult<PagedList<BookDto>>> GetUserLibrary([FromQuery]BookParams bookParams)
         {
             var user = await _uow.UserRepository.GetUserByIdAsync(User.GetUserId());
 
             if (user == null) return NotFound();
 
-            var books = await _uow.BookRepository.GetLibraryBooks(user.Id);
+            var books = await _uow.BookRepository.GetLibraryBooks(user.Id, bookParams);
+
+            Response.AddPaginationHeader(new PaginationHeader(
+                books.CurrentPage,
+                books.PageSize,
+                books.TotalCount,
+                books.TotalPages
+            ));
 
             return Ok(books);
         }

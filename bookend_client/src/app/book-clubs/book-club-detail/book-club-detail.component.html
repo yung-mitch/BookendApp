@@ -15,6 +15,22 @@
 <div class="row mb-5 text-center" *ngIf="books.length == 0">
     <h6 class="text-info">It looks like there this Book Club doesn't have any listening material yet. Check back later for the the Audiobook(s) to engage with and discuss.</h6>
 </div>
+
+<div class="pagination-control book-pagination" *ngIf="bookPagination">
+    <pagination
+        [boundaryLinks]="true"
+        [totalItems]="bookPagination.totalItems"
+        [itemsPerPage]="bookPagination.itemsPerPage"
+        [maxSize]="10"
+        [(ngModel)]="bookPagination.currentPage"
+        (pageChanged)="pageChangedBooks($event)"
+        previousText="&lsaquo;"
+        nextText="&rsaquo;"
+        firstText="&laquo;"
+        lastText="&raquo;">
+    </pagination>
+</div>
+
 <div class="owner-options">
     <button class="btn btn-secondary owner-option-btn"(click)="openAddBookClubBookModal()" *ngIf="club?.owningUserId == member?.id">&plus; Audiobook</button>
 </div>
@@ -41,6 +57,20 @@
         </tr>
     </tbody>
 </table>
+<div class="pagination-control member-pagination" *ngIf="userPagination">
+    <pagination
+        [boundaryLinks]="true"
+        [totalItems]="userPagination.totalItems"
+        [itemsPerPage]="userPagination.itemsPerPage"
+        [maxSize]="10"
+        [(ngModel)]="userPagination.currentPage"
+        (pageChanged)="pageChangedMembers($event)"
+        previousText="&lsaquo;"
+        nextText="&rsaquo;"
+        firstText="&laquo;"
+        lastText="&raquo;">
+    </pagination>
+</div>
 
 <div class="owner-options" style="padding-top: 100px;" *ngIf="club?.owningUserId == member?.id">
     <button class="btn btn-danger owner-option-btn" (click)="deleteBookClub()">Delete Book Club</button>

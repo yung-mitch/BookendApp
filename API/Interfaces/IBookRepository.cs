@@ -1,14 +1,16 @@
 ﻿using API.Chapters;
 using API.DTOs;
 using API.Entities;
+using API.Helpers;
 
 namespace API.Interfaces
 {
     public interface IBookRepository
     {
-        Task<IEnumerable<Book>> GetBooksAsync();
-        Task<IEnumerable<BookDto>> GetBooksAsync(int userId);
-        Task<List<BookDto>> GetLibraryBooks(int userId);
+        Task<PagedList<BookDto>> GetBooksAsync(BookParams bookParams);
+        Task<PagedList<BookDto>> GetBooksSearchAsync(BookParams bookParams);
+        Task<PagedList<BookDto>> GetBooksAsync(int userId, BookParams bookParams);
+        Task<PagedList<BookDto>> GetLibraryBooks(int userId, BookParams bookParams);
         Task<UserBook> GetUserBook(int userId, int bookId);
         Task<Book> GetBookByIdAsync(int id);
         Task<Book> GetBookWithChaptersAsync(int id);

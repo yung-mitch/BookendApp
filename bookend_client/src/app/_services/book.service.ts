@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Book } from '../_models/book';
@@ -9,6 +9,8 @@ import { BookParams } from '../_models/bookParams';
 import { Chapter } from '../_models/chapter';
 import { Review } from '../_models/review';
 import { ChapterComment } from '../_models/chapterComment';
+import { PaginatedResult } from '../_models/pagination';
+import { getPaginatedResult, getPaginationHeaders } from './paginationHelper';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +21,7 @@ export class BookService {
   bookCache = new Map();
   bookParams: BookParams | undefined;
   user: User | undefined;
+  paginatedResult: PaginatedResult<Book[]> = new PaginatedResult<Book[]>
 
   constructor(private http: HttpClient, private accountService: AccountService) {
     this.accountService.currentUser$.pipe(take(1)).subscribe({
@@ -30,16 +33,22 @@ export class BookService {
     })
   }
 
-  getBooks() {
+  getBooks(bookParams: BookParams) {
     // const response = this.bookCache.get(Object.values(bookParams).join('-'));
 
     // if (response) return of(response);
 
-    return this.http.get<Book[]>(this.baseUrl + 'books');
+    let params = getPaginationHeaders(bookParams.pageNumber, bookParams.pageSize);
+    params = params.append('searchString', bookParams.searchString);
+
+    return getPaginatedResult<Book[]>(this.baseUrl + 'books', params, this.http);
   }
 
-  getPublishedBooks() {
-    return this.http.get<Book[]>(this.baseUrl + 'books/published');
+  getPublishedBooks(bookParams: BookParams) {
+    let params = getPaginationHeaders(bookParams.pageNumber, bookParams.pageSize);
+    params = params.append('searchString', bookParams.searchString);
+
+    return getPaginatedResult<Book[]>(this.baseUrl + 'books/published', params, this.http);
   }
 
   getBook(bookId: number) {
@@ -91,8 +100,11 @@ export class BookService {
     return this.http.delete(this.baseUrl + 'books/delete-chapter/' + bookId + '/' + chapterId);
   }
 
-  getLibrary() {
-    return this.http.get<Book[]>(this.baseUrl + 'library');
+  getLibrary(bookParams: BookParams) {
+    let params = getPaginationHeaders(bookParams.pageNumber, bookParams.pageSize);
+    params = params.append('searchString', bookParams.searchString);
+
+    return getPaginatedResult<Book[]>(this.baseUrl + 'library', params, this.http);
   }
 
   addToLibrary(bookId: number) {

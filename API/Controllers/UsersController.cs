@@ -2,6 +2,7 @@
 using API.DTOs;
 using API.Entities;
 using API.Extensions;
+using API.Helpers;
 using API.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -22,9 +23,33 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<AppUser>> GetUsers()
+        public async Task<ActionResult<PagedList<MemberDto>>> GetUsers([FromQuery] UserParams userParams)
         {
-            return await _uow.UserRepository.GetUsersAsync();
+            if (string.IsNullOrEmpty(userParams.SearchString))
+            {
+                var users = await _uow.UserRepository.GetUsersAsync(userParams);
+
+                Response.AddPaginationHeader(new PaginationHeader(
+                    users.CurrentPage,
+                    users.PageSize,
+                    users.TotalCount,
+                    users.TotalPages
+                ));
+
+                return Ok(users);
+            } else {
+                // Get only Users that satisfy userParams.SearchString
+                var users = await _uow.UserRepository.GetUsersSearchAsync(userParams);
+
+                Response.AddPaginationHeader(new PaginationHeader(
+                    users.CurrentPage,
+                    users.PageSize,
+                    users.TotalCount,
+                    users.TotalPages
+                ));
+
+                return Ok(users);
+            }
         }
 
         [HttpGet("{userName}")]

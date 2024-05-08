@@ -1,5 +1,6 @@
 ﻿using API.DTOs;
 using API.Entities;
+using API.Helpers;
 using API.Interfaces;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
@@ -81,30 +82,28 @@ namespace API.Data
             return userClubObjs;
         }
 
-        public async Task<List<BookDto>> GetBookClubBooksAsync(int clubId)
+        public async Task<PagedList<BookDto>> GetBookClubBooksAsync(int clubId, BookParams bookParams)
         {
-            var clubBooks = _context.BookClubBooks.AsQueryable();
-            var books = _context.Books.OrderBy(b => b.Title).AsQueryable();
+            var query = _context.BookClubBooks
+                .Where(cb => cb.ClubId == clubId)
+                .Select(cb => cb.Book)
+                .OrderBy(b => b.Title)
+                .ProjectTo<BookDto>(_mapper.ConfigurationProvider)
+                .AsNoTracking();
 
-            clubBooks = clubBooks.Where(cb => cb.ClubId == clubId);
-            books = clubBooks.Select(cb => cb.Book);
-
-            var clubLibraryBooks = await books.ProjectTo<BookDto>(_mapper.ConfigurationProvider).ToListAsync();
-
-            return clubLibraryBooks;
+            return await PagedList<BookDto>.CreateAsync(query, bookParams.PageNumber, bookParams.PageSize);
         }
 
-        public async Task<List<MemberDto>> GetBookClubMembersAsync(int clubId)
+        public async Task<PagedList<MemberDto>> GetBookClubMembersAsync(int clubId, UserParams userParams)
         {
-            var userClubs = _context.UserClubs.AsQueryable();
-            var users = _context.Users.OrderBy(u => u.UserName).AsQueryable();
+            var query = _context.UserClubs
+                .Where(uc => uc.BookClubId == clubId)
+                .Select(uc => uc.User)
+                .OrderBy(u => u.UserName)
+                .ProjectTo<MemberDto>(_mapper.ConfigurationProvider)
+                .AsNoTracking();
 
-            userClubs = userClubs.Where(uc => uc.BookClubId == clubId);
-            users = userClubs.Select(uc => uc.User);
-
-            var clubMembers = await users.ProjectTo<MemberDto>(_mapper.ConfigurationProvider).ToListAsync();
-
-            return clubMembers;
+            return await PagedList<MemberDto>.CreateAsync(query, userParams.PageNumber, userParams.PageSize);
         }
 
         public void RemoveBookClubBook(BookClubBook bookClubBook)

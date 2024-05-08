@@ -1,5 +1,6 @@
 ﻿using API.DTOs;
 using API.Entities;
+using API.Helpers;
 using API.Interfaces;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
@@ -43,12 +44,15 @@ namespace API.Data
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<AdvertisementDto>> GetUserAdvertisementsAsync(int userId)
+        public async Task<PagedList<AdvertisementDto>> GetUserAdvertisementsAsync(int userId, AdvertisementParams adParams)
         {
-            return await _context.Advertisements
-                .Where(x => x.AdvertisingUserId == userId)
+            var query = _context.Advertisements
+                .Where(a => a.AdvertisingUserId == userId)
                 .ProjectTo<AdvertisementDto>(_mapper.ConfigurationProvider)
-                .ToListAsync();
+                .OrderByDescending(a => a.Id)
+                .AsNoTracking();
+
+            return await PagedList<AdvertisementDto>.CreateAsync(query, adParams.PageNumber, adParams.PageSize);
         }
 
         public async Task<List<AdvertisementDto>> GetRandomAdvertisements(int numberOfAds)

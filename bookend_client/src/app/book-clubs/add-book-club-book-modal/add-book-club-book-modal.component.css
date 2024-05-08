@@ -1,0 +1,11 @@
+.title-search {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.pagination-control {
+    display: flex;
+    align-items: stretch;
+    justify-content: space-around;
+}

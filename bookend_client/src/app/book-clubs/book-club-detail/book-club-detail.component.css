@@ -30,7 +30,7 @@
 
 .book-list {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
 }
 
 .book-item {
@@ -39,8 +39,29 @@
     margin: 10px;
 }
 
+.pagination-control {
+    display: flex;
+    align-items: stretch;
+}
+
+.book-pagination {
+    justify-content: flex-start;
+}
+
+.member-pagination {
+    justify-content: flex-end;
+}
+
 @media screen and (max-width: 800px) {
     .book-list {
         grid-template-columns: 1fr;
+    }
+
+    .book-pagination {
+        justify-content: space-around;
+    }
+
+    .member-pagination {
+        justify-content: space-around;
     }
 }

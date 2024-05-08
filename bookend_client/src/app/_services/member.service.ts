@@ -14,6 +14,8 @@ import { User } from '../_models/user';
 import { AccountService } from './account.service';
 import { of, take } from 'rxjs';
 import { Member } from '../_models/member';
+import { getPaginatedResult, getPaginationHeaders } from './paginationHelper';
+import { UserParams } from '../_models/userParams';
 
 @Injectable({
   providedIn: 'root'
@@ -34,8 +36,11 @@ export class MemberService {
     })
   }
 
-  getMembers() {
-    return this.http.get<Member[]>(this.baseUrl + 'users');
+  getMembers(userParams: UserParams) {
+    let params = getPaginationHeaders(userParams.pageNumber, userParams.pageSize);
+    params = params.append('searchString', userParams.searchString);
+
+    return getPaginatedResult<Member[]>(this.baseUrl + 'users', params, this.http);
   }
 
   getMember(userName: string) {

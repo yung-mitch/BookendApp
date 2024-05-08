@@ -1,6 +1,7 @@
 ﻿using API.DTOs;
 using API.Entities;
 using API.Extensions;
+using API.Helpers;
 using API.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -45,15 +46,20 @@ namespace API.Controllers
         */
         [Authorize (Roles = "Advertiser")]
         [HttpGet("published")] // /api/advertisements/published
-        public async Task<ActionResult<IEnumerable<AdvertisementDto>>> GetPublishedAdvertisements()
+        public async Task<ActionResult<PagedList<AdvertisementDto>>> GetPublishedAdvertisements([FromQuery] AdvertisementParams adParams)
         {
             var user = await _uow.UserRepository.GetUserByUsernameAsync(User.GetUsername());
-
             if (user == null) return NotFound();
 
-            var ads = await _uow.AdvertisementRepository.GetUserAdvertisementsAsync(user.Id);
-
+            var ads = await _uow.AdvertisementRepository.GetUserAdvertisementsAsync(user.Id, adParams);
             if (ads == null) return NotFound();
+
+            Response.AddPaginationHeader(new PaginationHeader(
+                ads.CurrentPage,
+                ads.PageSize,
+                ads.TotalCount,
+                ads.TotalPages
+            ));
 
             return Ok(ads);
         }

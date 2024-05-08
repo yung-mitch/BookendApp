@@ -1,4 +1,4 @@
-export class BookParams {
+export class UserParams {
     searchString: string = '';
     pageNumber = 1;
     pageSize = 5;
