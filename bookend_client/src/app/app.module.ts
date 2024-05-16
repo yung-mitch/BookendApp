@@ -49,6 +49,8 @@ import { BookClubBookCardComponent } from './books/book-club-book-card/book-club
 import { LoadingInterceptor } from './_interceptors/loading.interceptor';
 import { ErrorInterceptor } from './_interceptors/error.interceptor';
 import { NotFoundComponent } from './errors/not-found/not-found.component';
+import { CreateCampaignModalComponent } from './modals/create-campaign-modal/create-campaign-modal.component';
+import { CampaignEditModalComponent } from './modals/campaign-edit-modal/campaign-edit-modal.component';
 
 @NgModule({
   declarations: [
@@ -89,7 +91,9 @@ import { NotFoundComponent } from './errors/not-found/not-found.component';
     EditBookClubModalComponent,
     AddBookClubBookModalComponent,
     BookClubBookCardComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    CreateCampaignModalComponent,
+    CampaignEditModalComponent
   ],
   imports: [
     BrowserModule,

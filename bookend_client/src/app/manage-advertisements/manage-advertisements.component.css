@@ -3,7 +3,7 @@
     column-gap: 20px;
     justify-content: space-around;
     align-content: center;
-    padding: 0 5% 10px;
+    padding: 10px 5%;
 }
 
 .create-ad-btn {
@@ -17,6 +17,32 @@
     justify-content: stretch;
 }
 
+.campaign-options {
+    display: flex;
+    column-gap: 20px;
+    justify-content: space-around;
+    align-content: center;
+    padding: 10px 5%;
+}
+
+.create-campaign-btn {
+    width: 100%;
+}
+
+.campaign-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.campaign-table tbody tr {
+    vertical-align: middle;
+}
+
+.campaign-table-col {
+    text-align: center;
+}
+
 .name-col {
     grid-column: 1 / 4;
 }
@@ -28,8 +54,45 @@
     justify-content: center;
 }
 
+.campaign-accordions {
+    display: none !important;
+    position: static;
+}
+
+.accordion-group {
+    margin: 2% 5px !important;
+}
+
+.accordion-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.accordion-item > p {
+    margin: 5px;
+}
+
+/* .accordion-item-label {
+
+} */
+
+.accordion-item-value {
+    text-align: right;
+}
+
 .pagination-control {
     display: flex;
     align-items: stretch;
     justify-content: space-around;
+}
+
+@media screen and (max-width: 800px) {
+    .campaign-table {
+        display: none;
+    }
+
+    .campaign-accordions {
+        display: block !important;
+    }
 }

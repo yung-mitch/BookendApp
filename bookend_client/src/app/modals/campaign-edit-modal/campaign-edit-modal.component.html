@@ -1,0 +1,101 @@
+<div class="modal-header">
+    <h4 class="modal-title pull-left">Edit Details for {{staticTitle}}</h4>
+    <button type="button" class="btn-close close pull-right" aria-label="close" (click)="bsModalRef.hide()">
+        <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <form #campaignCreateForm="ngForm" id="campaignCreateForm" autocomplete="off" class="campaign-details-form">
+        <div class="campaign-form-item">
+            <label for="title">Campaign Title</label>
+            <input type="text"
+                name="title"
+                [(ngModel)]="title"
+                placeholder="Campaign Title">
+        </div>
+        <div class="campaign-form-item">
+            <label for="budget">Budget</label>
+            <input type="text"
+                name="budget"
+                [(ngModel)]="budget"
+                placeholder="Budget">
+        </div>
+        <div class="campaign-form-item">
+            <label for="targetMinAge">Target Age Min</label>
+            <input type="text"
+                name="targetMinAge"
+                [(ngModel)]="targetMinAge"
+                placeholder="Target Age Min">
+        </div>
+        <div class="campaign-form-item">
+            <label for="targetMaxAge">Target Age Max</label>
+            <input type="text"
+                name="targetMaxAge"
+                [(ngModel)]="targetMaxAge"
+                placeholder="Target Age Max">
+        </div>
+        
+        <hr class="solid" style="border-top: 2px solid #6e8ca0">
+
+        <div class="campaign-form-item">
+            <label for="advertisement">Choose an Advertisement</label>
+            <div *ngFor="let ad of adsList" class="ads-list">
+                <input class="advertisement-radio" type="radio" id="advertisement" name="advertisement" value="{{ad.id}}" [(ngModel)]="advertisementId">
+                <p>{{ad.adName}}</p>
+            </div>
+        </div>
+    </form>
+
+    <div class="pagination-control" *ngIf="pagination">
+        <pagination
+            [boundaryLinks]="true"
+            [totalItems]="pagination.totalItems"
+            [itemsPerPage]="pagination.itemsPerPage"
+            [maxSize]="10"
+            [(ngModel)]="pagination.currentPage"
+            (pageChanged)="pageChanged($event)"
+            previousText="&lsaquo;"
+            nextText="&rsaquo;"
+            firstText="&laquo;"
+            lastText="&raquo;">
+        </pagination>
+    </div>
+
+    <hr class="solid" style="border-top: 2px solid #6e8ca0">
+
+    <form #campaignEthnicitiesAddition="ngForm" id="campaignEthnicitiesAddition" autocomplete="off" class="list-attribute-form">
+        <label for="ethnicityStr" class="list-atr-label">Target User Ethnicities</label>
+        <input type="text"
+            name="ethnicity"
+            [(ngModel)]="ethnicityStr"
+            placeholder="Target Ethnicity"
+            required
+            style="width: 80%;">
+        <button class="btn btn-secondary btn-list-atr" (click)="addTargetEthnicity()" [disabled]="ethnicityStr == ''">Add</button>
+    </form>
+    <div class="list-atr-list" *ngIf="targetEthnicities.length != 0">
+        <div *ngFor="let ethnicity of targetEthnicities" class="list-atr-item">
+            <p>{{ethnicity}}</p>
+            <i class="fa-solid fa-x remove-list-item-btn" (click)="removeTargetEthnicity(ethnicity)"></i>
+        </div>
+    </div>
+    <form #campaignGenresAddition="ngForm" id="campaignGenreAddition" autocomplete="off" class="list-attribute-form">
+        <label for="genreStr" class="list-atr-label">Target Genre Interests</label>
+        <input type="text"
+            name="genreStr"
+            [(ngModel)]="genreStr"
+            placeholder="Target Genre"
+            required
+            style="width: 80%;">
+        <button class="btn btn-secondary btn-list-atr" (click)="addTargetGenre()" [disabled]="genreStr == ''">Add</button>
+    </form>
+    <div class="list-atr-list" *ngIf="targetGenreInterests.length != 0">
+        <div *ngFor="let genre of targetGenreInterests" class="list-atr-item">
+            <p>{{genre}}</p>
+            <i class="fa-solid fa-x remove-list-item-btn" (click)="removeTargetGenre(genre)"></i>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="submit" form="campaignCreateForm" class="btn btn-primary" [disabled]="!title || !advertisementId" (click)="submit()">Save</button>
+</div>

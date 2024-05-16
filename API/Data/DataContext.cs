@@ -1,7 +1,10 @@
 ﻿using API.Entities;
+using AutoMapper.Execution;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Newtonsoft.Json;
 
 namespace API.Data
 {
@@ -17,6 +20,7 @@ namespace API.Data
         public DbSet<Chapter> Chapters { get; set; }
         public DbSet<UserBook> UserBooks { get; set; }
         public DbSet<Advertisement> Advertisements { get; set; }
+        public DbSet<Campaign> Campaigns { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<BookClub> BookClubs { get; set;}
@@ -56,6 +60,40 @@ namespace API.Data
                 .WithOne(u => u.Role)
                 .HasForeignKey(ur => ur.RoleId)
                 .IsRequired();
+
+            builder.Entity<AppUser>()
+                .HasMany(u => u.PublishedCampaigns)
+                .WithOne(c => c.AdvertisingUser)
+                .HasForeignKey(c => c.AdvertisingUserId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            builder.Entity<Advertisement>()
+                .HasMany(a => a.AdCampaigns)
+                .WithOne(c => c.Advertisement)
+                .HasForeignKey(c => c.AdvertisementId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            builder.Entity<Campaign>()
+                .Property(c => c.TargetEthnicities)
+                .HasConversion(new ValueConverter<List<string>, string>(
+                    val => JsonConvert.SerializeObject(val),
+                    val => JsonConvert.DeserializeObject<List<string>>(val)
+                ));
+
+            builder.Entity<Campaign>()
+                .Property(c => c.TargetMinAge)
+                .HasDefaultValue(18);
+
+            builder.Entity<Campaign>()
+                .Property(c => c.TargetMaxAge)
+                .HasDefaultValue(100);
+
+            builder.Entity<Campaign>()
+                .Property(c => c.TargetGenreInterests)
+                .HasConversion(new ValueConverter<List<string>, string>(
+                    val => JsonConvert.SerializeObject(val),
+                    val => JsonConvert.DeserializeObject<List<string>>(val)
+                ));
 
             builder.Entity<Book>()
                 .HasMany(bc => bc.Chapters)

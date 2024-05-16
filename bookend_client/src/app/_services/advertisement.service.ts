@@ -7,6 +7,8 @@ import { AccountService } from './account.service';
 import { take } from 'rxjs';
 import { getPaginatedResult, getPaginationHeaders } from './paginationHelper';
 import { AdvertisementParams } from '../_models/advertisementParams';
+import { CampaignParams } from '../_models/campaignParams';
+import { Campaign } from '../_models/campaign';
 
 @Injectable({
   providedIn: 'root'
@@ -26,12 +28,12 @@ export class AdvertisementService {
     })
   }
 
-  getAdvertisements() {
+  // getAdvertisements() { }
 
-  }
+  // getCampaigns() { }
 
-  getAdvertisementsToServe() {
-    return this.http.get<Advertisement[]>(this.baseUrl + 'advertisements/advertisements-to-serve');
+  getCampaignsToServe() {
+    return this.http.get<Campaign[]>(this.baseUrl + 'advertisements/advertisements-to-serve');
   }
 
   getPublishedAdvertisements(adParams: AdvertisementParams) {
@@ -47,5 +49,28 @@ export class AdvertisementService {
 
   deleteAdvertisement(advertisementId: number) {
     return this.http.delete(this.baseUrl + 'advertisements/delete-advertisement/' + advertisementId);
+  }
+
+  getPublishedCampaigns(campaignParams: CampaignParams) {
+    let params = getPaginationHeaders(campaignParams.pageNumber, campaignParams.pageSize);
+    params = params.append('searchString', campaignParams.searchString);
+
+    return getPaginatedResult<Campaign[]>(this.baseUrl + 'advertisements/campaigns/published', params, this.http);
+  }
+
+  createCampaign(campaign: any) {
+    return this.http.post(this.baseUrl + 'advertisements/campaigns/add-campaign', campaign);
+  }
+
+  updateCampaign(campaignUpdate: any, campaignId: number) {
+    return this.http.put(this.baseUrl + 'advertisements/campaigns/update-campaign/' + campaignId, campaignUpdate);
+  }
+
+  deleteCampaign(campaignId: number) {
+    return this.http.delete(this.baseUrl + 'advertisements/campaigns/delete-campaign/' + campaignId);
+  }
+
+  incrementCampaignPlays(campaignId: number) {
+    return this.http.put(this.baseUrl + 'advertisements/campaigns/add-play/' + campaignId, {});
   }
 }

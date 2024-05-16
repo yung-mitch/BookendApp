@@ -55,16 +55,70 @@ namespace API.Data
             return await PagedList<AdvertisementDto>.CreateAsync(query, adParams.PageNumber, adParams.PageSize);
         }
 
-        public async Task<List<AdvertisementDto>> GetRandomAdvertisements(int numberOfAds)
+        public async Task<List<CampaignDto>> GetRandomAdvertisements(int numberOfAds)
         {
             Random rand = new Random();
             int skipper = rand.Next(0, _context.Set<Advertisement>().Count());
 
-            return await _context.Advertisements
+            return await _context.Campaigns
                 .OrderBy(x => x.Id)
                 .Skip(skipper)
                 .Take(numberOfAds)
-                .ProjectTo<AdvertisementDto>(_mapper.ConfigurationProvider)
+                .Include(c => c.Advertisement)
+                .ProjectTo<CampaignDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Campaign>> GetCampaignsAsync()
+        {
+            return await _context.Campaigns.ToListAsync();
+        }
+
+        public async Task<IEnumerable<CampaignDto>> GetCampaignsDtosAsync()
+        {
+            return await _context.Campaigns
+                .ProjectTo<CampaignDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+        }
+
+        public void AddNewCampaign(Campaign campaign)
+        {
+            _context.Campaigns.Add(campaign);
+        }
+
+        public void DeleteCampaign(Campaign campaign)
+        {
+            _context.Campaigns.Remove(campaign);
+        }
+
+        public async Task<PagedList<CampaignDto>> GetUserCampaignsAsync(int userId, CampaignParams campaignParams)
+        {
+            var query = _context.Campaigns
+                .Where(c => c.AdvertisingUserId == userId)
+                .ProjectTo<CampaignDto>(_mapper.ConfigurationProvider)
+                .OrderByDescending(c => c.Id)
+                .AsNoTracking();
+            
+            return await PagedList<CampaignDto>.CreateAsync(query, campaignParams.PageNumber, campaignParams.PageSize);
+        }
+
+        public async Task<Campaign> GetCampaignByIdAsync(int id)
+        {
+            return await _context.Campaigns.FindAsync(id);
+        }
+
+        public async Task<CampaignDto> GetCampaignDtoByIdAsync(int id)
+        {
+            return await _context.Campaigns
+                .Where( c => c.Id == id)
+                .ProjectTo<CampaignDto>(_mapper.ConfigurationProvider)
+                .SingleOrDefaultAsync();
+        }
+
+        public async Task<IEnumerable<Campaign>> GetCampaignsUsingAd(int id)
+        {
+            return await _context.Campaigns
+                .Where(c => c.AdvertisementId == id)
                 .ToListAsync();
         }
     }

@@ -1,0 +1,69 @@
+.campaign-details-form {
+    display: flex;
+    flex-direction: column;
+    row-gap: 5px;
+    align-items: stretch;
+    justify-content: space-around;
+}
+
+input {
+    border-radius: 8px;
+    border-color: #c8d1d3;
+    border-style: solid;
+}
+
+.campaign-form-item {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: space-around;
+}
+
+.ads-list {
+    display: flex;
+    column-gap: 5px;
+}
+
+.ads-list > * {
+    margin: 2px;
+}
+
+.pagination-control {
+    display: flex;
+    align-items: stretch;
+    justify-content: space-around;
+}
+
+.list-attribute-form {
+    display: flex;
+    column-gap: 10px;
+    align-items: stretch;
+    justify-content: space-between;
+    margin: 8px;
+    flex-wrap: wrap;
+}
+
+.list-atr-label {
+    flex-basis: 100%;
+}
+
+.btn-list-atr {
+    padding: 5px 5px;
+    width: 15%;
+}
+
+.list-atr-list {
+    margin: 5px 0 15px;
+    padding: 0 5px;
+}
+
+.list-atr-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px;
+}
+
+.remove-list-item-btn:hover {
+    cursor: pointer;
+}

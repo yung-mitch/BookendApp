@@ -7,6 +7,7 @@ import { AudioStreamState } from '../_models/audioStreamState';
 import { AudioService } from '../_services/audio.service';
 import { Advertisement } from '../_models/advertisement';
 import { AdvertisementService } from '../_services/advertisement.service';
+import { Campaign } from '../_models/campaign';
 
 @Component({
   selector: 'app-media-player',
@@ -17,8 +18,8 @@ export class MediaPlayerComponent implements OnInit {
   chapter: Chapter | undefined;
   chapterIndex: number | undefined;
   book: Book | undefined;
-  ads: Advertisement[] = [];
-  adIndex = 0;
+  campaigns: Campaign[] = [];
+  campaignIndex = 0;
   adsPlayedBack = false;
   filePlaybackTouched = false;
   
@@ -56,7 +57,7 @@ export class MediaPlayerComponent implements OnInit {
     console.log(this.chapter);
     
     if (this.chapter) {
-      this.populateAdsList();
+      this.populateCampaignsList();
     }
   }
 
@@ -106,11 +107,10 @@ export class MediaPlayerComponent implements OnInit {
     if (this.chapterIndex != 0) {
       this.chapterIndex = this.chapterIndex! - 1;
       this.chapter = this.book?.chapters[this.chapterIndex];
-      this.ads = [];
+      this.campaigns = [];
       console.log(this.book?.chapters[this.chapterIndex].id);
       this.router.navigateByUrl("/chapter/" + this.book?.chapters[this.chapterIndex].id);
-      this.populateAdsList();
-      // this.openChapterFile(this.chapter!);
+      this.populateCampaignsList();
     }
   }
 
@@ -120,11 +120,10 @@ export class MediaPlayerComponent implements OnInit {
       if (this.chapterIndex < this.book?.chapters.length - 1) {
         this.chapterIndex = this.chapterIndex + 1;
         this.chapter = this.book?.chapters[this.chapterIndex];
-        this.ads = [];
+        this.campaigns = [];
         console.log(this.book?.chapters[this.chapterIndex].id);
         this.router.navigateByUrl("/chapter/" + this.book?.chapters[this.chapterIndex].id);
-        this.populateAdsList();
-        // this.openChapterFile(this.chapter!);
+        this.populateCampaignsList();
       }
     }
   }
@@ -142,13 +141,18 @@ export class MediaPlayerComponent implements OnInit {
   filePlaybackEnded() {
     this.filePlaybackTouched = false;
     if (!this.adsPlayedBack) {
-      if (this.adIndex + 1 == this.ads.length && this.chapter) {
+      this.adService.incrementCampaignPlays(this.campaigns[this.campaignIndex].id).subscribe({
+        next: () => console.log('Campaign plays incremented')
+      })
+      if (this.campaignIndex + 1 == this.campaigns.length) {
         this.adsPlayedBack = true;
-        this.ads = [];
-        this.openChapterFile(this.chapter);
+        this.campaigns = [];
+        if (this.chapter) {
+          this.openChapterFile(this.chapter);
+        }
       } else {
-        this.adIndex = this.adIndex + 1;
-        this.openAdvertisementFile(this.ads[this.adIndex])
+        this.campaignIndex = this.campaignIndex + 1;
+        this.openAdvertisementFile(this.campaigns[this.campaignIndex].advertisement);
       }
     } else if (this.chapter) {
       this.next();
@@ -168,17 +172,17 @@ export class MediaPlayerComponent implements OnInit {
     }
   }
 
-  private populateAdsList() {
-    this.adService.getAdvertisementsToServe().subscribe({
+  private populateCampaignsList() {
+    this.adService.getCampaignsToServe().subscribe({
       next: response => {
         if (response)
         {
-          this.ads = response;
-          if (this.ads.length > 0)
+          this.campaigns = response;
+          if (this.campaigns.length > 0)
           {
             this.adsPlayedBack = false;
-            this.adIndex = 0;
-            this.openAdvertisementFile(this.ads[this.adIndex]);
+            this.campaignIndex = 0;
+            this.openAdvertisementFile(this.campaigns[this.campaignIndex].advertisement);
           }
         }
       },

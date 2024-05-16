@@ -12,5 +12,6 @@ namespace API.Entities
 
         public int AdvertisingUserId { get; set; }
         public AppUser AdvertisingUser { get; set; }
+        public List<Campaign> AdCampaigns { get; set; }
     }
 }

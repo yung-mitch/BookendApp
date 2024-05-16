@@ -2,42 +2,153 @@
   <h2>Manage your advertisements</h2>
 </div>
 
-<div class="advertiser-options">
-  <button class="btn btn-success create-ad-btn" (click)="openCreateAdvertisementModal()">&plus; New Advertisement</button>
-</div>
-  
-<table class="table ad-table">
-  <thead>
-    <tr>
-      <th class="name-col">Advertisement Name</th>
-      <th class="actions-col">Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let ad of advertisements; index as i">
-      <td class="name-col">{{ad.adName}}</td>
-      <td class="actions-col">
-        <!-- <button class="btn btn-primary" *appHasRole="['Advertiser']" routerLink="/chapter/{{chapter.id}}"><i class="fa-solid fa-play"></i></button> -->
-        <button class="btn btn-primary" *appHasRole="['Advertiser', 'Admin']" (click)="openAdvertisementEditModal(ad)"><i class="fa-solid fa-pencil"></i></button>
-        <button class="btn btn-primary" *appHasRole="['Advertiser', 'Admin']" (click)="openAdvertisementReplaceFileModal(ad)"><i class="fa-solid fa-file"></i></button>
-        <button class="btn btn-primary" *appHasRole="['Advertiser', 'Admin']" (click)="delete(ad.id)"><i class="fa-solid fa-trash"></i></button>
-      </td>
-    </tr>
-  </tbody>
+<tabset class="advertiser-tabset" #advertiserTabs>
+  <tab heading="Advertisements">
+    <div class="advertiser-options">
+      <button class="btn btn-success create-ad-btn" (click)="openCreateAdvertisementModal()">&plus; New Advertisement</button>
+    </div>
+      
+    <table class="table ad-table">
+      <thead>
+        <tr>
+          <th class="name-col">Advertisement Name</th>
+          <th class="actions-col">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let ad of advertisements; index as i">
+          <td class="name-col">{{ad.adName}}</td>
+          <td class="actions-col">
+            <!-- <button class="btn btn-primary" *appHasRole="['Advertiser']" routerLink="/chapter/{{chapter.id}}"><i class="fa-solid fa-play"></i></button> -->
+            <button class="btn btn-primary" *appHasRole="['Advertiser', 'Admin']" (click)="openAdvertisementEditModal(ad)"><i class="fa-solid fa-pencil"></i></button>
+            <button class="btn btn-primary" *appHasRole="['Advertiser', 'Admin']" (click)="openAdvertisementReplaceFileModal(ad)"><i class="fa-solid fa-file"></i></button>
+            <button class="btn btn-primary" *appHasRole="['Advertiser', 'Admin']" (click)="deleteAd(ad.id)"><i class="fa-solid fa-trash"></i></button>
+          </td>
+        </tr>
+      </tbody>
+        
+    </table>
     
-</table>
+    <div class="pagination-control" *ngIf="adPagination">
+      <pagination
+          [boundaryLinks]="true"
+          [totalItems]="adPagination.totalItems"
+          [itemsPerPage]="adPagination.itemsPerPage"
+          [maxSize]="10"
+          [(ngModel)]="adPagination.currentPage"
+          (pageChanged)="pageChangedAds($event)"
+          previousText="&lsaquo;"
+          nextText="&rsaquo;"
+          firstText="&laquo;"
+          lastText="&raquo;">
+      </pagination>
+    </div>
+  </tab>
+  <tab heading="Campaigns">
+    <div class="campaign-options">
+      <button class="btn btn-success create-campaign-btn" (click)="openCreateCampaignModal()">&plus; New Campaign</button>
+    </div>
 
-<div class="pagination-control" *ngIf="pagination">
-  <pagination
-      [boundaryLinks]="true"
-      [totalItems]="pagination.totalItems"
-      [itemsPerPage]="pagination.itemsPerPage"
-      [maxSize]="10"
-      [(ngModel)]="pagination.currentPage"
-      (pageChanged)="pageChanged($event)"
-      previousText="&lsaquo;"
-      nextText="&rsaquo;"
-      firstText="&laquo;"
-      lastText="&raquo;">
-  </pagination>
-</div>
+    <table class="table campaign-table">
+      <thead>
+        <tr>
+          <th class="campaign-table-col">Campaign Title</th>
+          <th class="campaign-table-col">Active</th>
+          <th class="campaign-table-col">Budget</th>
+          <th class="campaign-table-col">Insufficient Funds</th>
+          <th class="campaign-table-col">Number of Plays</th>
+          <th class="campaign-table-col">Number of Clicks</th>
+          <th class="campaign-table-col">Target Age Range</th>
+          <th class="campaign-table-col">Target Ethnicities</th>
+          <th class="campaign-table-col">Target Genres</th>
+          <th class="campaign-table-col">Ad Name</th>
+          <th class="actions-col">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let campaign of campaigns">
+          <td class="campaign-table-col">{{campaign.title}}</td>
+          <td class="campaign-table-col" *ngIf="campaign.active"><i class="fa-solid fa-check" style="color: green;"></i></td>
+          <td class="campaign-table-col" *ngIf="!campaign.active"></td>
+          <td class="campaign-table-col">${{campaign.budget}}</td>
+          <td class="campaign-table-col" *ngIf="campaign.insufficientFunds"><i class="fa-solid fa-asterisk"></i></td>
+          <td class="campaign-table-col" *ngIf="!campaign.insufficientFunds"></td>
+          <td class="campaign-table-col">{{campaign.numPlays}}</td>
+          <td class="campaign-table-col">{{campaign.numClicks}}</td>
+          <td class="campaign-table-col">{{campaign.targetMinAge}} - {{campaign.targetMaxAge}}</td>
+          <td class="campaign-table-col" style="overflow: hidden;" *ngIf="campaign.targetEthnicities.length > 0">{{formatList(campaign.targetEthnicities)}}</td>
+          <td class="campaign-table-col" style="overflow: hidden;" *ngIf="campaign.targetEthnicities.length == 0"></td>
+          <td class="campaign-table-col" style="overflow: hidden;" *ngIf="campaign.targetGenreInterests.length > 0">{{formatList(campaign.targetGenreInterests)}}</td>
+          <td class="campaign-table-col" style="overflow: hidden;" *ngIf="campaign.targetGenreInterests.length == 0"></td>
+          <td class="campaign-table-col">{{campaign.advertisement.adName}}</td>
+          <td class="actions-col">
+            <button class="btn btn-primary" *appHasRole="['Advertiser', 'Admin']" (click)="openCampaignEditModal(campaign)"><i class="fa-solid fa-pencil"></i></button>
+            <button class="btn btn-primary" *appHasRole="['Advertiser', 'Admin']" (click)="deleteCampaign(campaign.id)"><i class="fa-solid fa-trash"></i></button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <accordion [isAnimated]="true" class="campaign-accordions">
+      <accordion-group heading="{{campaign.title}}" *ngFor="let campaign of campaigns" class="accordion-group">
+        <div class="accordion-item">
+          <p class="accordion-item-label">Active</p>
+          <p *ngIf="campaign.active" class="accordion-item-value"><i class="fa-solid fa-check" style="color: green;"></i></p>
+          <p *ngIf="!campaign.active" class="accordion-item-value"><i class="fa-solid fa-x" style="color: red;"></i></p>
+        </div>
+        <div class="accordion-item">
+          <p class="accordion-item-label">Budget</p>
+          <p class="accordion-item-value">${{campaign.budget}}</p>
+        </div>
+        <div class="accordion-item" *ngIf="campaign.insufficientFunds">
+          <p class="accordion-item-label" style="color: red;">INSUFFICIENT FUNDS</p>
+        </div>
+        <div class="accordion-item">
+          <p class="accordion-item-label">Plays</p>
+          <p class="accordion-item-value">{{campaign.numPlays}}</p>
+        </div>
+        <div class="accordion-item">
+          <p class="accordion-item-label">Clicks</p>
+          <p class="accordion-item-value">{{campaign.numClicks}}</p>
+        </div>
+        <div class="accordion-item">
+          <p class="accordion-item-label">Target Age</p>
+          <p class="accordion-item-value">{{campaign.targetMinAge}} - {{campaign.targetMaxAge}}</p>
+        </div>
+        <div class="accordion-item" style="overflow: hidden;">
+          <p class="accordion-item-label">Target Ethnicities</p>
+          <p *ngIf="campaign.targetEthnicities.length > 0" class="accordion-item-value">{{formatList(campaign.targetEthnicities)}}</p>
+          <p *ngIf="campaign.targetEthnicities.length == 0" class="accordion-item-value"><em>None specified</em></p>
+        </div>
+        <div class="accordion-item" style="overflow: hidden;">
+          <p class="accordion-item-label">Target Genres</p>
+          <p *ngIf="campaign.targetGenreInterests.length > 0" class="accordion-item-value">{{formatList(campaign.targetGenreInterests)}}</p>
+          <p *ngIf="campaign.targetGenreInterests.length == 0" class="accordion-item-value"><em>None specified</em></p>
+        </div>
+        <div class="accordion-item">
+          <p class="accordion-item-label">Ad Title</p>
+          <p class="accordion-item-value">{{campaign.advertisement.adName}}</p>
+        </div>
+        <div class="accordion-item">
+          <button class="btn btn-secondary" style="width: 48%;" *appHasRole="['Advertiser', 'Admin']" (click)="openCampaignEditModal(campaign)">Edit</button>
+          <button class="btn btn-danger" style="width: 48%;" *appHasRole="['Advertiser', 'Admin']" (click)="deleteCampaign(campaign.id)">Delete</button>
+        </div>
+      </accordion-group>
+    </accordion>
+
+    <div class="pagination-control" *ngIf="campaignPagination">
+      <pagination
+          [boundaryLinks]="true"
+          [totalItems]="campaignPagination.totalItems"
+          [itemsPerPage]="campaignPagination.itemsPerPage"
+          [maxSize]="10"
+          [(ngModel)]="campaignPagination.currentPage"
+          (pageChanged)="pageChangedCampaigns($event)"
+          previousText="&lsaquo;"
+          nextText="&rsaquo;"
+          firstText="&laquo;"
+          lastText="&raquo;">
+      </pagination>
+    </div>
+  </tab>
+</tabset>

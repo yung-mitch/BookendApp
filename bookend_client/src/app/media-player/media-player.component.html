@@ -10,8 +10,8 @@
             <h5 class="text-center" *ngIf="adsPlayedBack">
                 Chapter {{chapterIndex! + 1}}: {{chapter?.chapterTitle}}
             </h5>
-            <h5 class="text-center" *ngIf="!adsPlayedBack && ads.length > 0">
-                {{ads[adIndex].adName}}
+            <h5 class="text-center" *ngIf="!adsPlayedBack && campaigns.length > 0">
+                {{campaigns[campaignIndex].title}}
             </h5>
         </div>
         <div class="media-action-palette bg-primary p-3">

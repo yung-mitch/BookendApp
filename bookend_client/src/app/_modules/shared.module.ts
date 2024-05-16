@@ -7,6 +7,8 @@ import { MaterialModule } from './material.module';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { ToastrModule } from 'ngx-toastr';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
+import { TabsModule } from 'ngx-bootstrap/tabs';
+import { AccordionModule } from 'ngx-bootstrap/accordion';
 
 @NgModule({
   declarations: [],
@@ -19,6 +21,8 @@ import { PaginationModule } from 'ngx-bootstrap/pagination';
     NgxSpinnerModule.forRoot({ type: 'line-scale-pulse-out' }),
     ToastrModule.forRoot({positionClass: 'toast-center-center'}),
     PaginationModule.forRoot(),
+    TabsModule.forRoot(),
+    AccordionModule.forRoot(),
   ],
   exports: [
     BsDropdownModule,
@@ -27,7 +31,9 @@ import { PaginationModule } from 'ngx-bootstrap/pagination';
     MaterialModule,
     NgxSpinnerModule,
     ToastrModule,
-    PaginationModule
+    PaginationModule,
+    TabsModule,
+    AccordionModule,
   ]
 })
 export class SharedModule { }

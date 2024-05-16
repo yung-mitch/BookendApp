@@ -28,6 +28,9 @@ namespace API.Helpers
             CreateMap<BookClub, ClubDto>();
             CreateMap<ClubDto, BookClub>();
             CreateMap<ClubUpdateDto, BookClub>();
+            CreateMap<Campaign, CampaignDto>();
+            CreateMap<CampaignDto, Campaign>();
+            CreateMap<CampaignUpdateDto, Campaign>();
         }
     }
 }
