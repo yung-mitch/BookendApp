@@ -7,6 +7,14 @@
 <div class="modal-body">
     <form #campaignCreateForm="ngForm" id="campaignCreateForm" autocomplete="off" class="campaign-details-form">
         <div class="campaign-form-item">
+            <label for="active">Active</label>
+            <input type="checkbox"
+                name="active"
+                [(ngModel)]="active"
+                [checked]="active"
+                style="align-self: flex-start;">
+        </div>
+        <div class="campaign-form-item">
             <label for="title">Campaign Title</label>
             <input type="text"
                 name="title"
