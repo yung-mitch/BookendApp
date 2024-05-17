@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240501125324_DevMigration")]
+    [Migration("20240516223257_DevMigration")]
     partial class DevMigration
     {
         /// <inheritdoc />
@@ -208,6 +208,64 @@ namespace API.Data.Migrations
                     b.ToTable("BookClubBooks");
                 });
 
+            modelBuilder.Entity("API.Entities.Campaign", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("AdvertisementId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("AdvertisingUserId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<double>("Budget")
+                        .HasColumnType("REAL");
+
+                    b.Property<double>("CostPerPlay")
+                        .HasColumnType("REAL");
+
+                    b.Property<bool>("InsufficientFunds")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("NumClicks")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("NumPlays")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("TargetEthnicities")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("TargetGenreInterests")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("TargetMaxAge")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValue(100);
+
+                    b.Property<int>("TargetMinAge")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValue(18);
+
+                    b.Property<string>("Title")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AdvertisementId");
+
+                    b.HasIndex("AdvertisingUserId");
+
+                    b.ToTable("Campaigns");
+                });
+
             modelBuilder.Entity("API.Entities.Chapter", b =>
                 {
                     b.Property<int>("Id")
@@ -216,6 +274,11 @@ namespace API.Data.Migrations
 
                     b.Property<int>("BookId")
                         .HasColumnType("INTEGER");
+
+                    b.Property<int>("ChapterNumber")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValue(500);
 
                     b.Property<string>("ChapterTitle")
                         .HasColumnType("TEXT");
@@ -493,6 +556,25 @@ namespace API.Data.Migrations
                     b.Navigation("Club");
                 });
 
+            modelBuilder.Entity("API.Entities.Campaign", b =>
+                {
+                    b.HasOne("API.Entities.Advertisement", "Advertisement")
+                        .WithMany("AdCampaigns")
+                        .HasForeignKey("AdvertisementId")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .IsRequired();
+
+                    b.HasOne("API.Entities.AppUser", "AdvertisingUser")
+                        .WithMany("PublishedCampaigns")
+                        .HasForeignKey("AdvertisingUserId")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .IsRequired();
+
+                    b.Navigation("Advertisement");
+
+                    b.Navigation("AdvertisingUser");
+                });
+
             modelBuilder.Entity("API.Entities.Chapter", b =>
                 {
                     b.HasOne("API.Entities.Book", "Book")
@@ -625,6 +707,11 @@ namespace API.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("API.Entities.Advertisement", b =>
+                {
+                    b.Navigation("AdCampaigns");
+                });
+
             modelBuilder.Entity("API.Entities.AppRole", b =>
                 {
                     b.Navigation("UserRoles");
@@ -643,6 +730,8 @@ namespace API.Data.Migrations
                     b.Navigation("PublishedAds");
 
                     b.Navigation("PublishedBooks");
+
+                    b.Navigation("PublishedCampaigns");
 
                     b.Navigation("ReviewsLeft");
 

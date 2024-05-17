@@ -242,6 +242,43 @@ namespace API.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Campaigns",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Title = table.Column<string>(type: "TEXT", nullable: true),
+                    Active = table.Column<bool>(type: "INTEGER", nullable: false),
+                    Budget = table.Column<double>(type: "REAL", nullable: false),
+                    CostPerPlay = table.Column<double>(type: "REAL", nullable: false),
+                    InsufficientFunds = table.Column<bool>(type: "INTEGER", nullable: false),
+                    NumPlays = table.Column<int>(type: "INTEGER", nullable: false),
+                    NumClicks = table.Column<int>(type: "INTEGER", nullable: false),
+                    TargetMinAge = table.Column<int>(type: "INTEGER", nullable: false, defaultValue: 18),
+                    TargetMaxAge = table.Column<int>(type: "INTEGER", nullable: false, defaultValue: 100),
+                    TargetEthnicities = table.Column<string>(type: "TEXT", nullable: true),
+                    TargetGenreInterests = table.Column<string>(type: "TEXT", nullable: true),
+                    AdvertisingUserId = table.Column<int>(type: "INTEGER", nullable: false),
+                    AdvertisementId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Campaigns", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Campaigns_Advertisements_AdvertisementId",
+                        column: x => x.AdvertisementId,
+                        principalTable: "Advertisements",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_Campaigns_AspNetUsers_AdvertisingUserId",
+                        column: x => x.AdvertisingUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserClubs",
                 columns: table => new
                 {
@@ -295,6 +332,7 @@ namespace API.Data.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
+                    ChapterNumber = table.Column<int>(type: "INTEGER", nullable: false, defaultValue: 500),
                     ChapterTitle = table.Column<string>(type: "TEXT", nullable: true),
                     Url = table.Column<string>(type: "TEXT", nullable: true),
                     PublicId = table.Column<string>(type: "TEXT", nullable: true),
@@ -447,6 +485,16 @@ namespace API.Data.Migrations
                 column: "PublishingUserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Campaigns_AdvertisementId",
+                table: "Campaigns",
+                column: "AdvertisementId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Campaigns_AdvertisingUserId",
+                table: "Campaigns",
+                column: "AdvertisingUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Chapters_BookId",
                 table: "Chapters",
                 column: "BookId");
@@ -492,9 +540,6 @@ namespace API.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Advertisements");
-
-            migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
             migrationBuilder.DropTable(
@@ -513,6 +558,9 @@ namespace API.Data.Migrations
                 name: "BookClubBooks");
 
             migrationBuilder.DropTable(
+                name: "Campaigns");
+
+            migrationBuilder.DropTable(
                 name: "Comments");
 
             migrationBuilder.DropTable(
@@ -529,6 +577,9 @@ namespace API.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Advertisements");
 
             migrationBuilder.DropTable(
                 name: "Chapters");
